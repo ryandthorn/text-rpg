@@ -1,0 +1,23 @@
+{
+  "name": "text-rpg",
+  "version": "1.0.0",
+  "description": "A text-based RPG.",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha --exit",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ryandthorn/text-rpg.git"
+  },
+  "author": "Ryan Thorn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryandthorn/text-rpg/issues"
+  },
+  "homepage": "https://github.com/ryandthorn/text-rpg#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
