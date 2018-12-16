@@ -25,10 +25,16 @@ describe('Text RPG', function() {
       });
   });
 
-  it('should create a new character on user input', function() {
+  it('should create a new character', function() {
     expect(characterData.character).to.be.undefined;
-    characterData['character'] = characterData.createCharacter('mage');
+    characterData['character'] = characterData.create('mage');
     expect(characterData.character).to.be.a('object');
     expect(characterData.character).to.have.keys('class', 'attributes', 'skills');
   });
+
+  it('should return the character object', function() {
+    const testObject = characterData.read();
+    expect(testObject).to.be.a('object');
+    expect(testObject).to.have.keys('class', 'attributes', 'skills');
+  })
 });

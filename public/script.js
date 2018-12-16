@@ -1,7 +1,7 @@
 'use strict';
 
 const characterData = {
-  createCharacter: function(selection) {
+  create: function(selection) {
     const newCharacter = {};
     if (selection === 'mage') {
       newCharacter.class = 'Mage';
@@ -65,6 +65,9 @@ const characterData = {
       };
     }
     return newCharacter;      
+  },
+  read: function(){
+    return this.character;
   }
 };
 
@@ -106,7 +109,7 @@ function selectCharacterHandler() {
   $('form').submit(function(event) {
     event.preventDefault();
     const selection = $('input[type=radio]:checked').val();
-    characterData['character'] = characterData.createCharacter(selection);
+    characterData['character'] = characterData.create(selection);
     $('header').empty();
     $('main').empty();
     $('header').append(`<h1>Chapter 1</h1>`);

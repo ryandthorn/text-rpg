@@ -1,7 +1,7 @@
 'use strict';
 
 const characterData = {
-  createCharacter: function(selection) {
+  create: function(selection) {
     const newCharacter = {};
     if (selection === 'mage') {
       newCharacter.class = 'Mage';
@@ -65,6 +65,9 @@ const characterData = {
       };
     }
     return newCharacter;      
+  },
+  read: function(){
+    return this.character;
   }
 };
 
