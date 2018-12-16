@@ -73,6 +73,9 @@ const characterData = {
     this.character.attributes.hp += updateObj.hp;
     this.character.attributes.mp += updateObj.mp;
     return this.character;
+  },
+  delete: function() {
+    delete this.character;
   }
 };
 

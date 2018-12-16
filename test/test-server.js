@@ -47,4 +47,9 @@ describe('Text RPG', function() {
     expect(updChar.attributes.mp).to
       .equal(prevMP - 1);
   });
+
+  it('should delete the character object', function() {
+    characterData.delete();
+    expect(characterData.character).to.be.undefined;
+  });
 });
