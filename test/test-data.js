@@ -8,6 +8,8 @@ const characterData = {
       newCharacter.attributes = {
         hp: 10,
         mp: 18,
+        maxHP: 10,
+        maxMP: 18,
         str: 6,
         agi: 10,
         mag: 12,
@@ -28,6 +30,8 @@ const characterData = {
       newCharacter.attributes = {
         hp: 14,
         mp: 10,
+        maxHP: 14,
+        maxMP: 10,
         str: 8,
         agi: 12,
         mag: 8,
@@ -48,6 +52,8 @@ const characterData = {
       newCharacter.attributes = {
         hp: 18,
         mp: 6,
+        maxHP: 18,
+        maxMP: 6,
         str: 10,
         agi: 8,
         mag: 6,
@@ -72,6 +78,12 @@ const characterData = {
   update: function(updateObj) {
     this.character.attributes.hp += updateObj.hp;
     this.character.attributes.mp += updateObj.mp;
+    if (this.character.attributes.hp > this.character.attributes.maxHP) {
+      this.character.attributes.hp = this.character.attributes.maxHP;
+    }
+    if (this.character.attributes.mp > this.character.attributes.maxMP) {
+      this.character.attributes.mp = this.character.attributes.maxMP;
+    }
     return this.character;
   },
   delete: function() {
