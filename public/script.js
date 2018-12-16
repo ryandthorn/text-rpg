@@ -84,6 +84,9 @@ const characterData = {
     if (this.character.attributes.mp > this.character.attributes.maxMP) {
       this.character.attributes.mp = this.character.attributes.maxMP;
     }
+    if (this.character.attributes.hp <= 0) {
+      loseGame();
+    }
     return this.character;
   },
   delete: function() {
@@ -149,6 +152,16 @@ function startGame() {
   `);
   $('aside').append(displayCharacterInfo());
   mockDataListener();
+}
+
+function loseGame() {
+  $('header').html(`<h1>Defeated!</h1>`);
+  $('main').html(`<button class="restart">Start new game</button>`);
+  characterData.delete();
+  $('button').click(event => {
+    event.preventDefault();
+    startGame();
+  });
 }
 
 function selectCharacterHandler() {

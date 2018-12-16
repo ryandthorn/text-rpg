@@ -84,6 +84,7 @@ const characterData = {
     if (this.character.attributes.mp > this.character.attributes.maxMP) {
       this.character.attributes.mp = this.character.attributes.maxMP;
     }
+    // if (hp < =0) {lose game}
     return this.character;
   },
   delete: function() {
