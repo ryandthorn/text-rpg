@@ -68,6 +68,11 @@ const characterData = {
   },
   read: function(){
     return this.character;
+  },
+  update: function(updateObj) {
+    this.character.attributes.hp += updateObj.hp;
+    this.character.attributes.mp += updateObj.mp;
+    return this.character;
   }
 };
 

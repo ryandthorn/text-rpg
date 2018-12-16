@@ -33,8 +33,18 @@ describe('Text RPG', function() {
   });
 
   it('should return the character object', function() {
-    const testObject = characterData.read();
-    expect(testObject).to.be.a('object');
-    expect(testObject).to.have.keys('class', 'attributes', 'skills');
-  })
+    const character = characterData.read();
+    expect(character).to.be.a('object');
+    expect(character).to.have.keys('class', 'attributes', 'skills');
+  });
+
+  it('should update the character object', function() {
+    const prevHP = characterData.character.attributes.hp;
+    const prevMP = characterData.character.attributes.mp;
+    const updChar = characterData.update({ hp: -2, mp: -1 });
+    expect(updChar.attributes.hp).to
+      .equal(prevHP - 2);
+    expect(updChar.attributes.mp).to
+      .equal(prevMP - 1);
+  });
 });
