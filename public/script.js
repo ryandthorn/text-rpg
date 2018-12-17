@@ -1,15 +1,23 @@
 'use strict';
 
 function displayStory() {
-  return `
-    <article class="story">
-      <p>It was a dark and stormy night...</p>
-    </article>
-  `;
+  $.get('/story')
+    .done((story) => {
+      $('main').html(story);
+    });
+}
+
+function startStory() {
+  $.post('/story')
+    .done(() => {
+      displayStory();
+      displayCharacterInfo();
+      // mockDataListener();
+    });
 }
 
 function displayCharacterInfo() {
-  $.get('http://localhost:8080/character')
+  $.get('/character')
     .done((char) => {
       $('aside').html( `
         <h2>${char.class}</h2>
@@ -37,8 +45,13 @@ function displayCharacterInfo() {
 }
 
 function mockDataListener() {
+  // $('.next-page').click(event => {
+  //   event.preventDefault()
+  //   // PUT => update bookmark and send next scene
+  //   displayStory();
+  // })
+
   // PUT sends null??
-  
   // $('.hit').click(event => {
   //   event.preventDefault();
   //   $.ajax({
@@ -64,16 +77,9 @@ function mockDataListener() {
 }
 
 function startGame() {
-  $('header').empty();
-  $('main').empty();
-  $('header').append(`<h1>Chapter 1</h1>`);
-  $('main').append(displayStory());
-  $('main').append(`
-    <button class="hit">-2HP -1MP</button>
-    <button class="recover">Recover</button>
-  `);
-  displayCharacterInfo();
-  mockDataListener();
+  $('form').remove();
+  $('header').html(`<h1>Chapter 1</h1>`);
+  startStory();
 }
 
 function loseGame() {

@@ -1,5 +1,21 @@
 'use strict';
 
+const storyData = {
+  begin: function() {
+    this['bookmark'] = this.chapter1.scene1;
+  },
+  bookmark: '',
+  chapter1: {
+    scene1: `
+    <p>It was a dark and stormy lorem</p>
+    <button class="next-page">Next page</button>
+    <button class="hit">-2HP -1MP</button>
+    <button class="recover">Recover</button>
+    `,
+    scene2: `<p>You reached scene 2!</p>`
+  },
+};
+
 const characterData = {
   create: function(selection) {
     const newCharacter = {};
@@ -95,4 +111,4 @@ const characterData = {
   }
 };
 
-module.exports = { characterData };
+module.exports = { characterData, storyData };
