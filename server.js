@@ -1,11 +1,36 @@
 'use strict';
 const express = require('express');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+
+const { characterData } = require('./mockDB');
 
 const app = express();
 app.use(express.static('public'));
 app.use(express.json());
 app.use(morgan('common'));
+
+app.post('/character', (req, res) => {
+  characterData['character'] = characterData.create('mage');
+  res.status(201).json(characterData.character);
+});
+
+app.get('/character', (req, res) => {
+  const charState = characterData.read();
+  res.status(200).json(charState);
+});
+
+app.put('/character', (req, res) => {
+  
+  const updated = characterData.update(req.body);
+  res.status(200).json(updated);
+});
+
+app.delete('/character', (req, res) => {
+  characterData.delete();
+  res.status(204).json({message: `Character deleted`});
+})
 
 let server;
 
