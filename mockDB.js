@@ -7,11 +7,12 @@ const storyData = {
   bookmark: '',
   chapter1: {
     scene1: `
-    <p>It was a dark and stormy lorem</p>
-    <button class="next-page">Next page</button>
-    <button class="hit">-2HP -1MP</button>
-    <button class="recover">Recover</button>
+      <p>It was a dark and stormy lorem</p>
+      <button class="next-page">Next page</button>
+      <button class="hit">-2HP -1MP</button>
+      <button class="recover">Recover</button>
     `,
+    // next: // => scene2
     scene2: `<p>You reached scene 2!</p>`
   },
 };
@@ -92,9 +93,8 @@ const characterData = {
     return this.character;
   },
   update: function(updateObj) {
-    console.log(updateObj);
-    this.character.attributes.hp += updateObj.hp;
-    this.character.attributes.mp += updateObj.mp;
+    this.character.attributes.hp += Number(updateObj.hp);
+    this.character.attributes.mp += Number(updateObj.mp);
     if (this.character.attributes.hp > this.character.attributes.maxHP) {
       this.character.attributes.hp = this.character.attributes.maxHP;
     }

@@ -54,10 +54,8 @@ describe('Text RPG', function() {
         .then(function(res) {
           prevHP = res.body.attributes.hp;
           prevMP = res.body.attributes.mp;
-          const update = {hp: -2, mp: -1};
           return chai.request(app)
-            .put('/character')
-            .send(update);
+            .put('/character/update?hp=-2&mp=-1')
         })
         .then(function(res) {
           expect(res).to.have.status(200);
@@ -82,8 +80,8 @@ describe('Text RPG', function() {
         .post('/story')
         .then(function(res) {
           expect(res).to.have.status(200);
-          expect(res.body).to.be.a('string');
-          expect(res.body).to.equal(storyData.chapter1.scene1);
+          expect(res.text).to.be.a('string');
+          expect(res.text).to.equal(storyData.chapter1.scene1);
         })
     })
   });

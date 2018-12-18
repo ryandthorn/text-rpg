@@ -11,6 +11,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(morgan('common'));
 
+// Character routes
 app.post('/character', (req, res) => {
   characterData['character'] = characterData.create('mage');
   res.status(201).json(characterData.character);
@@ -21,8 +22,8 @@ app.get('/character', (req, res) => {
   res.status(200).json(charState);
 });
 
-app.put('/character', (req, res) => {
-  const updated = characterData.update(req.body);
+app.put('/character/:update', (req, res) => {
+  const updated = characterData.update({hp: req.query.hp, mp: req.query.mp});
   res.status(200).json(updated);
 });
 
@@ -31,15 +32,18 @@ app.delete('/character', (req, res) => {
   res.status(204).json({message: `Character deleted`});
 })
 
+// Story routes
 app.get('/story', (req, res) => {
   res.status(200).send(storyData.bookmark);
 });
 
 app.post('/story', (req, res) => {
   storyData.begin();
-  console.log('Bookmark: ' + storyData.bookmark);
   res.status(200).send(storyData.bookmark);
 })
+
+// PUT /story =>
+//  update bookmark
 
 let server;
 

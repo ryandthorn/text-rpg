@@ -2,20 +2,18 @@
 
 const storyData = {
   begin: function() {
-    storyData['bookmark'] = storyData.chapter1.scene1;
+    this['bookmark'] = this.chapter1.scene1;
   },
   chapter1: {
-    scene1: {
-      text: `
-        <p>It was a dark and stormy lorem</p>
-        <button class="next-page">Next page</button>
-        <button class="hit">-2HP -1MP</button>
-        <button class="recover">Recover</button>
-        `,
-      nextScene: function() {
-        storyData['bookmark'] = storyData.chapter1.scene2;
-      }
-    },
+    scene1: `
+      <p>It was a dark and stormy lorem</p>
+      <button class="next-page">Next page</button>
+      <button class="hit">-2HP -1MP</button>
+      <button class="recover">Recover</button>
+    `,
+      // nextScene: function() {
+      //   storyData['bookmark'] = storyData.chapter1.scene2;
+      // }
     scene2: `<p>You reached scene 2!</p>`
   },
 };
@@ -96,8 +94,8 @@ const characterData = {
     return this.character;
   },
   update: function(updateObj) {
-    this.character.attributes.hp += updateObj.hp;
-    this.character.attributes.mp += updateObj.mp;
+    this.character.attributes.hp += Number(updateObj.hp);
+    this.character.attributes.mp += Number(updateObj.mp);
     if (this.character.attributes.hp > this.character.attributes.maxHP) {
       this.character.attributes.hp = this.character.attributes.maxHP;
     }

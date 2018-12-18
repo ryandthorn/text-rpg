@@ -1,18 +1,18 @@
 'use strict';
 
-function displayStory() {
-  $.get('/story')
-    .done((story) => {
-      $('main').html(story);
-    });
-}
-
 function startStory() {
   $.post('/story')
     .done(() => {
       displayStory();
       displayCharacterInfo();
-      // mockDataListener();
+    });
+}
+
+function displayStory() {
+  $.get('/story')
+    .done((story) => {
+      $('main').html(story);
+      buttonListener();
     });
 }
 
@@ -44,31 +44,29 @@ function displayCharacterInfo() {
     });
 }
 
-function mockDataListener() {
+function buttonListener() {
+  // Add data as query params
+  $('.hit').click(event => {
+    event.preventDefault();
+    $.ajax({
+      url: 'http://localhost:8080/character/update?hp=-2&mp=-1',
+      type: 'PUT',
+      // data: {hp: -2, mp: -1},
+      // dataType: "json",
+      success: function(data) {
+        console.log('Update was performed.');
+        console.log(data);
+        displayCharacterInfo();
+      }
+    });
+  });
+
   // $('.next-page').click(event => {
   //   event.preventDefault()
   //   // PUT => update bookmark and send next scene
   //   displayStory();
   // })
 
-  // PUT sends null??
-  // $('.hit').click(event => {
-  //   event.preventDefault();
-  //   $.ajax({
-  //     url: '/character',
-  //     type: 'PUT',
-  //     data: {"hp": -2, "mp": -1},
-  //     dataType: "json",
-  //     success: function(data) {
-  //       console.log('Update was performed.');
-  //       console.log(data);
-  //     }
-  //   })
-  //   .done((res) => {
-  //     displayCharacterInfo();
-  //     return;
-  //   });
-  // });
   // $('.recover').click(event => {
   //   event.preventDefault();
   //   characterData.update({hp: 2, mp: 1});
