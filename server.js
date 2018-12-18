@@ -1,8 +1,6 @@
 'use strict';
 const express = require('express');
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
 
 const { characterData, storyData } = require('./mockDB');
 
@@ -47,8 +45,6 @@ app.put('/story', (req, res) => {
   res.status(200).json(storyData.bookmark);
 });
 
-// PUT /story =>
-//  update bookmark
 
 let server;
 

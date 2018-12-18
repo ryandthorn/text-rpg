@@ -10,7 +10,7 @@ function startStory() {
 
 function displayStory() {
   $.get('/story')
-    .done((story) => {
+    .done(story => {
       $('main').html(story.text);
       buttonListener();
     });
@@ -18,7 +18,7 @@ function displayStory() {
 
 function displayCharacterInfo() {
   $.get('/character')
-    .done((char) => {
+    .done(char => {
       $('aside').html( `
         <h2>${char.class}</h2>
         <h3>HP: ${char.attributes.hp} | MP: ${char.attributes.mp}</h3>
@@ -53,25 +53,18 @@ function buttonListener() {
       type: 'PUT',
       // data: {hp: -2, mp: -1},
       // dataType: "json",
-      success: function(data) {
-        console.log('Update was performed.');
-        console.log(data);
-        displayCharacterInfo();
-      }
+      success: () => displayCharacterInfo()
     });
   });
 
-  // $('.next-page').click(event => {
-  //   event.preventDefault()
-  //   // PUT => update bookmark and send next scene
-  //   displayStory();
-  // })
-
-  // $('.recover').click(event => {
-  //   event.preventDefault();
-  //   characterData.update({hp: 2, mp: 1});
-  //   $('aside').html(displayCharacterInfo());
-  // });
+  $('.next-page').click(event => {
+    event.preventDefault()
+    $.ajax({
+      url: '/story',
+      type: 'PUT',
+      success: () => displayStory()
+    });
+  })
 }
 
 function startGame() {
@@ -91,13 +84,11 @@ function loseGame() {
 }
 
 function selectCharacterHandler() {
-  $('form').submit(function(event) {
+  $('form').submit(event => {
     event.preventDefault();
     const selection = $('input[type=radio]:checked').val();
     $.post('/character')
-      .done((res) => {
-        startGame();
-      });
+      .done(() => startGame());
   });
 }
 
