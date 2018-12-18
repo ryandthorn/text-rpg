@@ -74,15 +74,25 @@ describe('Text RPG', function() {
   });
 
   describe('/story endpoint', function() {
+
     it('should set bookmark to 1:1 on POST', function() {
       expect(storyData.bookmark).to.be.undefined;
       return chai.request(app)
         .post('/story')
         .then(function(res) {
           expect(res).to.have.status(200);
-          expect(res.text).to.be.a('string');
-          expect(res.text).to.equal(storyData.chapter1.scene1);
+          expect(res.body).to.be.a('object');
+          expect(res.body.text).to.equal(storyData.chapter1.scene1.text);
         })
-    })
+    });
+
+    it('should get bookmark on GET', function() {
+      return chai.request(app)
+        .get('/story')
+        .then(function(res) {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a('object');
+        });
+    });
   });
 });

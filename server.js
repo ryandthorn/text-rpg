@@ -34,12 +34,12 @@ app.delete('/character', (req, res) => {
 
 // Story routes
 app.get('/story', (req, res) => {
-  res.status(200).send(storyData.bookmark);
+  res.status(200).json(storyData.bookmark);
 });
 
 app.post('/story', (req, res) => {
   storyData.begin();
-  res.status(200).send(storyData.bookmark);
+  res.status(200).json(storyData.bookmark);
 })
 
 // PUT /story =>

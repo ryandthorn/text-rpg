@@ -6,14 +6,23 @@ const storyData = {
   },
   bookmark: '',
   chapter1: {
-    scene1: `
-      <p>It was a dark and stormy lorem</p>
-      <button class="next-page">Next page</button>
-      <button class="hit">-2HP -1MP</button>
-      <button class="recover">Recover</button>
-    `,
-    // next: // => scene2
-    scene2: `<p>You reached scene 2!</p>`
+    scene1: {
+      text: `
+        <p>It was a dark and stormy lorem</p>
+        <button class="next-page">Next page</button>
+        <button class="hit">-2HP -1MP</button>
+        <button class="recover">Recover</button>
+      `,
+      next: function() {
+        storyData.bookmark = storyData.chapter1.scene2;
+      }
+    },
+    scene2: {
+      text: `<p>You reached scene 2!</p>`,
+      next: function() {
+        console.log('end');
+      }
+    }
   },
 };
 
