@@ -11,7 +11,7 @@ function startStory() {
 function displayStory() {
   $.get('/story')
     .done((story) => {
-      $('main').html(story);
+      $('main').html(story.text);
       buttonListener();
     });
 }

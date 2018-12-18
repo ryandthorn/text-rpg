@@ -4,7 +4,6 @@ const storyData = {
   begin: function() {
     this['bookmark'] = this.chapter1.scene1;
   },
-  bookmark: '',
   chapter1: {
     scene1: {
       text: `

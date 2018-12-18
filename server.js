@@ -42,6 +42,11 @@ app.post('/story', (req, res) => {
   res.status(200).json(storyData.bookmark);
 })
 
+app.put('/story', (req, res) => {
+  storyData.bookmark.next();
+  res.status(200).json(storyData.bookmark);
+});
+
 // PUT /story =>
 //  update bookmark
 

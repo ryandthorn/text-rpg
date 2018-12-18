@@ -94,5 +94,16 @@ describe('Text RPG', function() {
           expect(res.body).to.be.a('object');
         });
     });
+
+    it('should update bookmark position on PUT', function() {
+      storyData.bookmark = storyData.chapter1.scene1;
+      return chai.request(app)
+        .put('/story')
+        .then(function(res) {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a('object');
+          expect(res.body.text).to.equal(storyData.chapter1.scene2.text);
+        });
+    });
   });
 });
