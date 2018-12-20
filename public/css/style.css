@@ -1,0 +1,10 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Courier New', Courier, monospace;
+  background: black;
+  color: white;
+}
+
+button {
+  padding: .5em 1em;
+}
