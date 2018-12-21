@@ -45,3 +45,7 @@ header input {
 .btn--start {
   margin-top: 1rem;
 }
+
+.text--first-person {
+  font-style: italic;
+}

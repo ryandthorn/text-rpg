@@ -7,7 +7,7 @@ const storyData = {
   chapter1: {
     scene1: {
       text: `
-        <p><span class="text--first-person">How long have I been in here? Days? ...Weeks?</span></p>
+        <p class="text--first-person">How long have I been in here? Days? ...Weeks?</p>
 
         <p>You'd heard the stories: people running out of the cave, stark raving mad and half-dead.
         All of them clutching at their burning eyes, screaming about unnatural beings deep within.</p>
@@ -15,18 +15,28 @@ const storyData = {
         <p>You'd also heard the others: riches beyond belief. Ruins of an ancient civilization,
         artifacts capable of giving their masters untold power. A portal to heaven itself.</p>
         
-        <p><span class="text--first-person">No chance now. Maybe I'm already gone.</span></p>
-        <p><span class="text--first-person">Death... how could it be worse than this?</span></p>
+        <p class="text--first-person">No chance now. Maybe I'm already gone.</p>
+        <p class="text--first-person">Death... how could it be worse than this?</p>
         
         <input class="btn--next" type="button" value="Next" />
       `,
-      next: function() {
-        storyData.bookmark = storyData.chapter1.scene2;
-      }
+      next: () => storyData.bookmark = storyData.chapter1.scene2
     },
     scene2: {
       text: `
-        <p><span class="text--first-person">Footsteps.</span> You feel your way into a corner of the cell.</p>
+        <p>Your mind wanders into memories of the days before the darkness.</p>
+        <p class="text--first-person">Slow... heavy. What moves like that?</p>
+
+      `,
+      next: () => storyData.bookmark = storyData.chapter1.scene3
+    }
+    scene3: {
+      text: `
+        <p><span class="text--first-person">Footsteps.</span></p> 
+        <p>You feel your way back into a corner of the cell.</p>
+        <p class="text--first-person">Slow... heavy. What moves like that?</p>
+        <input class="btn--next 13a" type="button" value="Call for help" />
+        <input class="btn--next 13b" type="button" value="Remain silent" />
       `,
       next: function() {
         console.log('end');
