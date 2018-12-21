@@ -5,6 +5,24 @@
   color: white;
 }
 
-button {
-  padding: .5em 1em;
+body {
+  max-width: 95vw;
+  max-height: 95vh;
+  margin: 0 auto;
+}
+
+header {
+  display: flex;
+}
+
+h1 {
+  font-size: 1.5em;
+  flex: 2;
+}
+
+header input {
+  flex: 1;
+  max-height: 4rem;
+  margin: auto .25rem;
+  padding: 1rem 0;
 }
