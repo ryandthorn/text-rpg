@@ -29,12 +29,13 @@ describe('Text RPG', function() {
     it('should create a new character on POST', function() {
       expect(characterData.character).to.be.undefined;
       return chai.request(app)
-        .post('/character')
+        .post('/character/new?class=mage')
         .then(function(res) {
           expect(res).to.have.status(201);
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.keys('class', 'attributes', 'skills');
-        })
+          expect(res.body.class).to.equal('Mage');
+        });
     });
   
     it('should return the character object on GET', function() {
