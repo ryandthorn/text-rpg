@@ -45,6 +45,10 @@ app.put('/story', (req, res) => {
   res.status(200).json(storyData.bookmark);
 });
 
+app.put('/story/:choice', (req, res) => {
+  storyData.bookmark.next(req.query.choice);
+  res.status(200).json(storyData.bookmark);
+});
 
 let server;
 

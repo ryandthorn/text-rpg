@@ -58,8 +58,17 @@ function buttonListener() {
 
   $('.btn--next').click(event => {
     event.preventDefault()
+    const target = $( event.target );
+    let parameters = '';
+
+    if (target.is( '.13a' )) {
+      parameters = '/choice?choice=A';
+    } else if (target.is( '.13b' )) {
+      parameters = '/choice?choice=B';
+    }
+    
     $.ajax({
-      url: '/story',
+      url: '/story' + parameters,
       type: 'PUT',
       success: () => displayStory()
     });
