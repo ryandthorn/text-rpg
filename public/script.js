@@ -4,7 +4,6 @@ function startStory() {
   $.post('/story')
     .done(() => {
       displayStory();
-      displayCharacterInfo();
     });
 }
 
