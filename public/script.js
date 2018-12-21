@@ -45,18 +45,18 @@ function displayCharacterInfo() {
 
 function buttonListener() {
   // Add data as query params
-  $('.btn-hit').click(event => {
-    event.preventDefault();
-    $.ajax({
-      url: 'http://localhost:8080/character/update?hp=-2&mp=-1',
-      type: 'PUT',
-      // data: {hp: -2, mp: -1},
-      // dataType: "json",
-      success: () => displayCharacterInfo()
-    });
-  });
+  // $('.btn--hit').click(event => {
+  //   event.preventDefault();
+  //   $.ajax({
+  //     url: 'http://localhost:8080/character/update?hp=-2&mp=-1',
+  //     type: 'PUT',
+  //     // data: {hp: -2, mp: -1},
+  //     // dataType: "json",
+  //     success: () => displayCharacterInfo()
+  //   });
+  // });
 
-  $('.btn-next').click(event => {
+  $('.btn--next').click(event => {
     event.preventDefault()
     $.ajax({
       url: '/story',
@@ -70,9 +70,9 @@ function headerListener() {
   $('header').click(event => {
     event.preventDefault();
     const target = $( event.target );
-    if (target.is( '.btn-story' )) {
+    if (target.is( '.btn--story' )) {
       displayStory();
-    } else if (target.is( '.btn-character' )) {
+    } else if (target.is( '.btn--character' )) {
       displayCharacterInfo();
     }
   });
@@ -82,8 +82,8 @@ function startGame() {
   $('form').remove();
   $('header').html(`
     <h1>Chapter 1</h1>
-    <input class="btn-story" type="button" value="Story" />
-    <input class="btn-character" type="button" value="Character" />
+    <input class="btn--story" type="button" value="Story" />
+    <input class="btn--character" type="button" value="Character" />
   `);
   headerListener();
   startStory();
