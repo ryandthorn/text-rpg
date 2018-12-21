@@ -10,8 +10,8 @@ app.use(express.json());
 app.use(morgan('common'));
 
 // Character routes
-app.post('/character', (req, res) => {
-  characterData['character'] = characterData.create('mage');
+app.post('/character/:new', (req, res) => {
+  characterData['character'] = characterData.create(req.query.class);
   res.status(201).json(characterData.character);
 });
 

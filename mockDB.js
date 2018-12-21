@@ -8,8 +8,8 @@ const storyData = {
     scene1: {
       text: `
         <p>It was a dark and stormy lorem</p>
-        <button class="next-page">Next page</button>
-        <button class="hit">-2HP -1MP</button>
+        <input class="btn-next" type="button" value="Next" />
+        <input class="btn-hit" type="button" value="-2HP -1MP" />
       `,
       next: function() {
         storyData.bookmark = storyData.chapter1.scene2;
