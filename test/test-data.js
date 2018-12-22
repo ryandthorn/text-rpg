@@ -40,8 +40,27 @@ const storyData = {
         <input class="btn--next 13a" type="button" value="Call for help" />
         <input class="btn--next 13b" type="button" value="Remain silent" />
       `,
-      next: function() {
-        console.log('end');
+      next: choice => {
+        if (choice === 'A') {
+          storyData.bookmark = storyData.chapter1.scene4.a;
+        } else if (choice === 'B') {
+          storyData.bookmark = storyData.chapter1.scene4.b;
+        }
+      }
+    },
+    scene4: {
+      a: {
+        text: `
+          <p>Whatever is out there can't be worse than living in this darkness.</p> 
+          <p>You call out: "You there!! Please, HELP!!"</p>
+        `,
+        next: () => console.log('end 1')
+      },
+      b: {
+        text: `
+          <p>It might be your captor. You decide to wait and see how this plays out.</p>
+        `,
+        next: () => console.log('end 2')
       }
     }
   }

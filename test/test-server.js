@@ -106,5 +106,19 @@ describe('Text RPG', function() {
           expect(res.body.text).to.equal(storyData.chapter1.scene2.text);
         });
     });
+
+    it('should update bookmark position with options on PUT', function() {
+      return chai.request(app)
+        .put('/story')
+        .then(function() {
+          return chai.request(app)
+          .put('/story/choice?choice=A')
+          .then(function(res) {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.a('object');
+            expect(res.body.text).to.equal(storyData.chapter1.scene4.a.text);
+          });
+        });
+    })
   });
 });

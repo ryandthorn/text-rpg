@@ -63,6 +63,20 @@ const storyData = {
         next: () => console.log('end 2')
       }
     }
+    // scene5: {
+    //   text: ``,
+    //   enemy: {
+    //     picture
+    //     name
+    //     attributes
+    //     action: {
+    //       // roll number
+    //       // if (number > 10) {
+    //         // attack 1
+    //       // }
+    //     }
+    //   }
+    // }
   },
 };
 
