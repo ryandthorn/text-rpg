@@ -84,7 +84,7 @@ const characterData = {
       newCharacter.skills = {
         phyDamage: -1,
         phyResist: -1,
-        toHit: 1,
+        accuracy: 1,
         evasion: 1,
         magDamage: 2,
         magResist: 2,
@@ -106,7 +106,7 @@ const characterData = {
       newCharacter.skills = {
         phyDamage: 0,
         phyResist: 0,
-        toHit: 2,
+        accuracy: 2,
         evasion: 2,
         magDamage: 0,
         magResist: 0,
@@ -128,7 +128,7 @@ const characterData = {
       newCharacter.skills = {
         phyDamage: 1,
         phyResist: 1,
-        toHit: 0,
+        accuracy: 0,
         evasion: 0,
         magDamage: -1,
         magResist: -1,
