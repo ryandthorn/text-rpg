@@ -144,6 +144,42 @@ function handleActionInfo() {
   });
 }
 
+function handleActionSubmit() {
+  $('form').submit(event => {
+    event.preventDefault();
+    const selection = $('select option:selected').val();
+    switch(selection) {
+      case 'attack':
+        $('.combat--log').append(`<p>Mage attacks!</p>`);
+        const playerHitRoll = characterData.character.actions.attack.rollHit();
+        const playerHitCalc = playerHitRoll + characterData.character.attributes.agi + characterData.character.skills.accuracy;
+        const enemyHitRoll = getRandomIntInclusive(1, 20);
+        const enemyHitCalc = enemyHitRoll; // Hard-coded
+        if (playerHitCalc > enemyHitCalc) {
+          $('.combat--log').append(`
+            <p>Mage HITS (roll${playerHitRoll} + agi${characterData.character.attributes.agi}` + 
+              `+ acc${characterData.character.skills.accuracy} (${playerHitCalc}) vs ` + 
+              `(${enemyHitCalc}) roll${enemyHitRoll} + agi0 + eva0</p>
+          `);
+        } else {
+          $('.combat--log').append(`
+          <p>Mage MISSES (roll${playerHitRoll} + agi${characterData.character.attributes.agi}` + 
+            `+ acc${characterData.character.skills.accuracy} (${playerHitCalc}) vs ` + 
+            `(${enemyHitCalc}) roll${enemyHitRoll} + agi0 + eva0</p>
+          `);
+        }
+        break;
+      case 'defend':
+        $('.combat--log').append(`<p>Mage defends.</p>`);
+        break;
+      case 'missile':
+        $('.combat--log').append(`<p>Mage casts Missile!</p>`);
+        break;
+    }
+    setScrollPosition();
+  });
+}
+
 $('.btn--character').click(event => {
   event.preventDefault();
 })
@@ -154,3 +190,4 @@ $('.btn--combat').click(event => {
 
 characterData['character'] = characterData.create('mage');
 handleActionInfo();
+handleActionSubmit();
