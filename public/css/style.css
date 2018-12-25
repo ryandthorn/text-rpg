@@ -103,7 +103,7 @@ header input {
   grid-template-rows: 1fr 1fr;
 }
 
-.combat--enemy .class {
+.combat--enemy .name {
   text-align: center;
   margin: auto 0;
 }

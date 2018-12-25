@@ -1,5 +1,64 @@
 'use strict';
 
+import { get } from "http";
+
+const storyData = {
+  chapter1: {
+    scene5: {
+      text: `
+        <p>The troglodyte looks like it wants to fight.</p>
+        <input class="btn--combat" type="button" value="Start Combat"/>
+      `,
+      enemy: {
+        name: `Injured Troglodyte`,
+        picture: "https://picsum.photos/100",
+        alt: "This eyeless, misshapen creature has a deep gash in its shoulder.",
+        attributes: {
+          hp: 8,
+          mp: 0,
+          maxHP: 8,
+          maxMP: 0,
+          str: 6,
+          agi: 8,
+          mag: 6,
+          con: 6
+        },
+        skills: {
+          phyDamage: -1,
+          phyResist: -1,
+          accuracy: 0,
+          evasion: 0,
+          magDamage: -1,
+          magResist: -1,
+          fortitude: -1,
+          damReduce: -1
+        },
+        actions: {
+          attack: {
+            text: [
+              'The troglodyte lowers its spear...',
+              'The troglodyte shifts its weight forward...',
+              'The troglodyte hisses...'
+            ],
+            rollHit: () => getRandomIntInclusive(1, 20),
+            rollDam: () => getRandomIntInclusive(1, 4)
+          },
+          defend: {
+            text: [
+              'The troglodyte takes a defensive stance...',
+              'The troglodyte steps back...',
+              'The troglodyte hesitates...'
+            ],
+            rollDam: () => getRandomIntInclusive(1, 4),
+            defendBonus: 0
+          }
+        }
+      },
+      next: () => console.log('combat resolved')
+    }
+  }
+}
+
 const characterData = {
   create: function(selection) {
     const newCharacter = {};
@@ -34,7 +93,8 @@ const characterData = {
         defend: {
           info: `Take a defensive stance. +5 vs enemy toHit, ` +
                 `counterattack for 1d4 on successful defense.`,
-          rollDam: () => getRandomIntInclusive(1, 4)
+          rollDam: () => getRandomIntInclusive(1, 4),
+          defendBonus: 0
         },
         spells: {
           missile: {
@@ -123,6 +183,84 @@ function setScrollPosition() {
   $('.combat--log').scrollTop(999999999);
 }
 
+function determineEnemyAction(enemy) {
+  const actions = Object.keys(enemy.actions);
+  const roll = getRandomIntInclusive(0, actions.length - 1);
+  const enemyAction = actions[roll];
+  const actionText = rollEnemyActionText(enemy, enemyAction);
+  $('.combat--log').append(`<p>${actionText}</p>`);
+  return enemyAction;
+}
+
+function rollEnemyActionText(enemy, enemyAction) {
+  const textOptions = enemy.actions[enemyAction].text;
+  const roll = getRandomIntInclusive(0, textOptions.length - 1);
+  return textOptions[roll];
+} 
+
+function displayCombatScreen() {
+  $('header').html(`
+    <h1>Fight!</h1>
+    <input class="btn--combat" type="button" value="Combat"/>
+    <input class="btn--character" type="button" value="Character"/>
+  `);
+  $('main').html(`
+    <section class="combat--character"></section>
+    <section class="combat--log"></section>
+    <section class="combat--enemy"></section>
+  `);
+}
+
+function displayCharacterInfo(player) {
+  $('.combat--character').html(`
+    <div class="class">
+      <h2>${player.class}</h2>
+    </div>
+    <div class="vitals">
+      <h3>HP ${player.attributes.hp}</h3>
+      <h3>MP ${player.attributes.mp}</h3>
+    </div>
+    <div class="actions">
+      <form class="action-form">
+        <fieldset>
+          <legend>Choose an action</legend>
+          <select name="action-menu" id="action-menu" required>
+            <option value="attack">Attack</option>
+            <option value="defend">Defend</option>
+            <optgroup label="Cast Spell">
+              <option value="missile">Missile</option>
+            </optgroup>
+          </select>
+          <section class="action-info">
+            <p>Select a combat action from the menu above.</p>
+          </section>
+          <input type="submit" class="btn--action-submit" value="Fight!">
+        </fieldset>
+      </form>
+    </div>
+  `);
+}
+
+function displayEnemyInfo(enemy) {
+  $('.combat--enemy').html(`
+    <div class="name">
+      <h2>${enemy.name}</h2>
+    </div>
+    <div class="vitals">
+      <h3>HP ${enemy.attributes.hp}</h3>
+      <h3>MP ${enemy.attributes.mp}</h3>
+    </div>
+    <div class="actions">
+      <h3>Actions</h3>
+      <p>Attack</p>
+      <p>Defend</p>
+    </div>
+    <div class="picture">
+      <img src="${enemy.picture}" alt="${enemy.alt}">
+    </div>
+  `);
+}
+
 function handleActionInfo() {
   $('select').change(() => {
     const selection = $('select option:selected').val();
@@ -144,28 +282,31 @@ function handleActionInfo() {
   });
 }
 
-function handleActionSubmit() {
+function combat(player, enemy) {
+  let enemyAction = determineEnemyAction(enemy);
   $('form').submit(event => {
     event.preventDefault();
+
     const selection = $('select option:selected').val();
     switch(selection) {
       case 'attack':
         $('.combat--log').append(`<p>Mage attacks!</p>`);
-        const playerHitRoll = characterData.character.actions.attack.rollHit();
-        const playerHitCalc = playerHitRoll + characterData.character.attributes.agi + characterData.character.skills.accuracy;
-        const enemyHitRoll = getRandomIntInclusive(1, 20);
-        const enemyHitCalc = enemyHitRoll; // Hard-coded
-        if (playerHitCalc > enemyHitCalc) {
+        const playerHitRoll = player.actions.attack.rollHit();
+        const playerHitCalc = playerHitRoll + player.skills.accuracy;
+        const enemyEvadeRoll = getRandomIntInclusive(1, 20);
+        const enemyEvadeCalc = enemyEvadeRoll + enemy.skills.evasion;
+        if (playerHitCalc > enemyEvadeCalc) {
+          const damage = player.actions.attack.rollDam();
           $('.combat--log').append(`
-            <p>Mage HITS (roll${playerHitRoll} + agi${characterData.character.attributes.agi}` + 
-              `+ acc${characterData.character.skills.accuracy} (${playerHitCalc}) vs ` + 
-              `(${enemyHitCalc}) roll${enemyHitRoll} + agi0 + eva0</p>
+            <p>Mage HITS for ${damage} damage [roll${playerHitRoll} + acc${player.skills.accuracy} ` + 
+              `(${playerHitCalc}) vs (${enemyEvadeCalc}) roll${enemyEvadeRoll} + eva0]</p>
           `);
+          enemy.attributes.hp -= damage;
+          displayEnemyInfo(enemy);
         } else {
           $('.combat--log').append(`
-          <p>Mage MISSES (roll${playerHitRoll} + agi${characterData.character.attributes.agi}` + 
-            `+ acc${characterData.character.skills.accuracy} (${playerHitCalc}) vs ` + 
-            `(${enemyHitCalc}) roll${enemyHitRoll} + agi0 + eva0</p>
+          <p>Mage MISSES [roll${playerHitRoll} + acc${player.skills.accuracy} (${playerHitCalc}) vs ` + 
+            `(${enemyEvadeCalc}) roll${enemyEvadeRoll} + eva0]</p>
           `);
         }
         break;
@@ -176,8 +317,48 @@ function handleActionSubmit() {
         $('.combat--log').append(`<p>Mage casts Missile!</p>`);
         break;
     }
+    if (enemy.attributes.hp <= 0) {
+      $('main').html(`Victory!`);
+      return;
+    }
+    enemyTurn(player, enemy, enemyAction);
+    if (player.attributes.hp > 0 && enemy.attributes.hp > 0) {
+      combat(player, enemy);
+    }
     setScrollPosition();
   });
+}
+
+function enemyTurn(player, enemy, enemyAction) {
+  const action = enemy.actions[enemyAction];
+  const enemyHitRoll = enemy.actions.attack.rollHit();
+  const enemyHitCalc = enemyHitRoll + enemy.skills.accuracy;
+  const playerEvadeRoll = getRandomIntInclusive();
+  const playerEvadeCalc = playerEvadeRoll + player.skills.evasion;
+  switch(enemyAction) {
+    case 'attack': 
+      $('.combat--log').append(`<p>${enemy.name} attacks!</p>`);
+      if (enemyHitCalc > playerEvadeCalc) {
+        const damage = enemy.actions.attack.rollDam();
+        $('.combat--log').append(`
+          <p>${enemy.name} HITS for ${damage} damage ` + 
+          `[roll${enemyHitRoll} + acc${enemy.skills.accuracy} (${enemyHitCalc}) ` +
+          `vs (${playerEvadeCalc}) roll(${playerEvadeRoll}) + eva(${player.skills.evasion})]
+        `);
+        player.attributes.hp -= damage;
+      } else {
+        $('.combat--log').append(`
+          <p>${enemy.name} MISSES ` + 
+          `[roll${enemyHitRoll} + acc${enemy.skills.accuracy} (${enemyHitCalc}) ` +
+          `vs (${playerEvadeCalc}) roll(${playerEvadeRoll}) + eva(${player.skills.evasion})]
+        `);
+      }
+      break;
+    case 'defend':
+      enemy.actions.defend.defendBonus = 5;
+      // When to add bonus??
+  }
+  console.log(action);
 }
 
 $('.btn--character').click(event => {
@@ -185,9 +366,27 @@ $('.btn--character').click(event => {
 })
 
 $('.btn--combat').click(event => {
-  event.preventDefault();
+  enemyAction();
 })
 
+function combatListener() {
+  $('.btn--combat').click(event => {
+    event.preventDefault();
+    startCombat();
+  });
+}
+
+function startCombat() {
+  const player = characterData['character'];
+  const enemy = storyData.bookmark.enemy;
+  displayCombatScreen()
+  displayCharacterInfo(player);
+  displayEnemyInfo(enemy);
+  handleActionInfo();
+  combat(player, enemy);
+}
+
 characterData['character'] = characterData.create('mage');
-handleActionInfo();
-handleActionSubmit();
+storyData['bookmark'] = storyData.chapter1.scene5;
+$('main').html(storyData.bookmark.text);
+combatListener();
