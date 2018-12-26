@@ -6,9 +6,9 @@
 }
 
 body {
-  max-width: 95vw;
-  max-height: 95vh;
+  max-width: 1000px;
   margin: 0 auto;
+  padding: 2vw;
 }
 
 header {
@@ -18,6 +18,7 @@ header {
 h1 {
   font-size: 1.5em;
   flex: 2;
+  text-align: center;
 }
 
 header input {
@@ -53,6 +54,7 @@ header input {
 /* Combat Screen */
 
 .combat--character {
+  margin-top: .5rem;
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-template-rows: 1fr 2fr;
@@ -93,13 +95,18 @@ header input {
 }
 
 .combat--log {
+  margin: .5rem 0;
   max-height: 20vh;
   overflow: auto;
 }
 
+.combat--log ul {
+  list-style-type: square; 
+}
+
 .combat--enemy {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 40% 60%;
   grid-template-rows: 1fr 1fr;
 }
 
@@ -108,23 +115,32 @@ header input {
   margin: auto 0;
 }
 
+.combat--enemy .name h2 {
+  font-size: 1em;
+}
+
 .combat--enemy .vitals {
   grid-area: 2 / 1 / 3 / 2;
   text-align: center;
 }
 
-.combat--enemy .actions {
-  grid-area: 1 / 2 / 3 / 3;
-  text-align: center;
-  margin: auto;
-}
-
 .combat--enemy .picture {
-  grid-area: 1 / 3 / 3 / 3;
+  grid-area: 1 / 2 / 3 / 2;
 }
 
 .combat--enemy .picture img {
   height: 100%;
+  max-width: 200px;
+  max-height: 200px;
   display: block;
   margin: 0 auto;
+}
+
+@media (min-width: 600px) {
+  .combat--log {
+    max-height: 40vh;
+  }
+  .combat--enemy .name h2 {
+    font-size: 1.5em;
+  }
 }

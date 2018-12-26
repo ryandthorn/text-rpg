@@ -9,7 +9,8 @@ const storyData = {
       `,
       enemy: {
         name: `Injured Troglodyte`,
-        picture: "https://picsum.photos/100",
+        imgSrc: "images/grzyb-troglodyte-full.jpg",
+        imgSrcSet: "images/grzyb-troglodyte-tiny.jpg 300w, images/grzyb-troglodyte-small.jpg 600w, images/grzyb-troglodyte-full.jpg 900w",
         alt: "This eyeless, misshapen creature has a deep gash in its shoulder.",
         attributes: {
           hp: 8,
@@ -188,7 +189,9 @@ function displayCombatScreen() {
   `);
   $('main').html(`
     <section class="combat--character"></section>
-    <section class="combat--log"></section>
+    <section class="combat--log">
+      <ul></ul>
+    </section>
     <section class="combat--enemy"></section>
   `);
 }
@@ -232,13 +235,8 @@ function displayEnemyInfo(enemy) {
       <h3>HP ${enemy.attributes.hp}</h3>
       <h3>MP ${enemy.attributes.mp}</h3>
     </div>
-    <div class="actions">
-      <h3>Actions</h3>
-      <p>Attack</p>
-      <p>Defend</p>
-    </div>
     <div class="picture">
-      <img src="${enemy.picture}" alt="${enemy.alt}">
+      <img srcset="${enemy.imgSrcSet}" src="${enemy.imgSrc}" alt="${enemy.alt}">
     </div>
   `);
 }
@@ -272,46 +270,46 @@ function combat(player, enemy) {
     const selection = $('select option:selected').val();
     switch(selection) {
       case 'attack':
-        $('.combat--log').append(`<p>Mage attacks!</p>`);
+        $('.combat--log ul').append(`<li>Mage attacks!</li>`);
         const playerHitRoll = player.actions.attack.rollHit();
         const playerHitCalc = playerHitRoll + player.attributes.agi + player.skills.accuracy;
         const enemyEvadeRoll = getRandomIntInclusive(1, 20);
         const enemyEvadeCalc = enemyEvadeRoll + enemy.attributes.agi + enemy.skills.evasion + (enemy.actions.defend.defendBonus || 0);
         if (playerHitCalc > enemyEvadeCalc) {
           const damage = player.actions.attack.rollDam();
-          $('.combat--log').append(`
-            <p>Mage HITS for ${damage} damage [roll${playerHitRoll} + agi${player.attributes.agi} + acc${player.skills.accuracy} ` + 
-              `(${playerHitCalc}) vs (${enemyEvadeCalc}) roll${enemyEvadeRoll} + agi${enemy.attributes.agi} + eva${enemy.skills.evasion} + defBonus${enemy.actions.defend.defendBonus}]</p>
+          $('.combat--log ul').append(`
+            <li>Mage HITS for ${damage} damage [roll${playerHitRoll} + agi${player.attributes.agi} + acc${player.skills.accuracy} ` + 
+              `(${playerHitCalc}) vs (${enemyEvadeCalc}) roll${enemyEvadeRoll} + agi${enemy.attributes.agi} + eva${enemy.skills.evasion} + defBonus${enemy.actions.defend.defendBonus}]</li>
           `);
           enemy.attributes.hp -= damage;
           displayEnemyInfo(enemy);
         } else {
-          $('.combat--log').append(`
-          <p>Mage MISSES [roll${playerHitRoll} + agi${player.attributes.agi} + acc${player.skills.accuracy} (${playerHitCalc}) vs ` + 
-            `(${enemyEvadeCalc}) roll${enemyEvadeRoll} + agi${enemy.attributes.agi} + eva${enemy.skills.evasion} + defBonus${enemy.actions.defend.defendBonus}]</p>
+          $('.combat--log ul').append(`
+            <li>Mage MISSES [roll${playerHitRoll} + agi${player.attributes.agi} + acc${player.skills.accuracy} (${playerHitCalc}) vs ` + 
+              `(${enemyEvadeCalc}) roll${enemyEvadeRoll} + agi${enemy.attributes.agi} + eva${enemy.skills.evasion} + defBonus${enemy.actions.defend.defendBonus}]</li>
           `);
         }
         break;
       case 'defend':
         player.actions.defend.defendBonus = 5;
-        $('.combat--log').append(`
-          <p>${player.class} defends (+5 eva for 1 turn)</p>
+        $('.combat--log ul').append(`
+          <li>${player.class} defends (+5 eva for 1 turn)</li>
         `)
         break;
       case 'missile':
         const damage = player.actions.spells.missile.rollDam();
         player.attributes.mp -= 2;
         enemy.attributes.hp -= damage;
-        $('.combat--log').append(`
-          <p>Mage casts missile!</p>
-          <p>Missile does ${damage} damage to ${enemy.name}</p>
+        $('.combat--log ul').append(`
+          <li>Mage casts missile!</li>
+          <li>Missile does ${damage} damage to ${enemy.name}</li>
         `);
         displayPlayerInfo(player);
         displayEnemyInfo(enemy);
         break;
     }
     if (enemy.attributes.hp <= 0) {
-      $('.combat--log').append(`
+      $('.combat--log ul').append(`
         <p>You defeated ${enemy.name}!</p>
         <input class="btn--next" type="button" value="End Combat"/>
       `)
@@ -319,7 +317,7 @@ function combat(player, enemy) {
       return;
     }
     if (player.attributes.hp <= 0) {
-      $('.combat--log').append(`<p>Placeholder: you lose!</p>`)
+      $('.combat--log ul').append(`<p>Placeholder: you lose!</p>`)
       setScrollPosition();
       return;
     }
@@ -342,20 +340,20 @@ function enemyTurn(player, enemy, enemyAction) {
       const enemyHitCalc = enemyHitRoll + enemy.attributes.agi + enemy.skills.accuracy;
       const playerEvadeRoll = getRandomIntInclusive(1, 20);
       const playerEvadeCalc = playerEvadeRoll + player.attributes.agi + player.skills.evasion + (player.actions.defend.defendBonus || 0);
-      $('.combat--log').append(`<p>${enemy.name} attacks!</p>`);
+      $('.combat--log ul').append(`<li>${enemy.name} attacks!</li>`);
       if (enemyHitCalc > playerEvadeCalc) {
         const damage = enemy.actions.attack.rollDam();
-        $('.combat--log').append(`
-          <p>${enemy.name} HITS for ${damage} damage ` + 
+        $('.combat--log ul').append(`
+          <li>${enemy.name} HITS for ${damage} damage ` + 
           `[roll${enemyHitRoll} + agi${enemy.attributes.agi} + acc${enemy.skills.accuracy} (${enemyHitCalc}) ` +
-          `vs (${playerEvadeCalc}) roll${playerEvadeRoll} + agi${player.attributes.agi} + eva${player.skills.evasion} + defBonus${player.actions.defend.defendBonus}]
+          `vs (${playerEvadeCalc}) roll${playerEvadeRoll} + agi${player.attributes.agi} + eva${player.skills.evasion} + defBonus${player.actions.defend.defendBonus}]</li>
         `);
         player.attributes.hp -= damage;
       } else {
-        $('.combat--log').append(`
-          <p>${enemy.name} MISSES ` + 
+        $('.combat--log ul').append(`
+          <li>${enemy.name} MISSES ` + 
           `[roll${enemyHitRoll} + agi${enemy.attributes.agi} + acc${enemy.skills.accuracy} (${enemyHitCalc}) ` +
-          `vs (${playerEvadeCalc}) roll${playerEvadeRoll} + agi${player.attributes.agi} + eva${player.skills.evasion} + defBonus${player.actions.defend.defendBonus}]
+          `vs (${playerEvadeCalc}) roll${playerEvadeRoll} + agi${player.attributes.agi} + eva${player.skills.evasion} + defBonus${player.actions.defend.defendBonus}]</li>
         `);
       }
       if (player.actions.defend.defendBonus > 0) {
@@ -364,8 +362,8 @@ function enemyTurn(player, enemy, enemyAction) {
       break;
     case 'defend':
       enemy.actions.defend.defendBonus = 5;
-      $('.combat--log').append(`
-        <p>${enemy.name} defends (+5 eva for 1 turn)</p>
+      $('.combat--log ul').append(`
+        <li>${enemy.name} defends (+5 eva for 1 turn)</li>
       `)
   }
 }
@@ -375,7 +373,7 @@ function determineEnemyAction(enemy) {
   const roll = getRandomIntInclusive(0, actions.length - 1);
   const enemyAction = actions[roll];
   const actionText = rollEnemyActionText(enemy, enemyAction);
-  $('.combat--log').append(`<p>${actionText}</p>`);
+  $('.combat--log ul').append(`<li>${actionText}</li>`);
   return enemyAction;
 }
 
