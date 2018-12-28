@@ -27,7 +27,7 @@ const storyData = {
         <p class="text--first-person">I might not even get the chance.</p>
         <p>The darkness overwhelms you.</p>
 
-        <input class="btn--next" type="button" value="Sleep" />
+        <input class="btn--next" type="button" value="Continue" />
       `,
       next: () => storyData.bookmark = storyData.chapter1.scene3
     },
