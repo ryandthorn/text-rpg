@@ -53,30 +53,94 @@ const storyData = {
         text: `
           <p>Whatever is out there can't be worse than living in this darkness.</p> 
           <p>You call out: "You there!! Please, HELP!!"</p>
+          <input class="btn--next" type="button" value="Continue"/>  
         `,
-        next: () => console.log('end 1')
+        next: () => storyData.bookmark = storyData.chapter1.scene5.a
       },
       b: {
         text: `
           <p>It might be your captor. You decide to wait and see how this plays out.</p>
+          <input class="btn--next" type="button" value="Continue"/>
         `,
-        next: () => console.log('end 2')
+        next: () => storyData.bookmark = storyData.chapter1.scene5.b
       }
+    },
+    scene5: {
+      a: {
+        text: `
+          <p>You hear the whoosh of fire and a piercing hiss. Something large drops to the floor.</p>
+          <p class="text--first-person">What the hell is out there??</p>
+          <p>Your cell door swings open. The blinding flash of light from the fire dazes you.</p>
+          <p>Just as your eyes adjust, you make out a grotesque, lizard-like creature. Its spear point tips toward you.</p>
+          <input class="btn--next" type="button" value="Continue"/>
+        `,
+        next: () => storyData.bookmark = storyData.chapter1.scene6
+      },
+      b: {
+        text: `
+          <p>You hear a soft thud outside the cell door, soon followed by sharp, metallic scrapes.</p>
+          <p>Through a crack at the bottom of the door, you see the first glorious rays of light you've seen in who knows how long.</p>
+          <p>You hear keys at the door.</p>
+          <p class="text--first-person">Rescue! Finally!!</p>
+          <p>As the door swings open, you see a grotesque, lizard-like creature. Its spear point tips toward you.</p>
+          <input class="btn--next" type="button" value="Continue"/>
+        `,
+        next: () => storyData.bookmark = storyData.chapter1.scene6
+      }
+    },
+    scene6: {
+      text: `
+        <p>The creature looks like it wants to fight.</p>
+        <input class="btn--combat" type="button" value="Start Combat"/>
+      `,
+      enemy: {
+        name: `Troglodyte`,
+        imgSrc: "images/grzyb-troglodyte-full.jpg",
+        imgSrcSet: "images/grzyb-troglodyte-tiny.jpg 300w, images/grzyb-troglodyte-small.jpg 600w, images/grzyb-troglodyte-full.jpg 900w",
+        alt: "This eyeless, misshapen creature wields a sharp spear.",
+        attributes: {
+          hp: 8,
+          mp: 0,
+          maxHP: 8,
+          maxMP: 0,
+          str: 6,
+          agi: 8,
+          mag: 6,
+          con: 6
+        },
+        skills: {
+          phyDamage: -1,
+          phyResist: -1,
+          accuracy: 0,
+          evasion: 0,
+          magDamage: -1,
+          magResist: -1,
+          fortitude: -1,
+          damReduce: -1
+        },
+        actions: {
+          attack: {
+            text: [
+              'The troglodyte lowers its spear...',
+              'The troglodyte shifts its weight forward...',
+              'The troglodyte hisses...'
+            ],
+            rollHit: () => getRandomIntInclusive(1, 20),
+            rollDam: () => getRandomIntInclusive(1, 4)
+          },
+          defend: {
+            text: [
+              'The troglodyte takes a defensive stance...',
+              'The troglodyte steps back...',
+              'The troglodyte hesitates...'
+            ],
+            rollDam: () => getRandomIntInclusive(1, 4),
+            defendBonus: 0
+          }
+        }
+      },
+      next: () => console.log('next scene')
     }
-    // scene5: {
-    //   text: ``,
-    //   enemy: {
-    //     picture
-    //     name
-    //     attributes
-    //     action: {
-    //       // roll number
-    //       // if (number > 10) {
-    //         // attack 1
-    //       // }
-    //     }
-    //   }
-    // }
   },
 };
 
@@ -104,6 +168,25 @@ const characterData = {
         magResist: 2,
         fortitude: 0,
         damReduce: 0
+      };
+      newCharacter.actions = {
+        attack: {
+          info: `Physical attack for 1d6 damage`,
+          rollDam: () => getRandomIntInclusive(1, 6),
+          rollHit: () => getRandomIntInclusive(1, 20)
+        },
+        defend: {
+          info: `Take a defensive stance. +5 defense bonus vs enemy to-hit roll.`,
+          rollDam: () => getRandomIntInclusive(1, 4),
+          defendBonus: 0
+        },
+        spells: {
+          missile: {
+            info: `Shoot a bolt of kinetic energy at your opponent. ` +
+                  `1d8 + 4 damage, -2 MP`,
+            rollDam: () => getRandomIntInclusive(1, 8) + 4
+          }
+        }
       };
     } else if (selection === 'thief') {
       newCharacter.class = 'Thief',
@@ -164,9 +247,9 @@ const characterData = {
     if (this.character.attributes.mp > this.character.attributes.maxMP) {
       this.character.attributes.mp = this.character.attributes.maxMP;
     }
-    if (this.character.attributes.hp <= 0) {
-      loseGame();
-    }
+    // if (this.character.attributes.hp <= 0) {
+    //   loseGame();
+    // }
     return this.character;
   },
   delete: function() {
