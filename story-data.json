@@ -7,57 +7,57 @@
       "next": [
         "storyData.chapter1.scene2"
       ]
+    },
+    "scene2": {
+      "text": [
+        "<p>Your mind wanders into memories of the days before the darkness.</p><p class=\"text--first-person\">A cool breeze... the moon and stars... the sweet kiss of daylight...</p><p class=\"text--first-person\">I'll never take the light for granted again.</p><p>The darkness overwhelms you.</p><input class=\"btn--next\" type=\"button\" value=\"Continue\"/>"
+      ],
+      "next": [
+        "storyData.chapter1.scene3"
+      ]
+    },
+    "scene3": {
+      "text": [
+        "<p><span class=\"text--first-person\">Footsteps.</span></p><p>You feel your way back into a corner of the cell.</p><p class=\"text--first-person\">Slow... heavy. What moves like that?</p><input class=\"btn--next 13a\" type=\"button\" value=\"Call for help\" /><input class=\"btn--next 13b\" type=\"button\" value=\"Remain silent\"/>"
+      ],
+      "next": [
+        "storyData.chapter1.scene4.a",
+        "storyData.chapter1.scene4.b"
+      ]
+    },
+    "scene4": {
+      "text": [
+        "<p>Whatever is out there can't be worse than living in this darkness.</p><p>You call out: \"You there!! Please, HELP!!\"</p><input class=\"btn--next\" type=\"button\" value=\"Continue\"/>",
+        "<p>It might be your captor. You decide to wait and see how this plays out.</p><input class=\"btn--next\" type=\"button\" value=\"Continue\"/>"
+      ],
+      "next": [
+        "storyData.chapter1.scene5.a",
+        "storyData.chapter1.scene5.b"
+      ]
+    },
+    "scene5": {
+      "text": [
+        "<p>You hear the whoosh of fire and a piercing hiss. Something large drops to the floor.</p><p class=\"text--first-person\">What the hell is out there??</p><p>Your cell door swings open. The blinding flash of light from the fire dazes you.</p><p>Just as your eyes adjust, you make out a grotesque, lizard-like creature. Its spear point tips toward you.</p><input class=\"btn--next\" type=\"button\" value=\"Continue\"/>",
+        "<p>You hear a soft thud outside the cell door, soon followed by sharp, metallic scrapes.</p><p>Through a crack at the bottom of the door, you see the first glorious rays of light you've seen in who knows how long.</p><p>You hear keys at the door.</p><p class=\"text--first-person\">Rescue! Finally!!</p><p>As the door swings open, you see a grotesque, lizard-like creature. Its spear point tips toward you.</p><input class=\"btn--next\" type=\"button\" value=\"Continue\"/>"
+      ],
+      "next": [
+        "storyData.chapter1.scene6"
+      ]
+    },
+    "scene6": {
+      "text": "<p>The creature looks like it wants to fight.</p><input class=\"btn--combat\" type=\"button\" value=\"Start Combat\"/>",
+      "enemy": "Troglodyte",
+      "next": [
+        "storyData.chapter1.scene7"
+      ]
+    },
+    "scene7": {
+      "text": [
+        "<p>You gaze back at the dead creature on the floor of your cell, and you quickly decide to take this chance to escape.</p><p>Stepping out of your cell, you look towards the light and discover...</p><p class=\"text--first-person\">A corpse. Burnt. The smell... I've got to get out of here.</p><p>You pick up the lit torch beside the charred cadaver.</p><p class=\"text--first-person\">As long as I live, this light will not go out.</p>"
+      ],
+      "next": [
+        "storyData.chapter2.scene1"
+      ]
     }
-  },
-  "scene2": {
-    "text": [
-      "<p>Your mind wanders into memories of the days before the darkness.</p><p class=\"text--first-person\">A cool breeze... the moon and stars... the sweet kiss of daylight...</p><p class=\"text--first-person\">I'll never take the light for granted again.</p><p>The darkness overwhelms you.</p><input class=\"btn--next\" type=\"button\" value=\"Continue\"/>"
-    ],
-    "next": [
-      "storyData.chapter1.scene3"
-    ]
-  },
-  "scene3": {
-    "text": [
-      "<p><span class=\"text--first-person\">Footsteps.</span></p><p>You feel your way back into a corner of the cell.</p><p class=\"text--first-person\">Slow... heavy. What moves like that?</p><input class=\"btn--next 13a\" type=\"button\" value=\"Call for help\" /><input class=\"btn--next 13b\" type=\"button\" value=\"Remain silent\"/>"
-    ],
-    "next": [
-      "storyData.chapter1.scene4.a",
-      "storyData.chapter1.scene4.b"
-    ]
-  },
-  "scene4": {
-    "text": [
-      "<p>Whatever is out there can't be worse than living in this darkness.</p><p>You call out: \"You there!! Please, HELP!!\"</p><input class=\"btn--next\" type=\"button\" value=\"Continue\"/>",
-      "<p>It might be your captor. You decide to wait and see how this plays out.</p><input class=\"btn--next\" type=\"button\" value=\"Continue\"/>"
-    ],
-    "next": [
-      "storyData.chapter1.scene5.a",
-      "storyData.chapter1.scene5.b"
-    ]
-  },
-  "scene5": {
-    "text": [
-      "<p>You hear the whoosh of fire and a piercing hiss. Something large drops to the floor.</p><p class=\"text--first-person\">What the hell is out there??</p><p>Your cell door swings open. The blinding flash of light from the fire dazes you.</p><p>Just as your eyes adjust, you make out a grotesque, lizard-like creature. Its spear point tips toward you.</p><input class=\"btn--next\" type=\"button\" value=\"Continue\"/>",
-      "<p>You hear a soft thud outside the cell door, soon followed by sharp, metallic scrapes.</p><p>Through a crack at the bottom of the door, you see the first glorious rays of light you've seen in who knows how long.</p><p>You hear keys at the door.</p><p class=\"text--first-person\">Rescue! Finally!!</p><p>As the door swings open, you see a grotesque, lizard-like creature. Its spear point tips toward you.</p><input class=\"btn--next\" type=\"button\" value=\"Continue\"/>"
-    ],
-    "next": [
-      "storyData.chapter1.scene6"
-    ]
-  },
-  "scene6": {
-    "text": "<p>The creature looks like it wants to fight.</p><input class=\"btn--combat\" type=\"button\" value=\"Start Combat\"/>",
-    "enemy": "Troglodyte",
-    "next": [
-      "storyData.chapter1.scene7"
-    ]
-  },
-  "scene7": {
-    "text": [
-      "<p>You gaze back at the dead creature on the floor of your cell, and you quickly decide to take this chance to escape.</p><p>Stepping out of your cell, you look towards the light and discover...</p><p class=\"text--first-person\">A corpse. Burnt. The smell... I've got to get out of here.</p><p>You pick up the lit torch beside the charred cadaver.</p><p class=\"text--first-person\">As long as I live, this light will not go out.</p>"
-    ],
-    "next": [
-      "storyData.chapter2.scene1"
-    ]
   }
 }

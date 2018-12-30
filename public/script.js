@@ -92,7 +92,8 @@ function headerListener() {
   });
 }
 
-function startGame() {
+function startGame(player) {
+  console.log(player);
   $('form').remove();
   $('header').html(`
     <h1>Chapter 1</h1>
@@ -118,7 +119,7 @@ function selectCharacterHandler() {
     event.preventDefault();
     const selection = $('input[type=radio]:checked').val();
     $.post('/character/new?class=' + selection)
-      .done(() => startGame());
+      .done((player) => startGame(player));
   });
 }
 
