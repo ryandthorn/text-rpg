@@ -52,7 +52,7 @@ function advanceStory(eventTarget) {
   // 3) Display next scene
   // 4) Update character bookmark
 
-  fetch(url + `/character.bookmark?id=${character_id}`)
+  fetch(url + `/character/bookmark?id=${character_id}`)
     .then(res => res.json())
     .then(bookmark => {
       fetch(url + '/story')
@@ -76,7 +76,7 @@ function advanceStory(eventTarget) {
             scene: nextScene.scene,
             next: story[nextScene.chapter][nextScene.scene].next
           }
-          fetch(url + `/character.bookmark?id=${character_id}`, {
+          fetch(url + `/character/bookmark?id=${character_id}`, {
             method: 'PUT',
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -125,7 +125,7 @@ function headerListener() {
     event.preventDefault();
     const target = $( event.target );
     if (target.is( '.btn--story' )) {
-      fetch(`http://localhost:8080/character.bookmark?id=${character_id}`)
+      fetch(`http://localhost:8080/character/bookmark?id=${character_id}`)
         .then(res => res.json())
         .then(bookmark => {
           displayStory(bookmark);
