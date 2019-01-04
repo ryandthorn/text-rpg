@@ -1,23 +1,22 @@
 'use strict';
 
-function startStory() {
-  $.post('/story')
-    .done(() => {
-      displayStory();
-    });
-}
+let character_id;
+const url = 'http://localhost:8080';
 
-function displayStory() {
-  $.get('/story')
-    .done(story => {
-      $('main').html(story.text);
-      buttonListener();
-    });
+function displayStory(bookmark) {
+  fetch(url + '/story')
+    .then(res => res.json())
+    .then(story => {
+      const currentScene = story[bookmark.chapter][bookmark.scene].text;
+      $('main').html(currentScene);
+    })
+    .catch(err => console.error(err));
 }
 
 function displayCharacterInfo() {
-  $.get('/character')
-    .done(char => {
+  fetch(url + `/character?id=${character_id}`)
+    .then(response => response.json())
+    .then(char => {
       $('main').html( `
         <h2>${char.class}</h2>
         <h3>HP: ${char.attributes.hp} | MP: ${char.attributes.mp}</h3>
@@ -32,7 +31,7 @@ function displayCharacterInfo() {
         <ul>
           <li>Phys. Damage: ${char.skills.phyDamage}</li>
           <li>Phys. Resist: ${char.skills.phyResist}</li>
-          <li>Accuracy: ${char.skills.toHit}</li>
+          <li>Accuracy: ${char.skills.accuracy}</li>
           <li>Evasion: ${char.skills.evasion}</li>
           <li>Mag. Damage: ${char.skills.magDamage}</li>
           <li>Mag. Resist: ${char.skills.magResist}</li>
@@ -40,43 +39,83 @@ function displayCharacterInfo() {
           <li>Phys. Ignore: ${char.skills.damReduce}</li>
         </ul>
       `);
-    });
+    })
+    .catch(err => console.error(err))
 }
 
-function buttonListener() {
-  // Add data as query params
-  // $('.btn--hit').click(event => {
-  //   event.preventDefault();
-  //   $.ajax({
-  //     url: 'http://localhost:8080/character/update?hp=-2&mp=-1',
-  //     type: 'PUT',
-  //     // data: {hp: -2, mp: -1},
-  //     // dataType: "json",
-  //     success: () => displayCharacterInfo()
-  //   });
-  // });
+function advanceStory(eventTarget) {
+  const target = eventTarget;
 
-  $('.btn--next').click(event => {
-    event.preventDefault()
+  // Strategy:
+  // 1) Get bookmark and story from db
+  // 2) Handle story branches
+  // 3) Display next scene
+  // 4) Update character bookmark
+
+  fetch(url + `/character.bookmark?id=${character_id}`)
+    .then(res => res.json())
+    .then(bookmark => {
+      fetch(url + '/story')
+        .then(res => res.json())
+        .then(story => {
+          let index = 0;
+          if (bookmark.next.length > 1) {
+            if (target.is( '.13b' )) {
+              index = 1;
+            }
+          }
+
+          const nextScene = bookmark.next[index];
+          if (target.is('.btn--next')) {
+            displayStory(nextScene);
+          }
+
+          const nextBookmark = {
+            chapter: nextScene.chapter,
+            scene: nextScene.scene,
+            next: story[nextScene.chapter][nextScene.scene].next
+          }
+          fetch(url + `/character.bookmark?id=${character_id}`, {
+            method: 'PUT',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+              bookmark: nextBookmark
+            })
+          })
+        })
+        .catch(err => console.error(err));
+    })
+    .catch(err => console.error(err));
+}
+
+function mainListener() {
+  $('main').click(event => {
     const target = $( event.target );
-    let parameters = '';
 
-    if (target.is( '.13a' )) {
-      parameters = '/choice?choice=A';
-    } else if (target.is( '.13b' )) {
-      parameters = '/choice?choice=B';
+    if (target.is( '.btn--next' )) {
+      advanceStory(target);
+    };
+
+    if (target.is( '.btn--combat' )) {
+      fetch(url + `/character?id=${character_id}`)
+        .then(res => res.json())
+        .then(player => {
+          fetch(url + '/story/enemy')
+            .then(res => res.json())
+            .then(enemy => {
+              preCombat(player, enemy)
+            })
+            .catch(err => console.error(err));
+        })
+        .catch(err => console.error(err));
     }
-    
-    $.ajax({
-      url: '/story' + parameters,
-      type: 'PUT',
-      success: () => displayStory()
-    });
-  });
 
-  $('.btn--combat').click(event => {
-    event.preventDefault();
-    startCombat();
+    if (target.is('.btn--restart')) {
+      fetch(url + `/character?id=${character_id}`, {
+        method: 'DELETE'
+      });
+      location.reload();
+    }
   });
 }
 
@@ -85,7 +124,12 @@ function headerListener() {
     event.preventDefault();
     const target = $( event.target );
     if (target.is( '.btn--story' )) {
-      displayStory();
+      fetch(`http://localhost:8080/character.bookmark?id=${character_id}`)
+        .then(res => res.json())
+        .then(bookmark => {
+          displayStory(bookmark);
+        })
+        .catch(err => console.error(err));
     } else if (target.is( '.btn--character' )) {
       displayCharacterInfo();
     }
@@ -93,26 +137,14 @@ function headerListener() {
 }
 
 function startGame(player) {
-  console.log(player);
+  character_id = player._id;
   $('form').remove();
-  $('header').html(`
-    <h1>Chapter 1</h1>
-    <input class="btn--story" type="button" value="Story" />
-    <input class="btn--character" type="button" value="Character" />
-  `);
+  generateStoryHeader();
   headerListener();
-  startStory();
+  const bookmark = player.bookmark;
+  displayStory(bookmark);
+  mainListener();
 }
-
-// function loseGame() {
-//   $('header').html(`<h1>Defeated!</h1>`);
-//   $('main').html(`<button class="restart">Start new game</button>`);
-//   characterData.delete();
-//   $('button').click(event => {
-//     event.preventDefault();
-//     startGame();
-//   });
-// }
 
 function selectCharacterHandler() {
   $('form').submit(event => {
@@ -123,7 +155,14 @@ function selectCharacterHandler() {
   });
 }
 
-// Combat
+function generateStoryHeader() {
+  $('header').html(`
+    <h1>Chapter 1</h1>
+    <input class="btn--story" type="button" value="Story" />
+    <input class="btn--character" type="button" value="Character" />
+  `);
+}
+// Combat functions
 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
@@ -138,7 +177,7 @@ function setScrollPosition() {
 function displayCombatScreen() {
   $('header').html(`
     <h1>Fight!</h1>
-    <input class="btn--combat" type="button" value="Combat"/>
+    <input class="btn--view-combat" type="button" value="Combat"/>
     <input class="btn--character" type="button" value="Character"/>
   `);
   $('main').html(`
@@ -150,8 +189,13 @@ function displayCombatScreen() {
   `);
 }
 
-// Refactor to get player actions and descriptions dynamically
 function displayPlayerInfo(player) {
+  const actionsArray = Object.keys(player.actions);
+  let optionString;
+  actionsArray.forEach(action => {
+    const displayName = action.charAt(0).toUpperCase() + action.slice(1);
+    optionString += `<option value="${action}">${displayName}</option>`;
+  })
   $('.combat--character').html(`
     <div class="class">
       <h2>${player.class}</h2>
@@ -165,14 +209,10 @@ function displayPlayerInfo(player) {
         <fieldset>
           <legend>Choose an action</legend>
           <select name="action-menu" id="action-menu" required>
-            <option value="attack">Attack</option>
-            <option value="defend">Defend</option>
-            <optgroup label="Cast Spell">
-              <option value="missile">Missile</option>
-            </optgroup>
+            ${optionString}
           </select>
           <section class="action-info">
-            <p>Select a combat action from the menu above.</p>
+            <p>${player.actions[actionsArray[0]].info}</p>
           </section>
           <input type="submit" class="btn--action-submit" value="Fight!">
         </fieldset>
@@ -199,105 +239,144 @@ function displayEnemyInfo(enemy) {
 function handleActionInfo(player) {
   $('select').change(() => {
     const selection = $('select option:selected').val();
-    let selectionInfo;
-    switch(selection) {
-      case 'attack':
-        selectionInfo = player.actions.attack.info;
-        break;
-      case 'defend':
-        selectionInfo = player.actions.defend.info;
-        break;
-      case 'missile':
-        selectionInfo = player.actions.spells.missile.info;
-        break;
-    }
     $('.action-info').html(`
-      <p>${selectionInfo}</p>
+      <p>${player.actions[selection].info}</p>
     `);
   });
 }
+
+function rollD20() {
+  return getRandomIntInclusive(1, 20);
+}
+
+function rollDam(damArray) {
+  // Expects array [min, max(, modifier)]
+  let damage = getRandomIntInclusive(damArray[0], damArray[1]);
+  if (damArray.length < 2) {
+    damage += modifier;
+  }
+  return damage;
+}
+
+function determineEnemyAction(enemy) {
+  const actions = Object.keys(enemy.actions);
+  const roll = getRandomIntInclusive(0, actions.length - 1);
+  const enemyAction = actions[roll];
+  const actionText = rollEnemyActionText(enemy, enemyAction);
+  $('.combat--log ul').append(`<li>${actionText}</li>`);
+  return enemyAction;
+}
+
+function rollEnemyActionText(enemy, enemyAction) {
+  const textOptions = enemy.actions[enemyAction].text;
+  const roll = getRandomIntInclusive(0, textOptions.length - 1);
+  return textOptions[roll];
+} 
+
+function preCombat(player, enemy) {
+  displayCombatScreen();
+  displayPlayerInfo(player);
+  displayEnemyInfo(enemy);
+  handleActionInfo(player);
+  combat(player, enemy);
+}
+
+/*** Combat ***
+ * 1) Determine enemy action
+ * 2) Display enemy action choice hint
+ * 3) Player turn - player selects action
+ * 4) Roll hit & evade for player action
+ * 5) Compare player vs enemy rolls, handle results
+ * 6) Check for victory/loss conditions
+ * 7) Enemy turn - resolve determined enemy action
+ * 8) Recurse for next turn
+*/
 
 function combat(player, enemy) {
   let enemyAction = determineEnemyAction(enemy);
   setScrollPosition();
   $('form').submit(event => {
     event.preventDefault();
-    const selection = $('select option:selected').val();
-    switch(selection) {
-      case 'attack':
-        $('.combat--log ul').append(`<li>Mage attacks!</li>`);
-        const playerHitRoll = player.actions.attack.rollHit();
-        const playerHitCalc = playerHitRoll + player.attributes.agi + player.skills.accuracy;
-        const enemyEvadeRoll = getRandomIntInclusive(1, 20);
-        const enemyEvadeCalc = enemyEvadeRoll + enemy.attributes.agi + enemy.skills.evasion + (enemy.actions.defend.defendBonus || 0);
-        if (playerHitCalc > enemyEvadeCalc) {
-          const damage = player.actions.attack.rollDam();
-          $('.combat--log ul').append(`
-            <li>Mage HITS for ${damage} damage [roll${playerHitRoll} + agi${player.attributes.agi} + acc${player.skills.accuracy} ` + 
-              `(${playerHitCalc}) vs (${enemyEvadeCalc}) roll${enemyEvadeRoll} + agi${enemy.attributes.agi} + eva${enemy.skills.evasion} + defBonus${enemy.actions.defend.defendBonus}]</li>
-          `);
-          enemy.attributes.hp -= damage;
-          displayEnemyInfo(enemy);
-        } else {
-          $('.combat--log ul').append(`
-            <li>Mage MISSES [roll${playerHitRoll} + agi${player.attributes.agi} + acc${player.skills.accuracy} (${playerHitCalc}) vs ` + 
-              `(${enemyEvadeCalc}) roll${enemyEvadeRoll} + agi${enemy.attributes.agi} + eva${enemy.skills.evasion} + defBonus${enemy.actions.defend.defendBonus}]</li>
-          `);
-        }
-        break;
-      case 'defend':
-        player.actions.defend.defendBonus = 5;
-        $('.combat--log ul').append(`
-          <li>${player.class} defends (+5 eva for 1 turn)</li>
-        `)
-        break;
-      case 'missile':
-        const damage = player.actions.spells.missile.rollDam();
-        player.attributes.mp -= 2;
-        enemy.attributes.hp -= damage;
-        $('.combat--log ul').append(`
-          <li>Mage casts missile!</li>
-          <li>Missile does ${damage} damage to ${enemy.name}</li>
-        `);
-        displayPlayerInfo(player);
-        displayEnemyInfo(enemy);
-        break;
-    }
-    if (enemy.attributes.hp <= 0) {
-      $('.combat--log ul').append(`
-        <p>You defeated ${enemy.name}!</p>
-        <input class="btn--next" type="button" value="End Combat"/>
-      `)
-      setScrollPosition();
-      return;
-    }
-    if (player.attributes.hp <= 0) {
-      $('.combat--log ul').append(`<p>Placeholder: you lose!</p>`)
-      setScrollPosition();
-      return;
-    }
-    if (enemy.actions.defend.defendBonus > 0) {
-      enemy.actions.defend.defendBonus = 0;
-    }
+    const playerAction = $('select option:selected').val();
+    playerTurn(player, enemy, playerAction);
     enemyTurn(player, enemy, enemyAction);
     setScrollPosition();
     displayPlayerInfo(player);
     displayEnemyInfo(enemy);
     $('form').off('submit');
+    if (player.attributes.hp <= 0 || enemy.attributes.hp <= 0) {
+      return;
+    }
     combat(player, enemy);
   });
 }
 
+function playerTurn(player, enemy, playerAction) {
+  switch(playerAction) {
+    case 'attack':
+      $('.combat--log ul').append(`<li>Mage attacks!</li>`);
+      const playerHitRoll = rollD20();
+      const playerHitCalc = playerHitRoll + player.attributes.agi + player.skills.accuracy;
+      const enemyEvadeRoll = rollD20();
+      const enemyEvadeCalc = enemyEvadeRoll + enemy.attributes.agi + enemy.skills.evasion + (enemy.actions.defend.defendBonus || 0);
+      if (playerHitCalc > enemyEvadeCalc) {
+        let damage = rollDam(player.actions.attack.damage);
+        damage += player.skills.phyDamage - enemy.skills.phyResist - enemy.skills.damReduce;
+        $('.combat--log ul').append(`
+          <li>Mage HITS for ${damage} damage [roll${playerHitRoll} + agi${player.attributes.agi} + acc${player.skills.accuracy} ` + 
+            `(${playerHitCalc}) vs (${enemyEvadeCalc}) roll${enemyEvadeRoll} + agi${enemy.attributes.agi} + eva${enemy.skills.evasion} + defBonus${enemy.actions.defend.defendBonus}]</li>
+        `);
+        enemy.attributes.hp -= damage;
+        displayEnemyInfo(enemy);
+      } else {
+        $('.combat--log ul').append(`
+          <li>Mage MISSES [roll${playerHitRoll} + agi${player.attributes.agi} + acc${player.skills.accuracy} (${playerHitCalc}) vs ` + 
+            `(${enemyEvadeCalc}) roll${enemyEvadeRoll} + agi${enemy.attributes.agi} + eva${enemy.skills.evasion} + defBonus${enemy.actions.defend.defendBonus}]</li>
+        `);
+      }
+      break;
+    case 'defend':
+      player.actions.defend.defendBonus = 5;
+      $('.combat--log ul').append(`
+        <li>${player.class} defends (+5 eva for 1 turn)</li>
+      `)
+      break;
+    case 'missile':
+      let damage = rollDam(player.actions.missile.damage);
+      damage += player.skills.magDamage - enemy.skills.magResist - enemy.skills.damReduce;
+      player.attributes.mp -= player.actions.missile.mpCost;
+      enemy.attributes.hp -= damage;
+      $('.combat--log ul').append(`
+        <li>Mage casts missile!</li>
+        <li>Missile does ${damage} damage to ${enemy.name}</li>
+      `);
+      displayPlayerInfo(player);
+      displayEnemyInfo(enemy);
+      break;
+  }
+  if (enemy.attributes.hp <= 0) {
+    const condition = 'win';
+    return endCombat(player, enemy, condition);
+  }
+  if (enemy.actions.defend.defendBonus > 0) {
+    enemy.actions.defend.defendBonus = 0;
+  }
+}
+
 function enemyTurn(player, enemy, enemyAction) {
+  if (enemy.attributes.hp <= 0) {
+    return;
+  }
   switch(enemyAction) {
     case 'attack': 
-      const enemyHitRoll = enemy.actions.attack.rollHit();
+      const enemyHitRoll = rollD20()
       const enemyHitCalc = enemyHitRoll + enemy.attributes.agi + enemy.skills.accuracy;
-      const playerEvadeRoll = getRandomIntInclusive(1, 20);
+      const playerEvadeRoll = rollD20();
       const playerEvadeCalc = playerEvadeRoll + player.attributes.agi + player.skills.evasion + (player.actions.defend.defendBonus || 0);
       $('.combat--log ul').append(`<li>${enemy.name} attacks!</li>`);
       if (enemyHitCalc > playerEvadeCalc) {
-        const damage = enemy.actions.attack.rollDam();
+        let damage = rollDam(enemy.actions.attack.damage);
+        damage += enemy.skills.phyDamage - player.skills.phyResist - player.skills.damReduce;
         $('.combat--log ul').append(`
           <li>${enemy.name} HITS for ${damage} damage ` + 
           `[roll${enemyHitRoll} + agi${enemy.attributes.agi} + acc${enemy.skills.accuracy} (${enemyHitCalc}) ` +
@@ -321,37 +400,37 @@ function enemyTurn(player, enemy, enemyAction) {
         <li>${enemy.name} defends (+5 eva for 1 turn)</li>
       `)
   }
+  if (player.attributes.hp <= 0) {
+    const condition = 'loss';
+    return endCombat(player, enemy, condition);
+  }
 }
 
-function determineEnemyAction(enemy) {
-  const actions = Object.keys(enemy.actions);
-  const roll = getRandomIntInclusive(0, actions.length - 1);
-  const enemyAction = actions[roll];
-  const actionText = rollEnemyActionText(enemy, enemyAction);
-  $('.combat--log ul').append(`<li>${actionText}</li>`);
-  return enemyAction;
-}
+function endCombat(player, enemy, condition) {
+  if (condition === 'win') {
+    $('.combat--log ul').append(`
+      <p>You defeated ${enemy.name}!</p>
+      <input class="btn--next" type="button" value="End Combat"/>
+    `);
+    setScrollPosition();
 
-function rollEnemyActionText(enemy, enemyAction) {
-  const textOptions = enemy.actions[enemyAction].text;
-  const roll = getRandomIntInclusive(0, textOptions.length - 1);
-  return textOptions[roll];
-} 
-
-function startCombat() {
-  $.get('/character')
-    .done(character => {
-      const player = character;
-      $.get('/story')
-        .done(bookmark => {
-          const enemy = bookmark.enemy;
-          displayCombatScreen()
-          displayPlayerInfo(player);
-          displayEnemyInfo(enemy);
-          handleActionInfo(player);
-          combat(player, enemy); 
-        });
+    // Update character hp and mp
+    const updateObj = {
+      hp: player.attributes.hp,
+      mp: player.attributes.mp
+    }
+    fetch(url + `/character?id=${character_id}`, {
+      method: 'PUT',
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(updateObj)
     });
+  } else if (condition === 'loss') {
+    $('.combat--log ul').append(`
+      <p>You have been slain by ${enemy.name}.</p>
+      <input class="btn--restart" type="button" value="New Character"/>
+    `)
+    setScrollPosition();
+  }
 }
 
 selectCharacterHandler();

@@ -3,21 +3,29 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+mongoose.set('useFindAndModify', false);
 
 const { PORT, DATABASE_URL, TEST_DATABASE_URL} = require('./config');
 const { Character, Adventure, Enemy } = require('./models');
-// const { characterData, storyData } = require('./mockDB');
 
 const app = express();
 app.use(express.static('public'));
 app.use(express.json());
 app.use(morgan('common'));
 
-// Character routes
 app.post('/character/:new', (req, res) => {
-  // characterData['character'] = characterData.create(req.query.class);
-  // res.status(201).json(characterData.character);
   const newCharacter = {};
+  newCharacter.bookmark = {
+    chapter: 'chapter1',
+    scene: 'scene1',
+    next: [
+      {
+        chapter: 'chapter1',
+        scene: 'scene2'
+      }
+    ]
+  };
+
   if (req.query.class === 'mage') {
     newCharacter.class = 'Mage';
     newCharacter.attributes = {
@@ -43,20 +51,18 @@ app.post('/character/:new', (req, res) => {
     newCharacter.actions = {
       attack: {
         info: `Physical attack for 1d6 damage`,
-        rollDam: () => getRandomIntInclusive(1, 6),
-        rollHit: () => getRandomIntInclusive(1, 20)
+        damage: [1, 6]
       },
       defend: {
         info: `Take a defensive stance. +5 defense bonus vs enemy to-hit roll.`,
-        rollDam: () => getRandomIntInclusive(1, 4),
+        damage: [1, 4],
         defendBonus: 0
       },
-      spells: {
-        missile: {
-          info: `Shoot a bolt of kinetic energy at your opponent. ` +
-                `1d8 + 4 damage, -2 MP`,
-          rollDam: () => getRandomIntInclusive(1, 8) + 4
-        }
+      missile: {
+        info: `Shoot a magic missile at your opponent. ` +
+              `1d8 + 4 damage, -2 MP`,
+        damage: [1, 8, 4],
+        mpCost: 2
       }
     };
   } else if (req.query.class === 'thief') {
@@ -115,41 +121,95 @@ app.post('/character/:new', (req, res) => {
 });
 
 app.get('/character', (req, res) => {
-  // const charState = characterData.read();
-  // res.status(200).json(charState);
-  // Character
-  //   .
+  Character
+    .findById(req.query.id)
+    .then(character => res.status(200).json(character))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'});
+    });
 });
 
-app.put('/character/:update', (req, res) => {
-  const updated = characterData.update({hp: req.query.hp, mp: req.query.mp});
-  res.status(200).json(updated);
+app.get('/character.bookmark', (req, res) => {
+  Character
+    .findById(req.query.id)
+    .then(character => {
+      res.status(200).json(character.bookmark);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'});
+    });
+});
+
+app.put('/character.bookmark', (req, res) => {
+  const toUpdate = {"bookmark": req.body.bookmark}
+  Character
+    .findOneAndUpdate({_id: req.query.id}, {$set: toUpdate})
+    .then(response => {
+      res.status(200).json(response);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'});
+    });
+});
+
+app.put('/character', (req, res) => {
+  // Update character attributes after combat resolves
+  Character
+    .findById(req.query.id)
+    .then(character => {
+      const updateableAttrs = ['hp', 'mp'];
+      updateableAttrs.forEach(attr => {
+        character.attributes[attr] = req.body[attr];
+      })
+
+      character.save(function (err, character) {
+        if (err) {
+          console.error(err);
+          res.status(500).json({message: 'Internal server error'});
+        }
+        res.json(character);
+      })
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'});
+    });
 });
 
 app.delete('/character', (req, res) => {
-  characterData.delete();
-  res.status(204).json({message: `Character deleted`});
+  Character
+    .findByIdAndDelete(req.query.id)
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch(err => console.error(err));
 })
 
 // Story routes
 app.get('/story', (req, res) => {
-  res.status(200).json(storyData.bookmark);
+  Adventure // Hard-coded for now to find the only adventure in db
+    .findOne() 
+    .then(story => {
+      res.status(200).json(story);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'});
+    });
 });
 
-app.post('/story', (req, res) => {
-  storyData.begin();
-  res.status(200).json(storyData.bookmark);
+app.get('/story/enemy', (req, res) => {
+  Enemy // Hard-coded for now to find only enemy in db
+    .findOne({"name": "Troglodyte"})
+    .then(enemy => res.status(200).json(enemy))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'});
+    });
 })
-
-app.put('/story', (req, res) => {
-  storyData.bookmark.next();
-  res.status(200).json(storyData.bookmark);
-});
-
-app.put('/story/:choice', (req, res) => {
-  storyData.bookmark.next(req.query.choice);
-  res.status(200).json(storyData.bookmark);
-});
 
 let server;
 

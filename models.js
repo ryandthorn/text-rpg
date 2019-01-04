@@ -23,7 +23,12 @@ const characterSchema = mongoose.Schema({
     fortitude: {type: Number, required: true},
     damReduce: {type: Number, required: true}
   },
-  actions: {type: Object, required: true}
+  actions: {type: Object, required: true},
+  bookmark: {
+    chapter: String,
+    scene: String,
+    next: Array
+  }
 });
 
 const enemySchema = mongoose.Schema({
