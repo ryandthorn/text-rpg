@@ -29,10 +29,10 @@ app.post('/character/:new', (req, res) => {
   if (req.query.class === 'mage') {
     newCharacter.class = 'Mage';
     newCharacter.attributes = {
-      hp: 10,
-      mp: 18,
-      maxHP: 10,
-      maxMP: 18,
+      hp: 8,
+      mp: 12,
+      maxHP: 8,
+      maxMP: 12,
       str: 6,
       agi: 10,
       mag: 12,
@@ -68,9 +68,9 @@ app.post('/character/:new', (req, res) => {
   } else if (req.query.class === 'thief') {
     newCharacter.class = 'Thief',
     newCharacter.attributes = {
-      hp: 14,
+      hp: 10,
       mp: 10,
-      maxHP: 14,
+      maxHP: 10,
       maxMP: 10,
       str: 8,
       agi: 12,
@@ -87,13 +87,29 @@ app.post('/character/:new', (req, res) => {
       fortitude: 1,
       damReduce: 1
     };
+    newCharacter.actions = {
+      attack: {
+        info: `Physical attack for 1d6 damage`,
+        damage: [1, 6]
+      },
+      defend: {
+        info: `Take a defensive stance. +5 defense bonus vs enemy to-hit roll.`,
+        damage: [1, 4],
+        defendBonus: 0
+      },
+      dblStrike: {
+        info: `Attack twice this turn. -2 MP`,
+        damage: [1, 6],
+        mpCost: 2
+      }
+    };
   } else if (req.query.class === 'warrior') {
     newCharacter.class = 'Warrior';
     newCharacter.attributes = {
-      hp: 18,
-      mp: 6,
-      maxHP: 18,
-      maxMP: 6,
+      hp: 12,
+      mp: 8,
+      maxHP: 12,
+      maxMP: 8,
       str: 10,
       agi: 8,
       mag: 6,
@@ -108,6 +124,23 @@ app.post('/character/:new', (req, res) => {
       magResist: -1,
       fortitude: 2,
       damReduce: 2
+    };
+    newCharacter.actions = {
+      attack: {
+        info: `Physical attack for 1d6 damage`,
+        damage: [1, 6]
+      },
+      defend: {
+        info: `Take a defensive stance. +5 defense bonus vs enemy to-hit roll.`,
+        damage: [1, 4],
+        defendBonus: 0
+      },
+      smash: {
+        info: `An unavoidable crushing blow.` +
+          `3d4 damage, -2 MP`,
+        damage: [3, 4],
+        mpCost: 2
+      }
     };
   }
 

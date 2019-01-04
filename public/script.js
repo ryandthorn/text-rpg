@@ -67,6 +67,7 @@ function advanceStory(eventTarget) {
 
           const nextScene = bookmark.next[index];
           if (target.is('.btn--next')) {
+            generateStoryHeader();
             displayStory(nextScene);
           }
 
@@ -252,8 +253,8 @@ function rollD20() {
 function rollDam(damArray) {
   // Expects array [min, max(, modifier)]
   let damage = getRandomIntInclusive(damArray[0], damArray[1]);
-  if (damArray.length < 2) {
-    damage += modifier;
+  if (damArray.length > 2) {
+    damage += damArray[2];
   }
   return damage;
 }
@@ -311,48 +312,82 @@ function combat(player, enemy) {
   });
 }
 
+function playerAttack(player, enemy) {
+  $('.combat--log ul').append(`<li>${player.class} attacks!</li>`);
+  const playerHitRoll = rollD20();
+  const playerHitCalc = playerHitRoll + player.attributes.agi + player.skills.accuracy;
+  const enemyEvadeRoll = rollD20();
+  const enemyEvadeCalc = enemyEvadeRoll + enemy.attributes.agi + enemy.skills.evasion + (enemy.actions.defend.defendBonus || 0);
+  if (playerHitCalc > enemyEvadeCalc) {
+    let damage = rollDam(player.actions.attack.damage);
+    damage += player.skills.phyDamage - enemy.skills.phyResist - enemy.skills.damReduce;
+    if (damage < 0) {
+      damage = 0;
+    }
+    $('.combat--log ul').append(`
+      <li>${player.class} HITS for ${damage} damage [roll${playerHitRoll} + agi${player.attributes.agi} + acc${player.skills.accuracy} ` + 
+        `(${playerHitCalc}) vs (${enemyEvadeCalc}) roll${enemyEvadeRoll} + agi${enemy.attributes.agi} + eva${enemy.skills.evasion} + defBonus${enemy.actions.defend.defendBonus}]</li>
+    `);
+    enemy.attributes.hp -= damage;
+    displayEnemyInfo(enemy);
+  } else {
+    $('.combat--log ul').append(`
+      <li>${player.class} MISSES [roll${playerHitRoll} + agi${player.attributes.agi} + acc${player.skills.accuracy} (${playerHitCalc}) vs ` + 
+        `(${enemyEvadeCalc}) roll${enemyEvadeRoll} + agi${enemy.attributes.agi} + eva${enemy.skills.evasion} + defBonus${enemy.actions.defend.defendBonus}]</li>
+    `);
+  }
+}
+
 function playerTurn(player, enemy, playerAction) {
   switch(playerAction) {
-    case 'attack':
-      $('.combat--log ul').append(`<li>Mage attacks!</li>`);
-      const playerHitRoll = rollD20();
-      const playerHitCalc = playerHitRoll + player.attributes.agi + player.skills.accuracy;
-      const enemyEvadeRoll = rollD20();
-      const enemyEvadeCalc = enemyEvadeRoll + enemy.attributes.agi + enemy.skills.evasion + (enemy.actions.defend.defendBonus || 0);
-      if (playerHitCalc > enemyEvadeCalc) {
-        let damage = rollDam(player.actions.attack.damage);
-        damage += player.skills.phyDamage - enemy.skills.phyResist - enemy.skills.damReduce;
-        $('.combat--log ul').append(`
-          <li>Mage HITS for ${damage} damage [roll${playerHitRoll} + agi${player.attributes.agi} + acc${player.skills.accuracy} ` + 
-            `(${playerHitCalc}) vs (${enemyEvadeCalc}) roll${enemyEvadeRoll} + agi${enemy.attributes.agi} + eva${enemy.skills.evasion} + defBonus${enemy.actions.defend.defendBonus}]</li>
-        `);
-        enemy.attributes.hp -= damage;
-        displayEnemyInfo(enemy);
-      } else {
-        $('.combat--log ul').append(`
-          <li>Mage MISSES [roll${playerHitRoll} + agi${player.attributes.agi} + acc${player.skills.accuracy} (${playerHitCalc}) vs ` + 
-            `(${enemyEvadeCalc}) roll${enemyEvadeRoll} + agi${enemy.attributes.agi} + eva${enemy.skills.evasion} + defBonus${enemy.actions.defend.defendBonus}]</li>
-        `);
-      }
+    case 'attack': {
+      playerAttack(player, enemy);
       break;
-    case 'defend':
+    }
+    case 'defend': {
       player.actions.defend.defendBonus = 5;
       $('.combat--log ul').append(`
         <li>${player.class} defends (+5 eva for 1 turn)</li>
       `)
       break;
-    case 'missile':
+    }
+    case 'missile': {
       let damage = rollDam(player.actions.missile.damage);
       damage += player.skills.magDamage - enemy.skills.magResist - enemy.skills.damReduce;
+      if (damage < 0) {
+        damage = 0;
+      }
       player.attributes.mp -= player.actions.missile.mpCost;
       enemy.attributes.hp -= damage;
       $('.combat--log ul').append(`
-        <li>Mage casts missile!</li>
+        <li>${player.class} casts missile!</li>
         <li>Missile does ${damage} damage to ${enemy.name}</li>
       `);
       displayPlayerInfo(player);
       displayEnemyInfo(enemy);
       break;
+    }
+    case 'dblStrike': {
+      $('.combat--log ul').append(`<li>${player.class} focuses...</li>`);
+      for (let i = 0; i < 2; i++) {
+        playerAttack(player, enemy);
+      }
+      break;
+    }
+    case 'smash': {
+      $('.combat--log ul').append(`<li>${player.class} attacks!</li>`);
+      let damage = rollDam(player.actions.smash.damage);
+      damage += player.skills.phyDamage - enemy.skills.phyResist - enemy.skills.damReduce;
+      if (damage < 0) {
+        damage = 0;
+      }
+      $('.combat--log ul').append(`
+        <li>${player.class} HITS ${enemy.name} for ${damage} damage
+      `);
+      enemy.attributes.hp -= damage;
+      displayEnemyInfo(enemy);
+      break;
+    }
   }
   if (enemy.attributes.hp <= 0) {
     const condition = 'win';
@@ -377,6 +412,9 @@ function enemyTurn(player, enemy, enemyAction) {
       if (enemyHitCalc > playerEvadeCalc) {
         let damage = rollDam(enemy.actions.attack.damage);
         damage += enemy.skills.phyDamage - player.skills.phyResist - player.skills.damReduce;
+        if (damage < 0) {
+          damage = 0;
+        }
         $('.combat--log ul').append(`
           <li>${enemy.name} HITS for ${damage} damage ` + 
           `[roll${enemyHitRoll} + agi${enemy.attributes.agi} + acc${enemy.skills.accuracy} (${enemyHitCalc}) ` +
@@ -390,9 +428,6 @@ function enemyTurn(player, enemy, enemyAction) {
           `vs (${playerEvadeCalc}) roll${playerEvadeRoll} + agi${player.attributes.agi} + eva${player.skills.evasion} + defBonus${player.actions.defend.defendBonus}]</li>
         `);
       }
-      if (player.actions.defend.defendBonus > 0) {
-        player.actions.defend.defendBonus = 0;
-      }
       break;
     case 'defend':
       enemy.actions.defend.defendBonus = 5;
@@ -404,6 +439,9 @@ function enemyTurn(player, enemy, enemyAction) {
     const condition = 'loss';
     return endCombat(player, enemy, condition);
   }
+  if (player.actions.defend.defendBonus > 0) {
+    player.actions.defend.defendBonus = 0;
+  }
 }
 
 function endCombat(player, enemy, condition) {
@@ -414,7 +452,7 @@ function endCombat(player, enemy, condition) {
     `);
     setScrollPosition();
 
-    // Update character hp and mp
+    // Update character hp and mp in DB
     const updateObj = {
       hp: player.attributes.hp,
       mp: player.attributes.mp
