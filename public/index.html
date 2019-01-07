@@ -15,15 +15,20 @@
     <h1 class="h1--banner">Text RPG</h1>
   </header>
   <main>
+    <h2 class="h2--info">A text-based adventure inspired by the browser RPGs of ages past.</h2>
+    <h3 class="h3--info">(demo version)</h3>
     <form class="form--choose-character">
       <fieldset>
         <legend>Choose your character</legend>
-        <input type="radio" name="character" id="mage" value="mage">
-        <label for="mage">Mage</label>
-        <input type="radio" name="character" id="thief" value="thief">
-        <label for="thief">Thief</label>
-        <input type="radio" name="character" id="warrior" value="warrior">
-        <label for="warrior">Warrior</label></br>
+        <label for="mage">
+          <input type="radio" name="character" id="mage" value="mage" required>Mage
+        </label>
+        <label for="thief">
+          <input type="radio" name="character" id="thief" value="thief" required>Thief
+        </label>
+        <label for="warrior">
+          <input type="radio" name="character" id="warrior" value="warrior" required>Warrior
+        </label></br>
         <input class="btn--start" type="submit" value="Start"/>
       </fieldset>
     </form>

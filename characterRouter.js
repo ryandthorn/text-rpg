@@ -127,8 +127,7 @@ router.post('/:new', (req, res) => {
         defendBonus: 0
       },
       smash: {
-        info: `An unavoidable crushing blow.` +
-          `3d4 damage, -2 MP`,
+        info: `An unavoidable crushing blow. 3d4 damage, -2 MP`,
         damage: [3, 4],
         mpCost: 2
       }
