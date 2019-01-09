@@ -41,7 +41,7 @@ router.post('/:new', (req, res) => {
     };
     newCharacter.actions = {
       attack: {
-        info: `Physical attack for 1d6 damage`,
+        info: `Physical attack for 1-6 damage`,
         damage: [1, 6]
       },
       defend: {
@@ -50,8 +50,7 @@ router.post('/:new', (req, res) => {
         defendBonus: 0
       },
       missile: {
-        info: `Shoot a magic missile at your opponent. ` +
-              `1d8 + 4 damage, -2 MP`,
+        info: `Shoot a magic missile at your opponent. 1-6 + 4 damage (-2 MP)`,
         damage: [1, 8, 4],
         mpCost: 2
       }
@@ -80,7 +79,7 @@ router.post('/:new', (req, res) => {
     };
     newCharacter.actions = {
       attack: {
-        info: `Physical attack for 1d6 damage`,
+        info: `Physical attack for 1-6 damage`,
         damage: [1, 6]
       },
       defend: {
@@ -89,7 +88,7 @@ router.post('/:new', (req, res) => {
         defendBonus: 0
       },
       dblStrike: {
-        info: `Attack twice this turn. -2 MP`,
+        info: `Attack twice this turn (-2 MP)`,
         damage: [1, 6],
         mpCost: 2
       }
@@ -118,7 +117,7 @@ router.post('/:new', (req, res) => {
     };
     newCharacter.actions = {
       attack: {
-        info: `Physical attack for 1d6 damage`,
+        info: `Physical attack for 1-6 damage`,
         damage: [1, 6]
       },
       defend: {
@@ -127,8 +126,8 @@ router.post('/:new', (req, res) => {
         defendBonus: 0
       },
       smash: {
-        info: `An unavoidable crushing blow. 3d4 damage, -2 MP`,
-        damage: [3, 4],
+        info: `An unavoidable crushing blow. 3-5 + 4 damage (-2 MP)`,
+        damage: [3, 5, 4],
         mpCost: 2
       }
     };

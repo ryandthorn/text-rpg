@@ -5,7 +5,7 @@
 }
 
 body {
-  max-width: 1000px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 2vw;
   background: black;
@@ -35,6 +35,11 @@ h1 {
   margin-bottom: 1.5rem;
 }
 
+.h1--banner {
+  font-size: 3em;
+  text-align: center;
+}
+
 .h2--info {
   text-align: center;
   font-size: 1.25em;
@@ -55,11 +60,6 @@ header input {
   max-height: 4rem;
   margin: auto .25rem;
   padding: 0px;
-}
-
-.h1--banner {
-  font-size: 2.5em;
-  text-align: center;
 }
 
 .form--choose-character{
@@ -102,17 +102,17 @@ header input {
 
 .form--choose-character .radio-selected {
   border: 1px solid yellow;
-  background-color: rgb(37, 0, 0);
+  background-color: rgb(77, 0, 0);
 }
 
 .btn--start {
   padding: 1rem 2rem;
   border-radius: 10%;
   margin: .5rem auto 1rem auto;
-  background: rgb(0, 48, 6);
+  background: rgb(0, 78, 11);
 }
 
-.btn--next, .btn--restart {
+.btn--next, .btn--restart, .btn--combat {
   display: block;
   margin: 1rem auto;
 }
@@ -122,6 +122,10 @@ header input {
 }
 
 /* Combat Screen */
+
+.combat--h1 {
+  font-size: 2.5em;
+}
 
 .combat--character {
   margin-top: .5rem;
@@ -145,11 +149,7 @@ header input {
 }
 
 .combat--character form {
-  margin-top: 1rem;
-}
-
-.combat--character form * {
-  margin: .25rem;
+  margin: 1rem 1rem 0 0;
 }
 
 .combat--character input {
@@ -179,6 +179,11 @@ header input {
   list-style-type: square; 
 }
 
+.combat--log li::before {
+  color: yellow;
+  padding: .1rem auto;
+}
+
 .combat--enemy {
   display: grid;
   grid-template-columns: 40% 60%;
@@ -188,10 +193,6 @@ header input {
 .combat--enemy .name {
   text-align: center;
   margin: auto 0;
-}
-
-.combat--enemy .name h2 {
-  font-size: 1em;
 }
 
 .combat--enemy .vitals {
@@ -208,12 +209,17 @@ header input {
   max-width: 200px;
   max-height: 200px;
   display: block;
-  margin: 0 auto;
+  margin-left: auto;
 }
 
 @media (min-width: 600px) {
+  h1 {
+    font-size: 3em;
+  }
+
   .combat--log {
     max-height: 40vh;
+    max-width: 75vw;
   }
   .combat--enemy .name h2 {
     font-size: 1.5em;

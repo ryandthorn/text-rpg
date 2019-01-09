@@ -201,7 +201,7 @@ function setScrollPosition() {
 
 function displayCombatScreen() {
   $('header').html(`
-    <h1>Fight!</h1>
+    <h1 class=".combat--h1">Combat!</h1>
   `);
   $('main').html(`
     <section class="combat--character"></section>
