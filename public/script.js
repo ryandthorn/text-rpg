@@ -133,6 +133,11 @@ function headerListener() {
 }
 
 function selectCharacter() {
+  $('form').change(event => {
+    $('form label').removeClass('radio-selected');
+    const target = $(event.target);
+    target.next('label').addClass('radio-selected');
+  });
   $('form').submit(event => {
     event.preventDefault();
     const selection = $('input[type=radio]:checked').val();
@@ -144,6 +149,7 @@ function selectCharacter() {
 function startGame(player) {
   character_id = player._id;
   $('form').remove();
+  $('body').css('background-image', 'none');
   generateStoryHeader();
   displayStory(player.bookmark);
   headerListener();
@@ -400,7 +406,7 @@ function playerTurn(player, enemy, playerAction) {
       break;
     }
     case 'dblStrike': {
-      const dblStrikeString = generateHTML('li', player.class + 'focuses...')
+      const dblStrikeString = generateHTML('li', player.class + ' focuses...')
       appendHTML('.combat--log ul', dblStrikeString);
 
       for (let i = 0; i < 2; i++) {
@@ -409,7 +415,7 @@ function playerTurn(player, enemy, playerAction) {
       break;
     }
     case 'smash': {
-      const smashString = generateHTML('li', player.class + 'becomes enraged!');
+      const smashString = generateHTML('li', player.class + ' becomes enraged!');
       appendHTML('.combat--log ul', smashString);
 
       const damage = calcPlayerDamage(player, enemy, 'smash');
