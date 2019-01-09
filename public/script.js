@@ -120,7 +120,7 @@ function headerListener() {
     event.preventDefault();
     const target = $( event.target );
     if (target.is( '.btn--story' )) {
-      fetch(`http://localhost:8080/character/bookmark?id=${character_id}`)
+      fetch(`/character/bookmark?id=${character_id}`)
         .then(res => res.json())
         .then(bookmark => {
           displayStory(bookmark);
