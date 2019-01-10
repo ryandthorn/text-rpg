@@ -37,6 +37,12 @@ describe('Text RPG', function() {
   beforeEach(function() {
     return seedStoryData();
   });
+  beforeEach(function() {
+    return seedEnemyData();
+  });
+  beforeEach(function() {
+    return seedCharacterData();
+  });
   afterEach(function() {
     return tearDownDb();
   })
@@ -54,18 +60,17 @@ describe('Text RPG', function() {
       });
   });
 
-  // describe('/character endpoint', function() {
-    // it('should create a new character on POST', function() {
-    //   expect(characterData.character).to.be.undefined;
-    //   return chai.request(app)
-    //     .post('/character/new?class=mage')
-    //     .then(function(res) {
-    //       expect(res).to.have.status(201);
-    //       expect(res.body).to.be.a('object');
-    //       expect(res.body).to.have.keys('class', 'attributes', 'skills');
-    //       expect(res.body.class).to.equal('Mage');
-    //     });
-    // });
+  describe('/character endpoint', function() {
+    it('should create a new character on POST', function() {
+      return chai.request(app)
+        .post('/character/new?class=mage')
+        .then(function(res) {
+          expect(res).to.have.status(201);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
+          expect(res.body.class).to.equal('Mage');
+        });
+    });
   
     // it('should return the character object on GET', function() {
     //   return chai.request(app)
@@ -101,16 +106,9 @@ describe('Text RPG', function() {
     //       expect(res).to.have.status(204);
     //     })
     // });
-  // });
+  });
 
   describe('/story endpoint', function() {
-    beforeEach(function() {
-      return seedEnemyData();
-    });
-    afterEach(function() {
-      return tearDownDb();
-    });
-
     it('should get the story object on GET /', function() {
       return chai.request(app)
         .get('/story')

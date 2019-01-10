@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
-const { PORT, DATABASE_URL, TEST_DATABASE_URL} = require('./config');
+const { PORT, DATABASE_URL } = require('./config');
 
 const app = express();
 app.use(express.static('public'));
