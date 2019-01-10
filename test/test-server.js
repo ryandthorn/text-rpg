@@ -11,10 +11,6 @@ const { storyData, enemyData, characterData } = require('./test-data');
 
 chai.use(chaiHttp);
 
-function seedDB() {
-  
-}
-
 function seedCharacterData() {
   console.info('Seeding character data');
   return Character
@@ -38,6 +34,12 @@ describe('Text RPG', function() {
   before(function() {
     return runServer(TEST_DATABASE_URL);
   });
+  beforeEach(function() {
+    return seedStoryData();
+  });
+  afterEach(function() {
+    return tearDownDb();
+  })
   after(function() {
     return closeServer();
   });
@@ -102,22 +104,32 @@ describe('Text RPG', function() {
   // });
 
   describe('/story endpoint', function() {
-    before(function() {
-      return seedStoryData();
+    beforeEach(function() {
+      return seedEnemyData();
     });
-    after(function() {
+    afterEach(function() {
       return tearDownDb();
     });
 
-    it('should get the story object on GET', function() {
+    it('should get the story object on GET /', function() {
       return chai.request(app)
         .get('/story')
         .then(function(res) {
           expect(res).to.have.status(200);
           expect(res.body).to.be.a('object');
           expect(res.body).to.haveOwnProperty('chapter1');
-        })
-    })
+        });
+    });
+
+    it ('should get an enemy object on GET /enemy', function() {
+      return chai.request(app)
+        .get('/story/enemy')
+        .then(function(res) {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a('object');
+          expect(res.body.name).to.equal('Troglodyte');
+        });
+    });
 
     // it('should set bookmark to 1:1 on POST', function() {
     //   expect(storyData.bookmark).to.be.undefined;
