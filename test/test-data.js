@@ -257,7 +257,7 @@ const enemyData = {
     con: 6
   },
   skills: {
-    phyDamage: -1,
+    phyDam: -1,
     phyResist: -1,
     accuracy: 0,
     evasion: 0,

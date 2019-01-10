@@ -4,25 +4,25 @@ const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 const expect = chai.expect;
 
-const TEST_DATABASE_URL = require('../config');
+const { TEST_DATABASE_URL } = require('../config');
 const { app, closeServer, runServer } = require('../server');
-const { Adventure, Enemies } = require('../models');
+const { Character, Enemy, Adventure } = require('../models');
 const { storyData, enemyData, characterData } = require('./test-data');
 
 chai.use(chaiHttp);
 
 function seedCharacterData() {
-  // console.info('Seeding character data');
-  // return Character.insertOne(characterData);
+  console.info('Seeding character data');
+  return Character
+    .create(characterData.mage, characterData.thief, characterData.warrior);
 }
 function seedStoryData() {
   console.info('Seeding story data');
-  return Adventure.insertOne(storyData);
+  return Adventure.create(storyData);
 }
 function seedEnemyData() {
   console.info('Seeding enemy data');
-  // const seedData = {};
-  // return Enemies.insertOne(seedData);
+  return Enemy.create(enemyData);
 }
 
 function tearDownDb() {
@@ -46,15 +46,15 @@ describe('Text RPG', function() {
     closeServer();
   });
 
-//   it('should serve index from public folder', function() {
-//     return chai
-//       .request(app)
-//       .get('/')
-//       .then(function(res) {
-//         expect(res).to.have.status(200);
-//         expect(res).to.be.html;
-//       });
-//   });
+  it('should serve index from public folder', function() {
+    return chai
+      .request(app)
+      .get('/')
+      .then(function(res) {
+        expect(res).to.have.status(200);
+        expect(res).to.be.html;
+      });
+  });
 
 //   describe('/character endpoint', function() {
 //     it('should create a new character on POST', function() {
