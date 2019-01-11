@@ -92,24 +92,34 @@ describe('Text RPG', function() {
             });
         });
     });
+
+    // it('should return the character's bookmark object on GET /bookmark?id=', function() {});
+    // it('should update the character's bookmark object on PUT /bookmark?id=', function() {});
   
-    // it('should update the character object on PUT ?id=', function() {
-    //   let prevHP, prevMP;
-    //   return chai.request(app)
-    //     .get('/character')
-    //     .then(function(res) {
-    //       prevHP = res.body.attributes.hp;
-    //       prevMP = res.body.attributes.mp;
-    //       return chai.request(app)
-    //         .put('/character/update?hp=-2&mp=-1')
-    //     })
-    //     .then(function(res) {
-    //       expect(res).to.have.status(200);
-    //       expect(res.body.attributes.hp).to.equal(prevHP - 2);
-    //       expect(res.body.attributes.mp).to.equal(prevMP - 1);
-    //     });
-    // });
-  
+    it('should update the character object on PUT ?id=', function() {
+      return chai.request(app)
+        .post('/character/new?class=mage')
+        .then(function(res) {
+          expect(res).to.have.status(201);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
+          expect(res.body.class).to.equal('Mage');
+          return res.body;
+        })
+        .then(function(character) {
+          return chai.request(app)
+            .put(`/character?id=${character._id}`)
+            .set('Content-Type', 'application/json')
+            .send({"hp": 4, "mp": 5})
+        })
+        .then(function(res) {
+          expect(res).to.have.status(200);
+          const character = res.body;
+          expect(character.attributes.hp).to.equal(4);
+          expect(character.attributes.mp).to.equal(5);
+        });
+    });
+
     it('should delete the character object on DELETE ?id=', function() {
       return chai.request(app)
         .post('/character/new?class=mage')
