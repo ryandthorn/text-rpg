@@ -99,6 +99,9 @@ function mainListener() {
     const target = $( event.target );
 
     if (target.is( '.btn--next' )) {
+      if (target.val() === 'End Combat') {
+        $('body').css('background', 'black url(./images/cave-background.png) no-repeat center');
+      }
       advanceStory(target);
     };
 

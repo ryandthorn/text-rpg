@@ -19,6 +19,10 @@ input[type=button] {
   padding: .5rem .75rem;
 }
 
+input[type=button]:hover, input[type=submit]:hover {
+  border: 2px solid yellow
+}
+
 header {
   display: flex;
 }
@@ -94,6 +98,11 @@ header input {
   width: 100px;
   border: 1px solid grey;
   border-radius: 5%;
+  cursor: pointer;
+}
+
+.form--choose-character label:hover {
+  border: 1px solid yellow;
 }
 
 .form--choose-character input[type="radio"] {
