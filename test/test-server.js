@@ -93,8 +93,50 @@ describe('Text RPG', function() {
         });
     });
 
-    // it('should return the character's bookmark object on GET /bookmark?id=', function() {});
-    // it('should update the character's bookmark object on PUT /bookmark?id=', function() {});
+    it("should return the character's bookmark object on GET /bookmark?id=", function() {
+      return chai.request(app)
+        .post('/character/new?class=mage')
+        .then(function(res) {
+          expect(res).to.have.status(201);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
+          expect(res.body.class).to.equal('Mage');
+
+          const queryID = res.body._id;
+          return chai.request(app)
+            .get(`/character/bookmark?id=${queryID}`)
+            .then(function(res) {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.a('object');
+              expect(res.body).to.have.keys('chapter', 'scene', 'next');
+            });
+      });
+    });
+
+    it("should update the character's bookmark object on PUT /bookmark?id=", function() {
+      return chai.request(app)
+        .post('/character/new?class=mage')
+        .then(function(res) {
+          expect(res).to.have.status(201);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
+          expect(res.body.class).to.equal('Mage');
+          return res.body;
+        })
+        .then(function(character) {
+          return chai.request(app)
+            .put(`/character/bookmark?id=${character._id}`)
+            .set('Content-Type', 'application/json')
+            .send([{"chapter": "chapter1", "scene": "scene2"}])
+        })
+        .then(function(res) {
+          expect(res).to.have.status(200);
+          const bookmark = res.body.bookmark;
+          expect(bookmark.chapter).to.equal('chapter1');
+          expect(bookmark.scene).to.equal('scene2');
+          expect(bookmark.next).to.equal({chapter: 'chapter1', scene: 'scene3'});
+        });
+    });
   
     it('should update the character object on PUT ?id=', function() {
       return chai.request(app)
