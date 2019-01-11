@@ -20,7 +20,8 @@ input[type=button] {
 }
 
 input[type=button]:hover, input[type=submit]:hover {
-  border: 2px solid yellow
+  border: 2px solid yellow;
+  cursor: pointer;
 }
 
 header {
@@ -128,6 +129,15 @@ header input {
 
 .text--first-person {
   font-style: italic;
+}
+
+/* Character Screen */
+.char-info--container {
+  display: flex;
+  justify-content: space-evenly;
+}
+.char-info--skills {
+  padding-top: 1em;
 }
 
 /* Combat Screen */

@@ -1,7 +1,7 @@
 {
   "chapter1": {
     "scene1": {
-      "text": "<p class=\"text--first-person\">How long have I been in here? Days? ...Weeks?</p><p>You'd heard the stories: people running out of the cave, stark raving mad and half-dead.All of them clutching at their burning eyes, screaming about unnatural beings deep within.</p><p>You'd also heard the others: riches beyond belief. Ruins of an ancient civilization, artifacts capable of giving their masters untold power. A portal to heaven itself.</p><p class=\"text--first-person\">What do stories mean to me anymore? Maybe I'm already gone.</p><p class=\"text--first-person\">Death... how could it be worse than this?</p><input class=\"btn--next\" type=\"button\" value=\"Continue\"/>",
+      "text": "<p class=\"text--first-person\">How long have I been in here? Days? ...Weeks?</p><p>You'd heard the stories: people running out of the cave, stark raving mad and half-dead. All of them clutching at their burning eyes, screaming about unnatural beings deep within.</p><p>You'd also heard the others: riches beyond belief. Ruins of an ancient civilization, artifacts capable of giving their masters untold power. A portal to heaven itself.</p><p class=\"text--first-person\">What do stories mean to me anymore? Maybe I'm already gone.</p><p class=\"text--first-person\">Death... how could it be worse than this?</p><input class=\"btn--next\" type=\"button\" value=\"Continue\"/>",
       "next": [
         {
           "chapter": "chapter1",

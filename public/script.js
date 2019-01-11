@@ -35,26 +35,32 @@ function displayCharacterInfo() {
     .then(response => response.json())
     .then(char => {
       $('main').html( `
-        <h2>${char.class}</h2>
-        <h3>HP: ${char.attributes.hp} | MP: ${char.attributes.mp}</h3>
-        <h3>Attributes</h3>
-        <ul>
-          <li>Strength: ${char.attributes.str}</li>
-          <li>Agility: ${char.attributes.agi}</li>
-          <li>Magic: ${char.attributes.mag}</li>
-          <li>Constitution: ${char.attributes.con}</li>
-        </ul>
-        <h3>Skills</h3>
-        <ul>
-          <li>Phys. Damage: ${char.skills.phyDamage}</li>
-          <li>Phys. Resist: ${char.skills.phyResist}</li>
-          <li>Accuracy: ${char.skills.accuracy}</li>
-          <li>Evasion: ${char.skills.evasion}</li>
-          <li>Mag. Damage: ${char.skills.magDamage}</li>
-          <li>Mag. Resist: ${char.skills.magResist}</li>
-          <li>Fortitude: ${char.skills.fortitude}</li>
-          <li>Phys. Ignore: ${char.skills.damReduce}</li>
-        </ul>
+        <div class="char-info--container">
+          <section class="char-info--vitals">
+            <h2>${char.class}</h2>
+            <h3>HP: ${char.attributes.hp} | MP: ${char.attributes.mp}</h3>
+            <h3>Attributes</h3>
+            <ul>
+              <li>Strength: ${char.attributes.str}</li>
+              <li>Agility: ${char.attributes.agi}</li>
+              <li>Magic: ${char.attributes.mag}</li>
+              <li>Constitution: ${char.attributes.con}</li>
+            </ul>
+          </section>
+          <section class="char-info--skills">
+            <h3>Skills</h3>
+            <ul>
+              <li>Phys. Damage: ${char.skills.phyDamage}</li>
+              <li>Phys. Resist: ${char.skills.phyResist}</li>
+              <li>Accuracy: ${char.skills.accuracy}</li>
+              <li>Evasion: ${char.skills.evasion}</li>
+              <li>Mag. Damage: ${char.skills.magDamage}</li>
+              <li>Mag. Resist: ${char.skills.magResist}</li>
+              <li>Fortitude: ${char.skills.fortitude}</li>
+              <li>Phys. Ignore: ${char.skills.damReduce}</li>
+            </ul>
+          </section>
+        </div>
       `);
     })
     .catch(err => console.error(err))
@@ -348,6 +354,7 @@ function combat(player, enemy) {
     displayPlayerInfo(player);
     displayEnemyInfo(enemy);
     $('form').off('submit');
+    handleActionInfo(player);
     if (player.attributes.hp <= 0 || enemy.attributes.hp <= 0) {
       return;
     }

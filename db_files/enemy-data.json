@@ -4,9 +4,9 @@
   "imgSrcSet": "images/grzyb-troglodyte-tiny.jpg 300w, images/grzyb-troglodyte-small.jpg 600w, images/grzyb-troglodyte-full.jpg 900w",
   "alt": "This eyeless, misshapen creature wields a sharp spear.",
   "attributes": {
-    "hp": 8,
+    "hp": 12,
     "mp": 0,
-    "maxHP": 8,
+    "maxHP": 12,
     "maxMP": 0,
     "str": 6,
     "agi": 8,
