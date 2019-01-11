@@ -7,19 +7,15 @@ const expect = chai.expect;
 const { TEST_DATABASE_URL } = require('../config');
 const { app, closeServer, runServer } = require('../server');
 const { Character, Enemy, Adventure } = require('../models');
-const { storyData, enemyData, characterData } = require('./test-data');
+const { storyData, enemyData } = require('./test-data');
 
 chai.use(chaiHttp);
 
-function seedCharacterData() {
-  console.info('Seeding character data');
-  return Character
-    .create(characterData.mage, characterData.thief, characterData.warrior);
-}
 function seedStoryData() {
   console.info('Seeding story data');
   return Adventure.create(storyData);
 }
+
 function seedEnemyData() {
   console.info('Seeding enemy data');
   return Enemy.create(enemyData);
@@ -34,18 +30,6 @@ describe('Text RPG', function() {
   before(function() {
     return runServer(TEST_DATABASE_URL);
   });
-  beforeEach(function() {
-    return seedStoryData();
-  });
-  beforeEach(function() {
-    return seedEnemyData();
-  });
-  // beforeEach(function() {
-  //   return seedCharacterData();
-  // });
-  afterEach(function() {
-    return tearDownDb();
-  })
   after(function() {
     return closeServer();
   });
@@ -61,6 +45,10 @@ describe('Text RPG', function() {
   });
 
   describe('/character endpoint', function() {
+    afterEach(function() {
+      return tearDownDb();
+    });
+
     it('should create a new character on POST /', function() {
       return chai.request(app)
         .post('/character/new?class=mage')
@@ -127,14 +115,29 @@ describe('Text RPG', function() {
           return chai.request(app)
             .put(`/character/bookmark?id=${character._id}`)
             .set('Content-Type', 'application/json')
-            .send([{"chapter": "chapter1", "scene": "scene2"}])
+            .send(JSON.stringify({
+              bookmark: {
+                chapter: "chapter1",
+                scene: "scene2",
+                next: [
+                  {
+                    chapter: "chapter1",
+                    scene: "scene3"
+                  }
+                ]
+              }
+            }));
         })
         .then(function(res) {
           expect(res).to.have.status(200);
           const bookmark = res.body.bookmark;
+          expect(bookmark).to.be.a('object');
           expect(bookmark.chapter).to.equal('chapter1');
           expect(bookmark.scene).to.equal('scene2');
-          expect(bookmark.next).to.equal({chapter: 'chapter1', scene: 'scene3'});
+          expect(bookmark.next).to.be.a('array');
+          expect(bookmark.next[0]).to.have.keys('chapter', 'scene');
+          expect(bookmark.next[0].chapter).to.equal('chapter1');
+          expect(bookmark.next[0].scene).to.equal('scene3');    
         });
     });
   
@@ -152,7 +155,7 @@ describe('Text RPG', function() {
           return chai.request(app)
             .put(`/character?id=${character._id}`)
             .set('Content-Type', 'application/json')
-            .send({"hp": 4, "mp": 5})
+            .send({"hp": 4, "mp": 5});
         })
         .then(function(res) {
           expect(res).to.have.status(200);
@@ -177,10 +180,17 @@ describe('Text RPG', function() {
             .then(function(res) {
               expect(res).to.have.status(204);
             });
+        });
     });
   });
 
   describe('/story endpoint', function() {
+    beforeEach(function() {
+      return seedStoryData();
+    });
+    afterEach(function() {
+      return tearDownDb();
+    })
     it('should get the story object on GET /', function() {
       return chai.request(app)
         .get('/story')
@@ -192,6 +202,7 @@ describe('Text RPG', function() {
     });
 
     it ('should get an enemy object on GET /enemy', function() {
+      seedEnemyData();
       return chai.request(app)
         .get('/story/enemy')
         .then(function(res) {
@@ -199,51 +210,6 @@ describe('Text RPG', function() {
           expect(res.body).to.be.a('object');
           expect(res.body.name).to.equal('Troglodyte');
         });
-    });
-
-    // it('should set bookmark to 1:1 on POST', function() {
-    //   expect(storyData.bookmark).to.be.undefined;
-    //   return chai.request(app)
-    //     .post('/story')
-    //     .then(function(res) {
-    //       expect(res).to.have.status(200);
-    //       expect(res.body).to.be.a('object');
-    //       expect(res.body.text).to.equal(storyData.chapter1.scene1.text);
-    //     })
-    // });
-
-    // it('should get bookmark on GET', function() {
-    //   return chai.request(app)
-    //     .get('/story')
-    //     .then(function(res) {
-    //       expect(res).to.have.status(200);
-    //       expect(res.body).to.be.a('object');
-    //     });
-    // });
-
-    // it('should update bookmark position on PUT', function() {
-    //   storyData.bookmark = storyData.chapter1.scene1;
-    //   return chai.request(app)
-    //     .put('/story')
-    //     .then(function(res) {
-    //       expect(res).to.have.status(200);
-    //       expect(res.body).to.be.a('object');
-    //       expect(res.body.text).to.equal(storyData.chapter1.scene2.text);
-    //     });
-    // });
-
-    // it('should update bookmark position with options on PUT', function() {
-    //   return chai.request(app)
-    //     .put('/story')
-    //     .then(function() {
-    //       return chai.request(app)
-    //       .put('/story/choice?choice=A')
-    //       .then(function(res) {
-    //         expect(res).to.have.status(200);
-    //         expect(res.body).to.be.a('object');
-    //         expect(res.body.text).to.equal(storyData.chapter1.scene4.a.text);
-    //       });
-    //     });
     });
   });
 });
