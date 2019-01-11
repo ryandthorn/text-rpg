@@ -167,7 +167,7 @@ router.get('/bookmark', (req, res) => {
 router.put('/bookmark', (req, res) => {
   const toUpdate = {"bookmark": req.body.bookmark}
   Character
-    .findOneAndUpdate({_id: req.query.id}, {$set: toUpdate})
+    .findOneAndUpdate({_id: req.query.id}, {$set: toUpdate}, {returnNewDocument: true})
     .then(response => {
       res.status(200).json(response);
     })
