@@ -4,6 +4,6 @@ deploy:
   provider: heroku
   api_key:
     secure: Rm9hXJ2rrJCcLgMh6VlrVbbu94WioEsuO6y3r+Y3a6uTFGnKVuFEaJ0XN4CbxdL69XEXZDSlaWS+h5n8KbnxJSV85s5vJTOoW6f8GPB9kFf2gyBWTkZzC+KekGAGKtS65z635E6hr+JBuBvJ3XKdqPIQ02ClUoa/PQv3xkBx1mH71PNJi/gIfyy8/Q/H9sT9fmzMDRJhqVeBXxjXVDtBt/Y+V8UqkLvh8ZfS390zcAy8CkyamO/HNvLxB5B66mhyAnBIifwQ8fiszTT9KZjwUC3Vn2BhCnTcwbBGRtnLfLHx25u+5s4pvsyONMW+JI61psUkSqMrf8v07MMqaj40dsX9kKyV7HuLOfA17ssdEGzLXA5NZ2FxCOLGmlPNXtRXbaXx9m1qNP/uzHY1/vKlRp5+dQ+2SMtZYT4+Lsg9TSHbZxKGixub3VnN9a1zLGo1s70Qp9u4o0k39Ofe2aRb9C0BoCeAt9EY+2OMMsc8icmEuCOmj+61467OCo8cRGGYzL3FhdIukF1gfUf42WwajhCqJYBUAO9opx/XfvLHAWKmAV6GPWqxJEra59umHTLu/fDacShtCTEoniYIyzzjvGl4rnsArFFkQa9EDRlMKOGiMQD+KrUgCv07AzQ5ksmxQxFEsrn/p7Ugf3RAAQo3/vmOBEin9fme0ksXxggHows=
-  app: pure-headland-46577
+  app: infinite-basin-52591
   on:
     repo: ryandthorn/text-rpg
