@@ -10,6 +10,23 @@ function putRequest(endpoint, payload) {
   });
 }
 
+function generateNewCharacterForm() {
+  return `
+    <form class="form--choose-character">
+      <fieldset>
+        <legend align="center">Choose your character</legend>
+        <input type="radio" name="character" id="mage" value="mage" required/>
+        <label for="mage">Mage</label>
+        <input type="radio" name="character" id="thief" value="thief" required/>
+        <label for="thief">Thief</label>
+        <input type="radio" name="character" id="warrior" value="warrior" required/>
+        <label for="warrior">Warrior</label></br>
+        <input class="btn--start" type="submit" value="Begin"/>
+      </fieldset>
+    </form>
+  `
+}
+
 /* Story functions */
 
 function generateStoryHeader() {
@@ -117,6 +134,13 @@ function mainListener() {
         method: 'DELETE'
       });
       location.reload();
+    }
+
+    if (target.is( '#btn--new-game')) {
+      console.log(target);
+      const chooseCharacter = generateNewCharacterForm();
+      $('main').html(chooseCharacter);
+      selectCharacter();
     }
   });
 }
@@ -519,4 +543,4 @@ function endCombat(player, enemy, condition) {
   }
 }
 
-selectCharacter();
+mainListener();
