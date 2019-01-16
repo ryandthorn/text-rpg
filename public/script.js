@@ -137,7 +137,6 @@ function mainListener() {
     }
 
     if (target.is( '#btn--new-game')) {
-      console.log(target);
       const chooseCharacter = generateNewCharacterForm();
       $('main').html(chooseCharacter);
       selectCharacter();

@@ -1,0 +1,47 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+main {
+  width: 90vw;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+header {
+  margin: 0;
+  height: 30vh;
+  background: white url(../images/banner.jpg) no-repeat center;
+}
+
+h1, h2, h3 {
+  text-align: center;
+}
+
+h1 {
+  font-size: 3em;
+  margin: 0;
+  padding-top: 10vh;
+}
+h2 {
+  font-size: 2em;
+}
+h3 {
+  font-size: 1.5em;
+}
+
+#btn--new-game {
+  display: block;
+  margin: 0 auto;
+}
+
+@media (min-width: 600px) {
+  body {
+    max-width: 1000px;
+  }
+}
