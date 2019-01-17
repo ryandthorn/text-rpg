@@ -3,30 +3,30 @@
 }
 
 body {
-  max-width: 600px;
+  background-color: lightyellow;
   margin: 0 auto;
+  max-width: 600px;
 }
 
 main {
-  width: 90vw;
-  max-width: 900px;
+  font-family: 'Alegreya Sans', sans-serif;
   margin: 0 auto;
+  max-width: 900px;
+  width: 90vw;
 }
 
 header {
-  margin: 0;
+  background: lightyellow url(../images/banner.jpg) no-repeat center;
   height: 30vh;
-  background: white url(../images/banner.jpg) no-repeat center;
+  margin: 0 auto;
 }
 
 h1, h2, h3 {
+  font-family: 'Alegreya', serif;
   text-align: center;
 }
-
 h1 {
   font-size: 3em;
-  margin: 0;
-  padding-top: 10vh;
 }
 h2 {
   font-size: 2em;
@@ -35,13 +35,58 @@ h3 {
   font-size: 1.5em;
 }
 
+button {  
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1.25em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 1em 1.5em;
+  text-transform: uppercase;
+}
+
+#h1--banner {
+  margin: 0;
+  padding-top: 10vh;
+}
+
+#h2--info {
+  display: block;
+  line-height: 1.25em;
+  margin: 2rem auto;
+}
+
+#span--h2-info {
+  color: #1c5702;
+}
+
 #btn--new-game {
+  background-color: #ACCC9F;
   display: block;
   margin: 0 auto;
+  position: relative;
+  top: 2px;
+}
+#btn--new-game:hover {
+  box-shadow: 0 4px #619949;
+  top: 0;
+  transition: all .2s;
+	-webkit-transition: all .2s;
+  -moz-transition: all .2s;
+}
+#btn--new-game:active {
+  box-shadow: 0 0 #619949;
+  top: 6px;
 }
 
 @media (min-width: 600px) {
   body {
     max-width: 1000px;
+  }
+
+  #h2--info {
+    max-width: 600px;
   }
 }
