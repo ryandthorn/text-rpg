@@ -11,12 +11,16 @@ body {
 main {
   font-family: 'Alegreya Sans', sans-serif;
   margin: 0 auto;
-  max-width: 900px;
+  max-width: 600px;
   width: 90vw;
 }
 
 header {
-  background: lightyellow url(../images/banner.jpg) no-repeat center;
+  background-color: lightyellow;
+  background-image: url(../images/banner.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   height: 30vh;
   margin: 0 auto;
 }
@@ -47,6 +51,46 @@ button {
   text-transform: uppercase;
 }
 
+/* Navigation bar */
+
+.navbar {
+  align-items: center;
+  border-bottom: 1px solid black;
+  display: flex;
+}
+
+#img--nav-icon {
+  height: 50px;
+  width: 50px;
+}
+
+#h2--nav-title {
+  flex-grow: 2;
+  font-size: 1.5em;
+  margin: 0;
+  margin-left: .5rem;
+  text-align: left;
+}
+
+.btn--login {
+  background-color: #ffcd3c;
+  border-radius: 25px;
+  font-size: 1em;
+  font-weight: bold;
+  margin-right: .5rem;
+  padding: .5em .6em;
+  text-transform: uppercase;
+}
+.btn--login:hover {
+  border: 1px solid #ffa600;
+  color: white;
+  transition: all .2s;
+	-webkit-transition: all .2s;
+  -moz-transition: all .2s;
+}
+
+/* Landing page */
+
 #h1--banner {
   margin: 0;
   padding-top: 10vh;
@@ -62,27 +106,28 @@ button {
   color: #1c5702;
 }
 
-#btn--new-game {
+#btn--enter {
   background-color: #ACCC9F;
   display: block;
   margin: 0 auto;
   position: relative;
   top: 2px;
 }
-#btn--new-game:hover {
+#btn--enter:hover {
   box-shadow: 0 4px #619949;
+  color: white;
   top: 0;
   transition: all .2s;
 	-webkit-transition: all .2s;
   -moz-transition: all .2s;
 }
-#btn--new-game:active {
+#btn--enter:active {
   box-shadow: 0 0 #619949;
   top: 6px;
 }
 
 @media (min-width: 600px) {
-  body {
+  body, .navbar {
     max-width: 1000px;
   }
 

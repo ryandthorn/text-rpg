@@ -136,7 +136,7 @@ function mainListener() {
       location.reload();
     }
 
-    if (target.is( '#btn--new-game')) {
+    if (target.is( '#btn--enter')) {
       const chooseCharacter = generateNewCharacterForm();
       $('main').html(chooseCharacter);
       selectCharacter();
