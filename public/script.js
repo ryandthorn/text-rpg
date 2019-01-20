@@ -21,7 +21,7 @@ function generateNewCharacterForm() {
         <label for="thief">Thief</label>
         <input type="radio" name="character" id="warrior" value="warrior" required/>
         <label for="warrior">Warrior</label></br>
-        <input class="btn--start" type="submit" value="Begin"/>
+        <input id="btn--start" type="submit" value="Start"/>
       </fieldset>
     </form>
   `

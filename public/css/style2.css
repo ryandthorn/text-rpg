@@ -9,19 +9,24 @@ body {
 }
 
 main {
+  background-image: url(../images/river.gif);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; 
   font-family: 'Alegreya Sans', sans-serif;
+  height: 100vh;
   margin: 0 auto;
   max-width: 600px;
-  width: 90vw;
+  overflow: auto;
 }
 
 header {
-  background-color: lightyellow;
-  background-image: url(../images/banner.jpg);
+  /* background-color: lightyellow; */
+  /* background-image: url(../images/banner.jpg);
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
-  height: 30vh;
+  background-size: cover; */
+
   margin: 0 auto;
 }
 
@@ -43,12 +48,20 @@ button {
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  display: inline-block;
   font-size: 1.25em;
   font-weight: bold;
   letter-spacing: 1px;
   padding: 1em 1.5em;
   text-transform: uppercase;
+}
+
+.frame {
+  background-color: black;
+  border: 3px groove white;
+  color: white;
+  margin: 10vh 5vw;
+  height: auto;
+  padding: 1rem;
 }
 
 /* Navigation bar */
@@ -99,21 +112,21 @@ button {
 #h2--info {
   display: block;
   line-height: 1.25em;
-  margin: 2rem auto;
+  margin: 0 auto;
 }
 
 #span--h2-info {
   color: #1c5702;
 }
 
-#btn--enter {
+#btn--enter, #btn--start {
   background-color: #ACCC9F;
   display: block;
   margin: 0 auto;
   position: relative;
   top: 2px;
 }
-#btn--enter:hover {
+#btn--enter:hover, #btn--start:hover {
   box-shadow: 0 4px #619949;
   color: white;
   top: 0;
@@ -121,13 +134,85 @@ button {
 	-webkit-transition: all .2s;
   -moz-transition: all .2s;
 }
-#btn--enter:active {
+#btn--enter:active, #btn--start:active {
   box-shadow: 0 0 #619949;
   top: 6px;
 }
 
+/* Choose character */
+.form--choose-character {
+  border-radius: 3%;
+  font-size: 1.25em;
+  margin: 0 auto;
+  margin-top: 2rem;
+  max-width: 300px;
+  text-align: center;
+}
+
+.form--choose-character fieldset {
+  border: 1px solid #ffcd3c;
+  border-radius: 2%;
+  padding: 0px;
+}
+
+.form--choose-character legend {
+  font-family: 'Alegreya', serif;
+  font-size: 1.25em;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  padding: 0 .25em;
+}
+
+.form--choose-character label {
+  background-color: black;
+  background-image: url(../images/tree-logo.jpg);
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: 50px 50px;
+  border: 1px solid grey;
+  color: white;
+  cursor: pointer;
+  display: block;
+  font-weight: bold;
+  margin: .75rem auto 0 auto;
+  padding: .75rem 0 .75rem 4rem;
+  width: 200px;
+}
+.form--choose-character label:hover {
+  border: 1px solid #ffa600;
+}
+.form--choose-character label[for="mage"] {
+  background-image: url(../images/mage-icon.gif);
+}
+.form--choose-character label[for="thief"] {
+  background-image: url(../images/thief-icon.gif);
+}
+.form--choose-character label[for="warrior"] {
+  background-image: url(../images/warrior-icon.gif);
+}
+
+.form--choose-character input[type="radio"] {
+  display: none;
+}
+.form--choose-character .radio-selected {
+  border: 1px solid #ffa600;
+  color: #ffcd3c;
+}
+
+#btn--start {
+  background: #ACCC9F;
+  border: none;
+  border-radius: 25px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin: .5rem auto 1rem auto;
+  padding: 1rem 2rem;
+  text-transform: uppercase;
+}
+
+
 @media (min-width: 600px) {
-  body, .navbar {
+  body, main, .navbar {
     max-width: 1000px;
   }
 

@@ -78,7 +78,7 @@ header input {
 }
 
 .form--choose-character fieldset {
-  border: 1px groove gray;
+  border: 3px groove #ffcd3c;
   border-radius: 2%;
   padding: 0px;
 }
