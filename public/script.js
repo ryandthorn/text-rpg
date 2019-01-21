@@ -55,7 +55,7 @@ function displayStory(bookmark) {
     .then(res => res.json())
     .then(story => {
       const currentScene = story[bookmark.chapter][bookmark.scene].text;
-      $('main').html(currentScene);
+      $('#frame').html(currentScene);
     })
     .catch(err => console.error(err));
 }
@@ -64,7 +64,7 @@ function displayCharacterInfo() {
   fetch(`/character?id=${character_id}`)
     .then(response => response.json())
     .then(char => {
-      $('main').html( `
+      $('#frame').html( `
         <div class="char-info--container">
           <section class="char-info--vitals">
             <h2>${char.class}</h2>
@@ -195,7 +195,7 @@ function selectCharacter() {
 function startGame(player) {
   character_id = player._id;
   $('form').remove();
-  $('body').css('background-image', 'none');
+  // $('body').css('background-image', 'none');
   generateStoryHeader();
   displayStory(player.bookmark);
   headerListener();
@@ -249,7 +249,7 @@ function displayCombatScreen() {
   $('header').html(`
     <h1 class=".combat--h1">Combat!</h1>
   `);
-  $('main').html(`
+  $('#frame').html(`
     <section class="combat--character"></section>
     <section class="combat--log">
       <ul></ul>

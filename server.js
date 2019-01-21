@@ -2,6 +2,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const passport = require('passport');
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
@@ -14,8 +15,17 @@ app.use(morgan('common'));
 
 const characterRouter = require('./characterRouter');
 const storyRouter = require('./storyRouter');
+const { router: usersRouter } = require('./users');
+const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 app.use('/character', characterRouter);
 app.use('/story', storyRouter);
+app.use('/api/users/', usersRouter);
+app.use('/api/auth/', authRouter);
+
+const jwtAuth = passport.authenticate('jwt', { session: false });
+
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 let server;
 
