@@ -4,8 +4,8 @@
 
 body {
   background-color: lightyellow;
-  margin: 0 auto;
-  max-width: 600px;
+  max-height: 100vh;
+  max-width: 100vw;
 }
 
 main {
@@ -18,16 +18,6 @@ main {
   margin: 0 auto;
   max-width: 600px;
   overflow: auto;
-}
-
-header {
-  /* background-color: lightyellow; */
-  /* background-image: url(../images/banner.jpg);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover; */
-
-  margin: 0 auto;
 }
 
 h1, h2, h3 {
@@ -55,7 +45,7 @@ button {
   text-transform: uppercase;
 }
 
-.frame {
+#frame {
   background-color: black;
   border: 3px groove white;
   color: white;
@@ -68,7 +58,6 @@ button {
 
 .navbar {
   align-items: center;
-  border-bottom: 1px solid black;
   display: flex;
 }
 
@@ -113,20 +102,21 @@ button {
   display: block;
   line-height: 1.25em;
   margin: 0 auto;
+  width: 100%;
 }
 
 #span--h2-info {
-  color: #1c5702;
+  color: lightgreen;
 }
 
-#btn--enter, #btn--start {
-  background-color: #ACCC9F;
+.btn--push-large {
+  background-color: lightgreen;
   display: block;
-  margin: 0 auto;
+  margin: 1rem auto;
   position: relative;
   top: 2px;
 }
-#btn--enter:hover, #btn--start:hover {
+.btn--push-large:hover {
   box-shadow: 0 4px #619949;
   color: white;
   top: 0;
@@ -134,13 +124,13 @@ button {
 	-webkit-transition: all .2s;
   -moz-transition: all .2s;
 }
-#btn--enter:active, #btn--start:active {
+.btn--push-large:active {
   box-shadow: 0 0 #619949;
   top: 6px;
 }
 
 /* Choose character */
-.form--choose-character {
+#form--choose-character {
   border-radius: 3%;
   font-size: 1.25em;
   margin: 0 auto;
@@ -148,22 +138,18 @@ button {
   max-width: 300px;
   text-align: center;
 }
-
-.form--choose-character fieldset {
-  border: 1px solid #ffcd3c;
-  border-radius: 2%;
+#form--choose-character fieldset {
+  border: none;
   padding: 0px;
 }
-
-.form--choose-character legend {
+#form--choose-character legend {
   font-family: 'Alegreya', serif;
   font-size: 1.25em;
   font-weight: bold;
   margin-bottom: 1rem;
   padding: 0 .25em;
 }
-
-.form--choose-character label {
+#form--choose-character label {
   background-color: black;
   background-image: url(../images/tree-logo.jpg);
   background-position: left;
@@ -178,31 +164,34 @@ button {
   padding: .75rem 0 .75rem 4rem;
   width: 200px;
 }
-.form--choose-character label:hover {
+#form--choose-character label:hover {
   border: 1px solid #ffa600;
 }
-.form--choose-character label[for="mage"] {
+#form--choose-character label[for="mage"] {
   background-image: url(../images/mage-icon.gif);
 }
-.form--choose-character label[for="thief"] {
+#form--choose-character label[for="thief"] {
   background-image: url(../images/thief-icon.gif);
 }
-.form--choose-character label[for="warrior"] {
+#form--choose-character label[for="warrior"] {
   background-image: url(../images/warrior-icon.gif);
 }
-
-.form--choose-character input[type="radio"] {
+#form--choose-character input[type="radio"] {
   display: none;
 }
-.form--choose-character .radio-selected {
+#form--choose-character .radio-selected {
   border: 1px solid #ffa600;
   color: #ffcd3c;
 }
 
+#new-character-info p {
+  margin-top: 0;
+}
+
 #btn--start {
-  background: #ACCC9F;
   border: none;
   border-radius: 25px;
+  cursor: pointer;
   font-weight: bold;
   letter-spacing: 1px;
   margin: .5rem auto 1rem auto;
@@ -210,9 +199,9 @@ button {
   text-transform: uppercase;
 }
 
-
 @media (min-width: 600px) {
   body, main, .navbar {
+    margin: 0 auto;
     max-width: 1000px;
   }
 

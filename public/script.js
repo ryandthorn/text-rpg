@@ -12,7 +12,7 @@ function putRequest(endpoint, payload) {
 
 function generateNewCharacterForm() {
   return `
-    <form class="form--choose-character">
+    <form id="form--choose-character">
       <fieldset>
         <legend align="center">Choose your character</legend>
         <input type="radio" name="character" id="mage" value="mage" required/>
@@ -21,11 +21,24 @@ function generateNewCharacterForm() {
         <label for="thief">Thief</label>
         <input type="radio" name="character" id="warrior" value="warrior" required/>
         <label for="warrior">Warrior</label></br>
-        <input id="btn--start" type="submit" value="Start"/>
+        <section id="new-character-info">
+          <p>Select a character for more info</p>
+        </section>
+        <input id="btn--start" class="btn--push-large" type="submit" value="Start"/>
       </fieldset>
     </form>
   `
 }
+
+function generateNewCharacterInfo(selection) {
+  if (selection === 'mage') {
+    return `<p>Mage info</p>`
+  } else if (selection === 'thief') {
+    return `<p>Thief info</p>`
+  } else {
+    return `<p>Warrior info</p>`
+  }
+} 
 
 /* Story functions */
 
@@ -138,7 +151,7 @@ function mainListener() {
 
     if (target.is( '#btn--enter')) {
       const chooseCharacter = generateNewCharacterForm();
-      $('main').html(chooseCharacter);
+      $('#frame').html(chooseCharacter);
       selectCharacter();
     }
   });
@@ -166,6 +179,10 @@ function selectCharacter() {
     $('form label').removeClass('radio-selected');
     const target = $(event.target);
     target.next('label').addClass('radio-selected');
+
+    const selection = $('input[type=radio]:checked').val();
+    const newCharacterInfo = generateNewCharacterInfo(selection);
+    $('#new-character-info').html(newCharacterInfo);
   });
   $('form').submit(event => {
     event.preventDefault();
