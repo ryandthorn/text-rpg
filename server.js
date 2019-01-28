@@ -19,8 +19,8 @@ const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 app.use('/character', characterRouter);
 app.use('/story', storyRouter);
-app.use('/api/users/', usersRouter);
-app.use('/api/auth/', authRouter);
+app.use('/users', usersRouter);
+app.use('/auth', authRouter);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 

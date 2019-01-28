@@ -1,7 +1,9 @@
 'use strict';
+const dotenv = require('dotenv');
+dotenv.config();
 exports.PORT = process.env.PORT || 8080;
-exports.DATABASE_URL = process.env.DATABASE_URL || 'mongodb://test:sconnie1@ds213183.mlab.com:13183/text-rpg';
-exports.TEST_DATABASE_URL = process.env.TEST_DATABASE_URL || 'mongodb://test:sconnie1@ds253804.mlab.com:53804/text-rpg-test';
-exports.JWT_SECRET = 'Thinkful';
+exports.DATABASE_URL = process.env.DATABASE_URL;
+exports.TEST_DATABASE_URL = process.env.TEST_DATABASE_URL;
+exports.JWT_SECRET = process.env.JWT_SECRET;
 exports.JWT_EXPIRY = '7d';
 // Heroku: set initial value to process.env
