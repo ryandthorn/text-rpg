@@ -131,6 +131,7 @@ function advanceStory(target) {
 }
 
 function mainListener() {
+  // Attach listener to frame
   $('main').click(event => {
     const target = $( event.target );
 
@@ -142,19 +143,21 @@ function mainListener() {
       startCombat();
     }
 
-    if (target.is('.btn--restart')) {
+    if (target.is( '.btn--restart' )) {
       fetch(`/character?id=${character_id}`, {
         method: 'DELETE'
       });
       location.reload();
     }
 
-    if (target.is( '#btn--enter')) {
+    if (target.is( '#btn--enter' )) {
       const chooseCharacter = generateNewCharacterForm();
       $('#frame').html(chooseCharacter);
       selectCharacter();
     }
   });
+
+  // $('#form--signup').one('submit', function() {});
 }
 
 function headerListener() {
@@ -175,7 +178,7 @@ function headerListener() {
 }
 
 function selectCharacter() {
-  $('form').change(event => {
+  $('#form--choose-character').change(event => {
     $('form label').removeClass('radio-selected');
     const target = $(event.target);
     target.next('label').addClass('radio-selected');
@@ -184,7 +187,7 @@ function selectCharacter() {
     const newCharacterInfo = generateNewCharacterInfo(selection);
     $('#new-character-info').html(newCharacterInfo);
   });
-  $('form').submit(event => {
+  $('#form--choose-character').submit(event => {
     event.preventDefault();
     const selection = $('input[type=radio]:checked').val();
     $.post('/character/new?class=' + selection)

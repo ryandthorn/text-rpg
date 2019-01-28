@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Text RPG</title>
+  <link href="https://fonts.googleapis.com/css?family=Alegreya|Alegreya+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style2.css" />
+</head>
+
+<body>
+  <header>
+    <section class="navbar" role="navigation">
+      <img src="./images/tree-logo.jpg" alt="Tree logo" id="img--nav-icon" />
+      <h2 id="h2--nav-title">Placeholder</h2>
+      <button class="btn--login">Sign in</button>
+    </section>
+  </header>
+  <main>
+    <div id="frame">
+      <h1 id="h1--signup">Sign up for your free <span class="span--title">Placeholder</span> account!</h1>
+      <form id="form--signup" action="/users" method="post">
+        <fieldset>
+          <legend class="hidden">Please enter your information</legend>
+          <div id="username-container" class="signup-container">
+            <label for="username">Username</label>
+            <input required type="text" name="username" id="username">
+          </div>
+          <div id="password-container" class="signup-container">
+            <label for="password">Password</label>
+            <input required type="password" name="password" id="password" placeholder="Minimum 6 characters">
+          </div>
+          <div id="confirm-password-container" class="signup-container">
+            <label for="confirm-password">Re-enter password</label>
+            <input required type="password" name="confirm-password" id="confirm-password">
+          </div>
+          <div id="email-container" class="signup-container">
+            <label for="email">Email</label>
+            <input required type="email" name="email" id="email">
+          </div>
+          <input type="submit" class="btn--push-large" value="Submit">
+        </fieldset>
+      </form>
+    </div>
+  </main>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
