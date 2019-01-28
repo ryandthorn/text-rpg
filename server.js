@@ -7,6 +7,7 @@ mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
 const { PORT, DATABASE_URL } = require('./config');
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
 const app = express();
 app.use(express.static('public'));
@@ -17,12 +18,10 @@ const characterRouter = require('./characterRouter');
 const storyRouter = require('./storyRouter');
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
-app.use('/character', characterRouter);
-app.use('/story', storyRouter);
+app.use('/character', jwtAuth, characterRouter);
+app.use('/story', jwtAuth, storyRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
-
-const jwtAuth = passport.authenticate('jwt', { session: false });
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
