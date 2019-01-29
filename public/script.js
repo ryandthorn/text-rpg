@@ -5,9 +5,199 @@ let character_id;
 function putRequest(endpoint, payload) {
   return fetch(endpoint, {
     method: 'PUT',
-    headers: {"Content-Type": "application/json"},
+    headers: new Headers({
+      'Authorization': 'Bearer ' + localStorage.authToken,
+      'Content-Type': 'application/json'
+    }),
     body: JSON.stringify(payload)
   });
+}
+
+function generateNewUserForm() {
+  return `
+    <h1 id="h1--signup">Sign up for your free <span class="span--title">Placeholder</span> account!</h1>
+    <form id="form--signup">
+      <fieldset>
+        <legend class="hidden">Please enter your information</legend>
+        <div id="username-container" class="signup-container">
+          <label for="username">Username</label>
+          <input required type="text" name="username" id="username">
+        </div>
+        <div id="password-container" class="signup-container">
+          <label for="password">Password</label>
+          <input required type="password" name="password" id="password" placeholder="Minimum 6 characters">
+        </div>
+        <div id="confirm-password-container" class="signup-container">
+          <label for="confirm-password">Re-enter password</label>
+          <input required type="password" name="confirm-password" id="confirm-password">
+        </div>
+        <div id="email-container" class="signup-container">
+          <label for="email">Email</label>
+          <input required type="email" name="email" id="email">
+        </div>
+        <input type="submit" class="btn--push-large" value="Submit">
+      </fieldset>
+    </form>
+  `
+}
+
+function createNewUser(userInfo) {
+  const options = {
+    method: 'POST',
+    headers: new Headers({
+      "Content-Type": "application/json",
+    }),
+    body: JSON.stringify(userInfo)
+  }
+  return fetch('/users', options);
+}
+
+function createNewUserJWT(userInfo) {
+  const options = {
+    method: 'POST',
+    headers: new Headers({
+      "Content-Type": "application/json",
+    }),
+    body: JSON.stringify({
+      username: userInfo.username,
+      password: userInfo.password
+    })
+  }
+  return fetch('/auth/login', options)
+    .then(res => res.json())
+    .then(token => localStorage.setItem('authToken', token.authToken))
+    .catch(err => console.error(err));
+}
+
+function updateUserCharacterId(character) {
+  const options = {
+    method: 'PUT',
+    headers: new Headers({
+      'Authorization': 'Bearer ' + localStorage.authToken,
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      characterId: character._id
+    })
+  }
+  fetch('/users/' + localStorage.username, options);
+}
+
+function startGame(character) {
+  character_id = character._id;
+  $('form').remove();
+  generateStoryHeader();
+  displayStory(character.bookmark);
+  headerListener();
+  mainListener();
+}
+
+/* Handlers */
+
+function mainListener() {
+  // Attach listener to frame
+  $('main').click(event => {
+    const target = $( event.target );
+
+    if (target.is( '.btn--next' )) {
+      advanceStory(target);
+    };
+
+    if (target.is( '.btn--combat' )) {
+      startCombat();
+    }
+
+    if (target.is( '.btn--restart' )) {
+      fetch(`/character?id=${character_id}`, {
+        headers: new Headers({
+          'Authorization': 'Bearer ' + localStorage.authToken
+        }),  
+        method: 'DELETE'
+      });
+      location.reload();
+    }
+
+    if (target.is( '#btn--enter' )) {
+      const newUserForm = generateNewUserForm();
+      $('#frame').html(newUserForm);
+    }
+  });
+
+  $('#frame').on('submit', '#form--signup', function(event) {
+    event.preventDefault();
+    const userInfo = {
+      username: $('#username').val(),
+      password: $('#password').val(),
+      email: $('#email').val()
+    }
+    localStorage.username = userInfo.username;
+    createNewUser(userInfo)
+      .then(() => {
+        createNewUserJWT(userInfo);
+        setupChooseCharacter();
+      })
+      .catch(err => console.error(err));
+  });
+}
+
+function headerListener() {
+  $('header').click(event => {
+    event.preventDefault();
+    const target = $( event.target );
+    if (target.is( '.btn--story' )) {
+      const options = {
+        headers: new Headers({
+          'Authorization': 'Bearer ' + localStorage.authToken
+        })
+      };
+      fetch(`/character/bookmark?id=${character_id}`, options)
+        .then(res => res.json())
+        .then(bookmark => {
+          displayStory(bookmark);
+        })
+        .catch(err => console.error(err));
+    } else if (target.is( '.btn--character' )) {
+      displayCharacterInfo();
+    }
+  });
+}
+
+function chooseCharacterHandler() {
+  $('#form--choose-character').change(event => {
+    $('form label').removeClass('radio-selected');
+    const target = $(event.target);
+    target.next('label').addClass('radio-selected');
+
+    const selection = $('input[type=radio]:checked').val();
+    const newCharacterInfo = generateNewCharacterInfo(selection);
+    $('#new-character-info').html(newCharacterInfo);
+  });
+  $('#form--choose-character').submit(event => {
+    event.preventDefault();
+    const selection = $('input[type=radio]:checked').val();
+    fetch('/character/new?class=' + selection, {
+      headers: new Headers({
+        'Authorization': 'Bearer ' + localStorage.authToken,
+      }),
+      method: 'POST'
+    })
+      .then(res => res.json())
+      .then(character => {
+        updateUserCharacterId(character);
+        startGame(character);
+      })
+      .catch(err => console.error(err));
+  });
+}
+
+
+
+/* Choose character */
+
+function setupChooseCharacter() {
+  const chooseCharacter = generateNewCharacterForm();
+  $('#frame').html(chooseCharacter);
+  chooseCharacterHandler();
 }
 
 function generateNewCharacterForm() {
@@ -38,9 +228,9 @@ function generateNewCharacterInfo(selection) {
   } else {
     return `<p>Warrior info</p>`
   }
-} 
+}
 
-/* Story functions */
+/* Story */
 
 function generateStoryHeader() {
   $('header').html(`
@@ -51,7 +241,12 @@ function generateStoryHeader() {
 }
 
 function displayStory(bookmark) {
-  fetch('/story')
+  const options = {
+    headers: new Headers({
+      'Authorization': 'Bearer ' + localStorage.authToken
+    })
+  };
+  fetch('/story', options)
     .then(res => res.json())
     .then(story => {
       const currentScene = story[bookmark.chapter][bookmark.scene].text;
@@ -61,7 +256,12 @@ function displayStory(bookmark) {
 }
 
 function displayCharacterInfo() {
-  fetch(`/character?id=${character_id}`)
+  const options = {
+    headers: new Headers({
+      'Authorization': 'Bearer ' + localStorage.authToken
+    })
+  };
+  fetch(`/character?id=${character_id}`, options)
     .then(response => response.json())
     .then(char => {
       $('#frame').html( `
@@ -98,10 +298,15 @@ function displayCharacterInfo() {
 
 function advanceStory(target) {
   // Get bookmark and story from db
-  fetch(`/character/bookmark?id=${character_id}`)
+  const options = {
+    headers: new Headers({
+      'Authorization': 'Bearer ' + localStorage.authToken
+    })
+  };
+  fetch(`/character/bookmark?id=${character_id}`, options)
     .then(res => res.json())
     .then(bookmark => {
-      fetch('/story')
+      fetch('/story', options)
         .then(res => res.json())
         .then(story => {
           // Determine next scene
@@ -128,81 +333,6 @@ function advanceStory(target) {
         .catch(err => console.error(err));
     })
     .catch(err => console.error(err));
-}
-
-function mainListener() {
-  // Attach listener to frame
-  $('main').click(event => {
-    const target = $( event.target );
-
-    if (target.is( '.btn--next' )) {
-      advanceStory(target);
-    };
-
-    if (target.is( '.btn--combat' )) {
-      startCombat();
-    }
-
-    if (target.is( '.btn--restart' )) {
-      fetch(`/character?id=${character_id}`, {
-        method: 'DELETE'
-      });
-      location.reload();
-    }
-
-    if (target.is( '#btn--enter' )) {
-      const chooseCharacter = generateNewCharacterForm();
-      $('#frame').html(chooseCharacter);
-      selectCharacter();
-    }
-  });
-
-  // $('#form--signup').one('submit', function() {});
-}
-
-function headerListener() {
-  $('header').click(event => {
-    event.preventDefault();
-    const target = $( event.target );
-    if (target.is( '.btn--story' )) {
-      fetch(`/character/bookmark?id=${character_id}`)
-        .then(res => res.json())
-        .then(bookmark => {
-          displayStory(bookmark);
-        })
-        .catch(err => console.error(err));
-    } else if (target.is( '.btn--character' )) {
-      displayCharacterInfo();
-    }
-  });
-}
-
-function selectCharacter() {
-  $('#form--choose-character').change(event => {
-    $('form label').removeClass('radio-selected');
-    const target = $(event.target);
-    target.next('label').addClass('radio-selected');
-
-    const selection = $('input[type=radio]:checked').val();
-    const newCharacterInfo = generateNewCharacterInfo(selection);
-    $('#new-character-info').html(newCharacterInfo);
-  });
-  $('#form--choose-character').submit(event => {
-    event.preventDefault();
-    const selection = $('input[type=radio]:checked').val();
-    $.post('/character/new?class=' + selection)
-      .done((player) => startGame(player));
-  });
-}
-
-function startGame(player) {
-  character_id = player._id;
-  $('form').remove();
-  // $('body').css('background-image', 'none');
-  generateStoryHeader();
-  displayStory(player.bookmark);
-  headerListener();
-  mainListener();
 }
 
 /* Combat functions */
@@ -354,10 +484,15 @@ function appendHTML(selector, entry) {
 }
 
 function startCombat() {
-  fetch(`/character?id=${character_id}`)
+  const options = {
+    headers: new Headers({
+      'Authorization': 'Bearer ' + localStorage.authToken
+    })
+  };
+  fetch(`/character?id=${character_id}`, options)
     .then(res => res.json())
     .then(player => {
-      fetch('/story/enemy')
+      fetch('/story/enemy', options)
         .then(res => res.json())
         .then(enemy => {
           displayCombatScreen();
@@ -562,4 +697,4 @@ function endCombat(player, enemy, condition) {
   }
 }
 
-mainListener();
+$(mainListener);

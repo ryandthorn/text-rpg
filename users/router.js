@@ -1,16 +1,18 @@
-
 'use strict';
 const express = require('express');
+const router = express.Router();
+
 const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+
+const passport = require('passport');
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
 const {User} = require('./models');
 
-const router = express.Router();
-
-const jsonParser = bodyParser.json();
-
 // Post to register a new user
 router.post('/', jsonParser, (req, res) => {
+
   const requiredFields = ['username', 'password', 'email'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -92,10 +94,8 @@ router.post('/', jsonParser, (req, res) => {
       location: tooSmallField || tooLargeField
     });
   }
-  // Valdiate email & characterId
-  let {username, password, email, characterId} = req.body;
-  // Username and password come in pre-trimmed, otherwise we throw an error
-  // before this
+  // To do: valdiate email
+  let {username, password, email} = req.body;
 
   return User.find({username})
     .count()
@@ -116,8 +116,7 @@ router.post('/', jsonParser, (req, res) => {
       return User.create({
         username,
         password: hash,
-        email,
-        characterId
+        email
       });
     })
     .then(user => {
@@ -130,6 +129,17 @@ router.post('/', jsonParser, (req, res) => {
         return res.status(err.code).json(err);
       }
       res.status(500).json({code: 500, message: 'Internal server error'});
+    });
+});
+
+router.put('/:username', jwtAuth, (req, res) => {
+  const toUpdate = {characterId: req.body.characterId};
+  User
+    .findOneAndUpdate({username: req.params.username}, {$set: toUpdate}, {new: true})
+    .then(response => res.status(200).json(response))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'});
     });
 });
 
