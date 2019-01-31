@@ -13,7 +13,7 @@ const {User} = require('./models');
 // Post to register a new user
 router.post('/', jsonParser, (req, res) => {
 
-  const requiredFields = ['username', 'password', 'email'];
+  const requiredFields = ['username', 'password', 'confirmPassword', 'email'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
   if (missingField) {
@@ -39,18 +39,19 @@ router.post('/', jsonParser, (req, res) => {
     });
   }
 
-  // If the username and password aren't trimmed we give an error.  Users might
-  // expect that these will work without trimming (i.e. they want the password
-  // "foobar ", including the space at the end).  We need to reject such values
-  // explicitly so the users know what's happening, rather than silently
-  // trimming them and expecting the user to understand.
-  // We'll silently trim the other fields, because they aren't credentials used
-  // to log in, so it's less of a problem.
-  const explicityTrimmedFields = ['username', 'password'];
+  // const passwordsMatch = req.body.password === req.body.confirmPassword;
+  // if (!passwordsMatch) {
+  //   return res.status(422).json({
+  //     code: 422,
+  //     reason: 'ValidationError',
+  //     message: 'Passwords do not match'
+  //   });
+  // }
+
+  const explicityTrimmedFields = ['username', 'password', 'email'];
   const nonTrimmedField = explicityTrimmedFields.find(
     field => req.body[field].trim() !== req.body[field]
   );
-
   if (nonTrimmedField) {
     return res.status(422).json({
       code: 422,
@@ -66,8 +67,7 @@ router.post('/', jsonParser, (req, res) => {
     },
     password: {
       min: 6,
-      // bcrypt truncates after 72 characters, so let's not give the illusion
-      // of security by storing extra (unused) info
+      // bcrypt truncates after 72 characters
       max: 72
     }
   };
@@ -94,7 +94,7 @@ router.post('/', jsonParser, (req, res) => {
       location: tooSmallField || tooLargeField
     });
   }
-  // To do: valdiate email
+
   let {username, password, email} = req.body;
 
   return User.find({username})
@@ -132,25 +132,15 @@ router.post('/', jsonParser, (req, res) => {
     });
 });
 
-router.put('/:username', jwtAuth, (req, res) => {
+router.put('/', jwtAuth, (req, res) => {
   const toUpdate = {characterId: req.body.characterId};
   User
-    .findOneAndUpdate({username: req.params.username}, {$set: toUpdate}, {new: true})
+    .findOneAndUpdate({username: req.user.username}, {$set: toUpdate}, {new: true})
     .then(response => res.status(200).json(response))
     .catch(err => {
       console.error(err);
       res.status(500).json({message: 'Internal server error'});
     });
-});
-
-// Never expose all your users like below in a prod application
-// we're just doing this so we have a quick way to see
-// if we're creating users. keep in mind, you can also
-// verify this in the Mongo shell.
-router.get('/', (req, res) => {
-  return User.find()
-    .then(users => res.json(users.map(user => user.serialize())))
-    .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
 module.exports = {router};

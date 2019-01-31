@@ -21,8 +21,8 @@
   </header>
   <main>
     <div id="frame">
-      <h1 id="h1--signup">Sign up for your free <span class="span--title">Placeholder</span> account!</h1>
-      <form id="form--signup" action="/users" method="post">
+      <h1 id="h1--login">Sign In</h1>
+      <form id="form--login">
         <fieldset>
           <legend class="hidden">Please enter your information</legend>
           <div id="username-container" class="signup-container">
@@ -31,17 +31,9 @@
           </div>
           <div id="password-container" class="signup-container">
             <label for="password">Password</label>
-            <input required type="password" name="password" id="password" placeholder="Minimum 6 characters">
+            <input required type="password" name="password" id="password">
           </div>
-          <div id="confirm-password-container" class="signup-container">
-            <label for="confirm-password">Re-enter password</label>
-            <input required type="password" name="confirm-password" id="confirm-password">
-          </div>
-          <div id="email-container" class="signup-container">
-            <label for="email">Email</label>
-            <input required type="email" name="email" id="email">
-          </div>
-          <input type="submit" class="btn--push-large" value="Submit">
+          <input type="submit" class="btn--push-large" value="Enter">
         </fieldset>
       </form>
     </div>

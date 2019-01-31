@@ -79,7 +79,7 @@ button, input[type="submit"] {
 }
 
 .btn--login {
-  background-color: #ffcd3c;
+  background-color: gold;
   border-radius: 25px;
   font-size: 1em;
   font-weight: bold;
@@ -133,18 +133,23 @@ button, input[type="submit"] {
   top: 6px;
 }
 
-/* Signup form */
+/* Signup & login forms */
 
 #h1--signup {
   font-size: 1.5em;
 }
 
-#form--signup {
+#h1--login {
+  font-size: 2.5em;
+  margin-bottom: 1rem;
+}
+
+#form--signup, #form--login {
   margin: 0 auto;
   width: max-content;
 }
 
-#form--signup fieldset {
+#form--signup fieldset, #form--login fieldset {
   border: none;
 }
 

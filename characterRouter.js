@@ -143,8 +143,12 @@ router.post('/:new', (req, res) => {
 });
 
 router.get('/', (req, res) => {
+  // if (req.query.id !== req.user.characterId) {
+  //   res.status(500).json({message: 'Query ID and character ID do not match'});
+  // }
+
   Character
-    .findById(req.query.id)
+    .findById(req.user.characterId)
     .then(character => res.status(200).json(character))
     .catch(err => {
       console.error(err);
@@ -154,7 +158,7 @@ router.get('/', (req, res) => {
 
 router.get('/bookmark', (req, res) => {
   Character
-    .findById(req.query.id)
+    .findById(req.user.characterId)
     .then(character => {
       res.status(200).json(character.bookmark);
     })
@@ -167,7 +171,7 @@ router.get('/bookmark', (req, res) => {
 router.put('/bookmark', (req, res) => {
   const toUpdate = {"bookmark": req.body.bookmark};
   Character
-    .findOneAndUpdate({_id: req.query.id}, {$set: toUpdate}, {new: true})
+    .findOneAndUpdate({_id: req.user.characterId}, {$set: toUpdate}, {new: true})
     .then(response => {
       res.status(200).json(response);
     })
@@ -180,7 +184,7 @@ router.put('/bookmark', (req, res) => {
 router.put('/', (req, res) => {
   // Update character attributes after combat resolves
   Character
-    .findById(req.query.id)
+    .findById(req.user.characterId)
     .then(character => {
       const updateableAttrs = ['hp', 'mp'];
       updateableAttrs.forEach(attr => {
@@ -203,7 +207,7 @@ router.put('/', (req, res) => {
 
 router.delete('/', (req, res) => {
   Character
-    .findByIdAndDelete(req.query.id)
+    .findByIdAndDelete(req.user.characterId)
     .then(() => {
       res.status(204).end();
     })

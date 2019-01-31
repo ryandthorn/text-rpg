@@ -1,7 +1,5 @@
 'use strict';
 
-let character_id;
-
 function putRequest(endpoint, payload) {
   return fetch(endpoint, {
     method: 'PUT',
@@ -11,6 +9,18 @@ function putRequest(endpoint, payload) {
     }),
     body: JSON.stringify(payload)
   });
+}
+
+function refreshJWT() {
+  return fetch('/auth/refresh', {
+    method: 'POST',
+    headers: new Headers({
+      'Authorization': 'Bearer ' + localStorage.authToken,
+    })
+  })
+    .then(res => res.json())
+    .then(token => token)
+    .catch(err => console.error(err));
 }
 
 function generateNewUserForm() {
@@ -41,6 +51,26 @@ function generateNewUserForm() {
   `
 }
 
+function generateLoginForm() {
+  return `
+    <h1 id="h1--login">Sign In</h1>
+    <form id="form--login">
+      <fieldset>
+        <legend class="hidden">Please enter your information</legend>
+        <div id="username-container" class="signup-container">
+          <label for="username">Username</label>
+          <input required type="text" name="username" id="username">
+        </div>
+        <div id="password-container" class="signup-container">
+          <label for="password">Password</label>
+          <input required type="password" name="password" id="password">
+        </div>
+        <input type="submit" class="btn--push-large" value="Enter">
+      </fieldset>
+    </form>
+  `
+}
+
 function createNewUser(userInfo) {
   const options = {
     method: 'POST',
@@ -52,7 +82,7 @@ function createNewUser(userInfo) {
   return fetch('/users', options);
 }
 
-function createNewUserJWT(userInfo) {
+function userLogin(userInfo) {
   const options = {
     method: 'POST',
     headers: new Headers({
@@ -65,11 +95,11 @@ function createNewUserJWT(userInfo) {
   }
   return fetch('/auth/login', options)
     .then(res => res.json())
-    .then(token => localStorage.setItem('authToken', token.authToken))
+    .then(token => token)
     .catch(err => console.error(err));
 }
 
-function updateUserCharacterId(character) {
+function updateUserCharacterId(character_id) {
   const options = {
     method: 'PUT',
     headers: new Headers({
@@ -77,19 +107,25 @@ function updateUserCharacterId(character) {
       'Content-Type': 'application/json'
     }),
     body: JSON.stringify({
-      characterId: character._id
+      characterId: character_id
     })
   }
-  fetch('/users/' + localStorage.username, options);
+  return fetch('/users', options);
 }
 
 function startGame(character) {
-  character_id = character._id;
-  $('form').remove();
   generateStoryHeader();
   displayStory(character.bookmark);
-  headerListener();
-  mainListener();
+}
+
+function getCharacterObj() {
+  const options = {
+    headers: new Headers({
+      'Authorization': 'Bearer ' + localStorage.authToken
+    })
+  };
+  // return fetch(`/character?id=${localStorage.characterId}`, options)
+  return fetch('/character', options)
 }
 
 /* Handlers */
@@ -108,13 +144,14 @@ function mainListener() {
     }
 
     if (target.is( '.btn--restart' )) {
-      fetch(`/character?id=${character_id}`, {
+      fetch(`/character`, {
         headers: new Headers({
           'Authorization': 'Bearer ' + localStorage.authToken
         }),  
         method: 'DELETE'
       });
-      location.reload();
+
+      setupChooseCharacter();
     }
 
     if (target.is( '#btn--enter' )) {
@@ -128,13 +165,34 @@ function mainListener() {
     const userInfo = {
       username: $('#username').val(),
       password: $('#password').val(),
+      confirmPassword: $('#confim-password').val(),
       email: $('#email').val()
-    }
-    localStorage.username = userInfo.username;
+    };
     createNewUser(userInfo)
       .then(() => {
-        createNewUserJWT(userInfo);
+        userLogin(userInfo);
         setupChooseCharacter();
+      })
+      .catch(err => console.error(err));
+  });
+
+  $('#frame').on('submit', '#form--login', function(event) {
+    event.preventDefault();
+    const userInfo = {
+      username: $('#username').val(),
+      password: $('#password').val()
+    };
+    userLogin(userInfo)
+      .then(res => {
+        // if (localStorage.getItem('characterId') == false) {
+        //   setupChooseCharacter();
+        // } else {
+          localStorage.setItem('authToken', res.authToken);
+          getCharacterObj()
+            .then(res => res.json())
+            .then(character => startGame(character))
+            .catch(err => console.error(err));
+        // }
       })
       .catch(err => console.error(err));
   });
@@ -144,19 +202,39 @@ function headerListener() {
   $('header').click(event => {
     event.preventDefault();
     const target = $( event.target );
+
+    if (target.is( '.btn--login' )) {
+      if (localStorage.authToken) {
+        refreshJWT()
+          .then(res => {
+            localStorage.setItem('authToken', res.authToken);
+            getCharacterObj()
+              .then(res => res.json())
+              .then(character => startGame(character))
+              .catch(err => console.error(err));
+            })
+          .catch(err => console.error(err));
+      } else {
+        const loginForm = generateLoginForm();
+        $('#frame').html(loginForm);
+      }
+    }
+
     if (target.is( '.btn--story' )) {
       const options = {
         headers: new Headers({
           'Authorization': 'Bearer ' + localStorage.authToken
         })
       };
-      fetch(`/character/bookmark?id=${character_id}`, options)
+      fetch(`/character/bookmark}`, options)
         .then(res => res.json())
         .then(bookmark => {
           displayStory(bookmark);
         })
         .catch(err => console.error(err));
-    } else if (target.is( '.btn--character' )) {
+    }
+    
+    if (target.is( '.btn--character' )) {
       displayCharacterInfo();
     }
   });
@@ -183,8 +261,13 @@ function chooseCharacterHandler() {
     })
       .then(res => res.json())
       .then(character => {
-        updateUserCharacterId(character);
-        startGame(character);
+        updateUserCharacterId(character._id)
+        refreshJWT()
+          .then(res => {
+            localStorage.setItem('authToken', res.authToken)
+            startGame(character);
+          })
+          .catch(err => console.error(err));
       })
       .catch(err => console.error(err));
   });
@@ -256,12 +339,7 @@ function displayStory(bookmark) {
 }
 
 function displayCharacterInfo() {
-  const options = {
-    headers: new Headers({
-      'Authorization': 'Bearer ' + localStorage.authToken
-    })
-  };
-  fetch(`/character?id=${character_id}`, options)
+  getCharacterObj()
     .then(response => response.json())
     .then(char => {
       $('#frame').html( `
@@ -303,7 +381,7 @@ function advanceStory(target) {
       'Authorization': 'Bearer ' + localStorage.authToken
     })
   };
-  fetch(`/character/bookmark?id=${character_id}`, options)
+  fetch(`/character/bookmark`, options)
     .then(res => res.json())
     .then(bookmark => {
       fetch('/story', options)
@@ -328,7 +406,7 @@ function advanceStory(target) {
             scene: nextScene.scene,
             next: story[nextScene.chapter][nextScene.scene].next
           }
-          putRequest(`/character/bookmark?id=${character_id}`, {bookmark: nextBookmark})
+          putRequest(`/character/bookmark`, {bookmark: nextBookmark})
         })
         .catch(err => console.error(err));
     })
@@ -489,7 +567,7 @@ function startCombat() {
       'Authorization': 'Bearer ' + localStorage.authToken
     })
   };
-  fetch(`/character?id=${character_id}`, options)
+  getCharacterObj()
     .then(res => res.json())
     .then(player => {
       fetch('/story/enemy', options)
@@ -687,7 +765,7 @@ function endCombat(player, enemy, condition) {
       hp: player.attributes.hp,
       mp: player.attributes.mp
     }
-    putRequest(`/character?id=${character_id}`, updateObj);
+    putRequest('/character', updateObj);
 
   } else if (condition === 'loss') {
     let lossMessage = generateHTML('p', 'You have been slain by ' + enemy.name);
@@ -697,4 +775,7 @@ function endCombat(player, enemy, condition) {
   }
 }
 
-$(mainListener);
+$(function() {
+  mainListener();
+  headerListener();
+})
