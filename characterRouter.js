@@ -143,10 +143,6 @@ router.post('/:new', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  // if (req.query.id !== req.user.characterId) {
-  //   res.status(500).json({message: 'Query ID and character ID do not match'});
-  // }
-
   Character
     .findById(req.user.characterId)
     .then(character => res.status(200).json(character))

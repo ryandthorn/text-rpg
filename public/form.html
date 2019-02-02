@@ -13,29 +13,32 @@
 
 <body>
   <header>
-    <section class="navbar" role="navigation">
+    <section class="navbar">
       <img src="./images/tree-logo.jpg" alt="Tree logo" id="img--nav-icon" />
-      <h2 id="h2--nav-title">Placeholder</h2>
-      <button class="btn--login">Sign in</button>
+      <h2 id="h2--nav-title">Placeholder - Chapter 1</h2>
+      <img id="img--menu" src="./images/menu.png" alt="Menu - click for options" />
+      <nav class="hidden" id="nav--mobile-menu">
+        <ul>
+          <li><button class="btn--story">Story</button></li>
+          <li><button class="btn--character">Character</button></li>
+          <li><button class="btn--signout">Sign out</button></li>
+        </ul>
+      </nav>
+      <button class="btn--header btn--story">Story</button>
+      <button class="btn--header btn--character">Character</button>
+      <button class="btn--header btn--signout">Sign out</button>
     </section>
+
   </header>
   <main>
     <div id="frame">
-      <h1 id="h1--login">Sign In</h1>
-      <form id="form--login">
-        <fieldset>
-          <legend class="hidden">Please enter your information</legend>
-          <div id="username-container" class="signup-container">
-            <label for="username">Username</label>
-            <input required type="text" name="username" id="username">
-          </div>
-          <div id="password-container" class="signup-container">
-            <label for="password">Password</label>
-            <input required type="password" name="password" id="password">
-          </div>
-          <input type="submit" class="btn--push-large" value="Enter">
-        </fieldset>
-      </form>
+      <p><span class="text--first-person">Footsteps.</span></p>
+      <p>You feel your way back into a corner of the cell.</p>
+      <p class="text--first-person">Slow... heavy. What moves like that?</p>
+      <div class="button-container">
+        <input class="btn--next 13a" type="button" value="Call for help" />
+        <input class="btn--next 13b" type="button" value="Remain silent" />
+      </div>
     </div>
   </main>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="

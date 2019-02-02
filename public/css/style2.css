@@ -4,6 +4,7 @@
 
 body {
   background-color: lightyellow;
+  font-family: 'Alegreya Sans', sans-serif;
   max-height: 100vh;
   max-width: 100vw;
 }
@@ -13,7 +14,6 @@ main {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover; 
-  font-family: 'Alegreya Sans', sans-serif;
   height: 100vh;
   margin: 0 auto;
   max-width: 600px;
@@ -63,6 +63,7 @@ button, input[type="submit"] {
 .navbar {
   align-items: center;
   display: flex;
+  height: 60px;
 }
 
 #img--nav-icon {
@@ -93,6 +94,51 @@ button, input[type="submit"] {
   transition: all .2s;
 	-webkit-transition: all .2s;
   -moz-transition: all .2s;
+}
+
+#img--menu {
+  height: 50px;
+  width: 50px;
+}
+#img--menu:hover {
+  cursor: pointer;
+}
+
+#nav--mobile-menu {
+  background-color: lightyellow;
+  border: 1px solid black;
+  border-bottom-left-radius: 10px;
+  border-right: none;
+  border-top: none;
+  position: absolute;
+  right: 0px;
+  top: 60px;
+}
+
+#nav--mobile-menu ul {
+  list-style-type: none;
+  margin: .5rem 1rem;
+  padding: 0;
+}
+
+#nav--mobile-menu ul li {
+  padding: 1rem 0;
+  text-align: center;
+}
+
+#nav--mobile-menu ul li button {
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1.2em;
+  letter-spacing: 0;
+  padding: .75rem 1rem;
+  text-transform: none;
+  width: 100px;
+}
+
+.btn--header {
+  display: none;
 }
 
 /* Landing page */
@@ -251,10 +297,43 @@ button, input[type="submit"] {
   text-transform: uppercase;
 }
 
+/* Story */
+.button-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.btn--next, .btn--combat {
+  background: goldenrod;
+  border: 1px solid lightslategrey;
+  border-radius: 25px;
+  color: white;
+  padding: .5rem .75rem;
+}
+
+.btn--combat {
+  background: firebrick;
+  display: block;
+  letter-spacing: .75px;
+  margin: 0 auto;
+  text-transform: uppercase;
+}
+
 @media (min-width: 600px) {
   body, main, .navbar {
     margin: 0 auto;
     max-width: 1000px;
+  }
+
+  #img--menu {
+    display: none;
+  }
+
+  .btn--header {
+    display: inline-block;
+    margin: 0 1rem;
+    width: 150px;
   }
 
   #h2--info {

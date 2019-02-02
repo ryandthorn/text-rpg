@@ -124,15 +124,13 @@ function getCharacterObj() {
       'Authorization': 'Bearer ' + localStorage.authToken
     })
   };
-  // return fetch(`/character?id=${localStorage.characterId}`, options)
   return fetch('/character', options)
 }
 
 /* Handlers */
 
 function mainListener() {
-  // Attach listener to frame
-  $('main').click(event => {
+  $('#frame').click(event => {
     const target = $( event.target );
 
     if (target.is( '.btn--next' )) {
@@ -150,7 +148,6 @@ function mainListener() {
         }),  
         method: 'DELETE'
       });
-
       setupChooseCharacter();
     }
 
@@ -184,15 +181,11 @@ function mainListener() {
     };
     userLogin(userInfo)
       .then(res => {
-        // if (localStorage.getItem('characterId') == false) {
-        //   setupChooseCharacter();
-        // } else {
-          localStorage.setItem('authToken', res.authToken);
-          getCharacterObj()
-            .then(res => res.json())
-            .then(character => startGame(character))
-            .catch(err => console.error(err));
-        // }
+        localStorage.setItem('authToken', res.authToken);
+        getCharacterObj()
+          .then(res => res.json())
+          .then(character => startGame(character))
+          .catch(err => console.error(err));
       })
       .catch(err => console.error(err));
   });
@@ -211,7 +204,10 @@ function headerListener() {
             getCharacterObj()
               .then(res => res.json())
               .then(character => startGame(character))
-              .catch(err => console.error(err));
+              .catch(err => {
+                console.error(err);
+                setupChooseCharacter();
+              });
             })
           .catch(err => console.error(err));
       } else {
@@ -221,21 +217,33 @@ function headerListener() {
     }
 
     if (target.is( '.btn--story' )) {
-      const options = {
-        headers: new Headers({
-          'Authorization': 'Bearer ' + localStorage.authToken
-        })
-      };
-      fetch(`/character/bookmark}`, options)
+      getCharacterObj()
         .then(res => res.json())
-        .then(bookmark => {
-          displayStory(bookmark);
-        })
+        .then(character => displayStory(character.bookmark))
         .catch(err => console.error(err));
     }
     
     if (target.is( '.btn--character' )) {
       displayCharacterInfo();
+    }
+
+    if (target.is( '.btn--signout' )) {
+      localStorage.clear();
+      location.reload();
+    }
+
+    if (target.is( '#img--menu' )) {
+      $( '#nav--mobile-menu' ).toggleClass('hidden');
+    }
+  });
+
+  // Hide mobile menu when user clicks outside it
+  $('body').mouseup(event => {
+    const menu = $('#nav--mobile-menu');
+    if (!menu.is(event.target) // if the target of the click isn't the container...
+    && menu.has(event.target).length === 0) // ... nor a descendant of the container
+    {
+      menu.addClass('hidden');
     }
   });
 }
@@ -317,9 +325,21 @@ function generateNewCharacterInfo(selection) {
 
 function generateStoryHeader() {
   $('header').html(`
-    <h1>Chapter 1</h1>
-    <input class="btn--story" type="button" value="Story" />
-    <input class="btn--character" type="button" value="Character" />
+    <section class="navbar">
+      <img src="./images/tree-logo.jpg" alt="Tree logo" id="img--nav-icon" />
+      <h2 id="h2--nav-title">Placeholder</h2>
+      <img id="img--menu" src="./images/menu.png" alt="Menu - click for options" />
+      <nav class="hidden" id="nav--mobile-menu">
+        <ul>
+          <li><button class="btn--story">Story</button></li>
+          <li><button class="btn--character">Character</button></li>
+          <li><button class="btn--signout">Sign out</button></li>
+        </ul>
+      </nav>
+      <button class="btn--header btn--story">Story</button>
+      <button class="btn--header btn--character">Character</button>
+      <button class="btn--header btn--signout">Sign out</button>
+    </section>
   `);
 }
 
@@ -340,7 +360,7 @@ function displayStory(bookmark) {
 
 function displayCharacterInfo() {
   getCharacterObj()
-    .then(response => response.json())
+    .then(res => res.json())
     .then(char => {
       $('#frame').html( `
         <div class="char-info--container">
@@ -458,7 +478,7 @@ function setScrollPosition() {
 
 function displayCombatScreen() {
   $('header').html(`
-    <h1 class=".combat--h1">Combat!</h1>
+    <h1 class="combat--h1">Combat</h1>
   `);
   $('#frame').html(`
     <section class="combat--character"></section>
