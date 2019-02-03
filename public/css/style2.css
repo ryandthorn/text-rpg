@@ -40,9 +40,7 @@ button, input[type="submit"] {
   cursor: pointer;
   font-size: 1.25em;
   font-weight: 800;
-  letter-spacing: 1px;
   padding: .75rem 1rem;
-  text-transform: uppercase;
 }
 
 #frame {
@@ -82,13 +80,21 @@ button, input[type="submit"] {
 .btn--login {
   background-color: gold;
   border-radius: 25px;
-  font-size: 1em;
+  font-size: 1.1em;
   font-weight: bold;
   margin-right: .5rem;
-  padding: .5em .6em;
+  padding: .75em 1em;
   text-transform: uppercase;
 }
-.btn--login:hover {
+#nav--mobile-menu button, .btn--header {
+  background-color: gold;
+  border-radius: 25px;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-right: .5rem;
+  padding: .75em 1em;
+}
+.btn--login:hover, #nav--mobile-menu button:hover, .btn--header:hover {
   border: 1px solid #ffa600;
   color: white;
   transition: all .2s;
@@ -126,19 +132,30 @@ button, input[type="submit"] {
   text-align: center;
 }
 
-#nav--mobile-menu ul li button {
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 1.2em;
+#nav--mobile-menu button, .btn--header {
+  background-color: lightgreen;
+}
+
+#nav--mobile-menu button {
   letter-spacing: 0;
-  padding: .75rem 1rem;
   text-transform: none;
   width: 100px;
 }
 
 .btn--header {
   display: none;
+  width: 150px;
+}
+
+.btn--signout {
+  font-size: 1em;
+  letter-spacing: .75px;
+  text-transform: uppercase;
+}
+
+.btn--header + .btn--signout, #nav--mobile-menu .btn--signout {
+  background-color: gold;
+  width: 110px;
 }
 
 /* Landing page */
@@ -164,6 +181,8 @@ button, input[type="submit"] {
   display: block;
   margin: 1rem auto;
   position: relative;
+  letter-spacing: .75px;
+  text-transform: uppercase;
   top: 2px;
 }
 .btn--push-large:hover {
@@ -298,21 +317,30 @@ button, input[type="submit"] {
 }
 
 /* Story */
+
 .button-container {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
 
-.btn--next, .btn--combat {
+.btn--next, .btn--combat, .btn--restart {
   background: goldenrod;
   border: 1px solid lightslategrey;
   border-radius: 25px;
   color: white;
+  cursor: pointer;
   padding: .5rem .75rem;
 }
+.btn--next:hover, .btn--combat:hover, .btn--restart:hover {
+  border: 1px solid orange;
+  transition: all .2s;
+	-webkit-transition: all .2s;
+  -moz-transition: all .2s;
+}
 
-.btn--combat {
+
+.btn--combat, .btn--restart {
   background: firebrick;
   display: block;
   letter-spacing: .75px;
