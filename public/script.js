@@ -155,6 +155,20 @@ function mainListener() {
       const newUserForm = generateNewUserForm();
       $('#frame').html(newUserForm);
     }
+
+    if (target.is('.btn--action-submit')) {
+      event.preventDefault();
+      const player = JSON.parse(sessionStorage.getItem('player'));
+      const enemy = JSON.parse(sessionStorage.getItem('enemy'));
+      const enemyAction = sessionStorage.getItem('enemyAction');
+      const playerAction = $('select option:selected').val();
+      combat(player, enemy, playerAction, enemyAction);
+    }
+
+    if (target.is( '#js--end-combat' )) {
+      $('#frame').removeClass('combat--screen');
+      $('#frame').css('background-color', 'rgb(0,0,0,.80)');
+    }
   });
 
   $('#frame').on('submit', '#form--signup', function(event) {
@@ -480,12 +494,16 @@ function displayCombatScreen() {
   $('header').html(`
     <h1 class="combat--h1">Combat</h1>
   `);
+  $('#frame').addClass('combat--screen');
+  $('#frame').css('background-color', 'black');
   $('#frame').html(`
-    <section class="combat--character"></section>
-    <section class="combat--log">
-      <ul></ul>
-    </section>
-    <section class="combat--enemy"></section>
+    <div class="combat--container">
+      <section class="combat--character"></section>
+      <section class="combat--log">
+        <ul></ul>
+      </section>
+      <section class="combat--enemy"></section>
+    </div>
   `);
 }
 
@@ -494,12 +512,12 @@ function displayPlayerInfo(player) {
   const optionString = generateOptionString(actionsArray);
   
   $('.combat--character').html(`
-    <div class="class">
-      <h2>${player.class}</h2>
+    <div class="icon">
+      <img src="./images/${player.class}-icon.gif" alt="${player.class} icon" />
     </div>
     <div class="vitals">
-      <h3>HP ${player.attributes.hp}</h3>
-      <h3>MP ${player.attributes.mp}</h3>
+      <h3>HP: ${player.attributes.hp}</h3>
+      <h3>MP: ${player.attributes.mp}</h3>
     </div>
     <div class="actions">
       <form class="action-form">
@@ -511,7 +529,7 @@ function displayPlayerInfo(player) {
           <section class="action-info">
             <p>${player.actions[actionsArray[0]].info}</p>
           </section>
-          <input type="submit" class="btn--action-submit" value="Fight!">
+          <input type="submit" class="btn--action-submit" value="Fight">
         </fieldset>
       </form>
     </div>
@@ -519,16 +537,26 @@ function displayPlayerInfo(player) {
 }
 
 function displayEnemyInfo(enemy) {
+  const enemyActions = Object.keys(enemy.actions);
+  const enemyActionsList = enemyActions.reduce((actionsList, _action, index) => {
+    const action = _action.slice(0,1).toUpperCase() + _action.slice(1);
+    const result = actionsList + `<p class="enemy-action block-centered">${action}</p>`;
+    return result;
+  }, '<h3>Actions</h3>');
+
   $('.combat--enemy').html(`
+    <div class="icon">
+      <img srcset="${enemy.imgSrcSet}" src="${enemy.imgSrc}" alt="${enemy.alt}">
+    </div>
+    <div class="vitals">
+      <h3>HP: ${enemy.attributes.hp}</h3>
+      <h3>MP: ${enemy.attributes.mp}</h3>
+    </div>
     <div class="name">
       <h2>${enemy.name}</h2>
     </div>
-    <div class="vitals">
-      <h3>HP ${enemy.attributes.hp}</h3>
-      <h3>MP ${enemy.attributes.mp}</h3>
-    </div>
-    <div class="picture">
-      <img srcset="${enemy.imgSrcSet}" src="${enemy.imgSrc}" alt="${enemy.alt}">
+    <div class="enemy-actions">
+      ${enemyActionsList}
     </div>
   `);
 }
@@ -597,7 +625,9 @@ function startCombat() {
           displayPlayerInfo(player);
           displayEnemyInfo(enemy);
           handleActionInfo(player);
-          combat(player, enemy);
+          sessionStorage.setItem('player', JSON.stringify(player));
+          sessionStorage.setItem('enemy', JSON.stringify(enemy));
+          sessionStorage.setItem('enemyAction', determineEnemyAction(enemy));
         })
         .catch(err => console.error(err));
     })
@@ -612,27 +642,24 @@ function startCombat() {
  * 5) Compare player vs enemy rolls, handle results
  * 6) Check for victory/loss conditions
  * 7) Enemy turn - resolve determined enemy action
- * 8) Recurse for next turn
+ * 8) Check for victory/loss conditions
+ * 9) Update player and enemy in storage
+ * 10) Determine enemy action for next turn
 */
 
-function combat(player, enemy) {
-  let enemyAction = determineEnemyAction(enemy);
+function combat(player, enemy, playerAction, enemyAction) {
+  playerTurn(player, enemy, playerAction);
+    if (enemy.attributes.hp <= 0) {return}
+  enemyTurn(player, enemy, enemyAction);
+    if (player.attributes.hp <= 0) {return}
   setScrollPosition();
-  $('form').submit(event => {
-    event.preventDefault();
-    const playerAction = $('select option:selected').val();
-    playerTurn(player, enemy, playerAction);
-    enemyTurn(player, enemy, enemyAction);
-    setScrollPosition();
-    displayPlayerInfo(player);
-    displayEnemyInfo(enemy);
-    $('form').off('submit');
-    handleActionInfo(player);
-    if (player.attributes.hp <= 0 || enemy.attributes.hp <= 0) {
-      return;
-    }
-    combat(player, enemy);
-  });
+  displayPlayerInfo(player);
+  displayEnemyInfo(enemy);
+
+  sessionStorage.setItem('player', JSON.stringify(player));
+  sessionStorage.setItem('enemy', JSON.stringify(enemy));
+  sessionStorage.setItem('enemyAction', determineEnemyAction(enemy));
+  setScrollPosition();
 }
 
 function playerAttack(player, enemy) {
@@ -774,10 +801,8 @@ function endTurn(player, enemy, turn) {
 
 function endCombat(player, enemy, condition) {
   if (condition === 'win') {
-    // Append win message
-    let winMessage = generateHTML('p', 'You defeated ' + enemy.name + '!');
-    winMessage += generateHTML('input', '', 'class="btn--next" type="button" value="End Combat"');
-    appendHTML('.combat--log', winMessage);
+    $('.combat--log').append(`<p class="block-centered">You defeated ${enemy.name}!</p>`);
+    $('.btn--action-submit').replaceWith('<input class="btn--next" type="button" id="js--end-combat" value="End Combat" />');
     setScrollPosition();
 
     // Update character hp and mp in DB
@@ -788,9 +813,8 @@ function endCombat(player, enemy, condition) {
     putRequest('/character', updateObj);
 
   } else if (condition === 'loss') {
-    let lossMessage = generateHTML('p', 'You have been slain by ' + enemy.name);
-    lossMessage += generateHTML('input', '', 'class="btn--restart" type="button" value="New Character"');
-    appendHTML('.combat--log', lossMessage);
+    $('.combat--log').append(`<p class="block-centered">You have been slain by ${enemy.name}!</p><p>Start a new character and try another path!</p>`);
+    $('.btn--action-submit').replaceWith('<input class="btn--restart" type="button" id="js--end-combat" value="New Character" />');
     setScrollPosition();
   }
 }
