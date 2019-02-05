@@ -23,6 +23,16 @@ function refreshJWT() {
     .catch(err => console.error(err));
 }
 
+function generateMenuHeader() {
+  return `
+    <section class="navbar" role="navigation">
+      <img src="./images/tree-logo.jpg" alt="Tree logo" id="img--nav-icon" />
+      <h2 id="h2--nav-title">Placeholder</h2>
+      <button class="btn--signout">Sign Out</button>
+    </section>
+  `
+}
+
 function generateNewUserForm() {
   return `
     <h1 id="h1--signup">Sign up for your free <span class="span--title">Placeholder</span> account!</h1>
@@ -115,6 +125,10 @@ function updateUserCharacterId(character_id) {
 
 function startGame(character) {
   generateStoryHeader();
+  if (!character.bookmark) {
+    setupChooseCharacter();
+    return;
+  }
   displayStory(character.bookmark);
 }
 
@@ -149,6 +163,7 @@ function mainListener() {
     }
 
     if (target.is( '.btn--restart' )) {
+      $('header').html(generateMenuHeader());
       fetch(`/character`, {
         headers: new Headers({
           'Authorization': 'Bearer ' + localStorage.authToken
