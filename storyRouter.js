@@ -17,9 +17,9 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/enemy', (req, res) => {
+router.get('/enemy/:enemyName', (req, res) => {
   Enemy // Hard-coded for now to find only enemy in db
-    .findOne({"name": "Troglodyte"})
+    .findOne({"name": req.params.enemyName})
     .then(enemy => res.status(200).json(enemy))
     .catch(err => {
       console.error(err);

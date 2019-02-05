@@ -1,7 +1,6 @@
 {
   "name": "Troglodyte",
   "imgSrc": "images/grzyb-troglodyte-full.jpg",
-  "imgSrcSet": "images/grzyb-troglodyte-tiny.jpg 300w, images/grzyb-troglodyte-small.jpg 600w, images/grzyb-troglodyte-full.jpg 900w",
   "alt": "This eyeless, misshapen creature wields a sharp spear.",
   "attributes": {
     "hp": 12,
@@ -40,6 +39,52 @@
         "The troglodyte takes a defensive stance...",
         "The troglodyte steps back...",
         "The troglodyte hesitates..."
+      ],
+      "defendBonus": 0
+    }
+  }
+}
+{
+  "name": "Goblin",
+  "imgSrc": "images/enemies/goblin.gif",
+  "alt": "A green goblin with short sword",
+  "attributes": {
+    "hp": 10,
+    "mp": 4,
+    "maxHP": 10,
+    "maxMP": 0,
+    "str": 8,
+    "agi": 8,
+    "mag": 6,
+    "con": 8
+  },
+  "skills": {
+    "phyDamage": 0,
+    "phyResist": 0,
+    "accuracy": 0,
+    "evasion": 0,
+    "magDamage": -1,
+    "magResist": -1,
+    "fortitude": 0,
+    "damReduce": 0
+  },
+  "actions": {
+    "attack": {
+      "text": [
+        "The goblin laughs viciously...",
+        "The goblin raises its sword...",
+        "The goblin's eyes flash open..."
+      ],
+      "damage": [
+        1,
+        6
+      ]
+    },
+    "defend": {
+      "text": [
+        "The goblin takes a defensive stance...",
+        "The goblin looks nervous...",
+        "The goblin taunts you..."
       ],
       "defendBonus": 0
     }

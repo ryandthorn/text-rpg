@@ -68,7 +68,7 @@
       ]
     },
     "scene6": {
-      "text": "<p>The creature looks like it wants to fight.</p><input class=\"btn--combat\" type=\"button\" value=\"Start Combat\"/>",
+      "text": "<p>The creature looks like it wants to fight.</p><input class=\"btn--combat gobl\" type=\"button\" value=\"Start Combat\"/>",
       "enemy": "Troglodyte",
       "next": [
         {

@@ -34,7 +34,6 @@ const characterSchema = mongoose.Schema({
 const enemySchema = mongoose.Schema({
   name: {type: String, required: true},
   imgSrc: {type: String, required: true},
-  imgSrcSet: {type: String, required: true},
   alt: {type: String, required: true},
   attributes: {
     hp: {type: Number, required: true},

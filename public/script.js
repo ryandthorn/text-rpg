@@ -138,7 +138,14 @@ function mainListener() {
     };
 
     if (target.is( '.btn--combat' )) {
-      startCombat();
+      let enemyName;
+      if (target.is( '.trog' )) {
+        enemyName = 'Troglodyte';
+      }
+      if (target.is( '.gobl' )) {
+        enemyName = 'Goblin';
+      }
+      startCombat(enemyName);
     }
 
     if (target.is( '.btn--restart' )) {
@@ -546,7 +553,7 @@ function displayEnemyInfo(enemy) {
 
   $('.combat--enemy').html(`
     <div class="icon">
-      <img srcset="${enemy.imgSrcSet}" src="${enemy.imgSrc}" alt="${enemy.alt}">
+      <img src="${enemy.imgSrc}" alt="${enemy.alt}">
     </div>
     <div class="vitals">
       <h3>HP: ${enemy.attributes.hp}</h3>
@@ -609,7 +616,7 @@ function appendHTML(selector, entry) {
   $(`${selector}`).append(entry);
 }
 
-function startCombat() {
+function startCombat(enemyName) {
   const options = {
     headers: new Headers({
       'Authorization': 'Bearer ' + localStorage.authToken
@@ -618,7 +625,7 @@ function startCombat() {
   getCharacterObj()
     .then(res => res.json())
     .then(player => {
-      fetch('/story/enemy', options)
+      fetch(`/story/enemy/${enemyName}`, options)
         .then(res => res.json())
         .then(enemy => {
           displayCombatScreen();
