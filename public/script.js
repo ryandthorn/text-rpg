@@ -125,7 +125,7 @@ function updateUserCharacterId(character_id) {
 
 function startGame(character) {
   generateStoryHeader();
-  if (!character.bookmark) {
+  if (!character) {
     setupChooseCharacter();
     return;
   }
@@ -148,7 +148,7 @@ function mainListener() {
     const target = $( event.target );
 
     if (target.is( '.btn--next' )) {
-      advanceStory(target);
+      advanceStory(target.val());
     };
 
     if (target.is( '.btn--combat' )) {
@@ -198,12 +198,14 @@ function mainListener() {
     const userInfo = {
       username: $('#username').val(),
       password: $('#password').val(),
-      confirmPassword: $('#confim-password').val(),
+      confirmPassword: $('#confirm-password').val(),
       email: $('#email').val()
     };
     createNewUser(userInfo)
       .then(() => {
-        userLogin(userInfo);
+        userLogin(userInfo)
+          .then(res => localStorage.setItem('authToken', res.authToken))
+          .catch(err => console.error(err));
         setupChooseCharacter();
       })
       .catch(err => console.error(err));
@@ -273,11 +275,11 @@ function headerListener() {
     }
   });
 
-  // Hide mobile menu when user clicks outside it
+  // Hide mobile menu when user clicks outside of it
   $('body').mouseup(event => {
     const menu = $('#nav--mobile-menu');
-    if (!menu.is(event.target) // if the target of the click isn't the container...
-    && menu.has(event.target).length === 0) // ... nor a descendant of the container
+    if (!menu.is(event.target) // if the target of the click is neither the container...
+    && menu.has(event.target).length === 0) // nor a descendant of the container
     {
       menu.addClass('hidden');
     }
@@ -306,18 +308,19 @@ function chooseCharacterHandler() {
       .then(res => res.json())
       .then(character => {
         updateUserCharacterId(character._id)
-        refreshJWT()
-          .then(res => {
-            localStorage.setItem('authToken', res.authToken)
-            startGame(character);
+          .then(() => {
+            refreshJWT()
+              .then(res => {
+                localStorage.setItem('authToken', res.authToken)
+                startGame(character);
+              })
+              .catch(err => console.error(err));
           })
           .catch(err => console.error(err));
       })
       .catch(err => console.error(err));
   });
 }
-
-
 
 /* Choose character */
 
@@ -385,11 +388,16 @@ function displayStory(bookmark) {
       'Authorization': 'Bearer ' + localStorage.authToken
     })
   };
-  fetch('/story', options)
+  fetch(`/story/${bookmark}`, options)
     .then(res => res.json())
-    .then(story => {
-      const currentScene = story[bookmark.chapter][bookmark.scene].text;
-      $('#frame').html(currentScene);
+    .then(scene => {
+      const chooseNextScene = scene.next.reduce((string, button) => string + button, '');
+      $('#frame').html(scene.text);
+      $('#frame').append(`
+        <div class="button-container">
+          ${chooseNextScene}
+        </div>
+      `);
     })
     .catch(err => console.error(err));
 }
@@ -430,41 +438,12 @@ function displayCharacterInfo() {
     .catch(err => console.error(err))
 }
 
-function advanceStory(target) {
-  // Get bookmark and story from db
-  const options = {
-    headers: new Headers({
-      'Authorization': 'Bearer ' + localStorage.authToken
-    })
-  };
-  fetch(`/character/bookmark`, options)
-    .then(res => res.json())
-    .then(bookmark => {
-      fetch('/story', options)
-        .then(res => res.json())
-        .then(story => {
-          // Determine next scene
-          let index = 0;
-          if (bookmark.next.length > 1) {
-            if (target.is( '.13b' )) {
-              index = 1;
-            }
-          }
-          const nextScene = bookmark.next[index];
-
-          // Display next scene
-          generateStoryHeader();
-          displayStory(nextScene);
-
-          // Update bookmark
-          const nextBookmark = {
-            chapter: nextScene.chapter,
-            scene: nextScene.scene,
-            next: story[nextScene.chapter][nextScene.scene].next
-          }
-          putRequest(`/character/bookmark`, {bookmark: nextBookmark})
-        })
-        .catch(err => console.error(err));
+function advanceStory(nextScene) {
+  // Update bookmark and display next scene
+  putRequest(`/character/bookmark`, {bookmark: nextScene})
+    .then(() => {
+      generateStoryHeader();
+      displayStory(nextScene);
     })
     .catch(err => console.error(err));
 }

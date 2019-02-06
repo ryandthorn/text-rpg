@@ -24,11 +24,7 @@ const characterSchema = mongoose.Schema({
     damReduce: {type: Number, required: true}
   },
   actions: {type: Object, required: true},
-  bookmark: {
-    chapter: String,
-    scene: String,
-    next: Array
-  }
+  bookmark: {type: String, required: true}
 });
 
 const enemySchema = mongoose.Schema({
@@ -59,7 +55,9 @@ const enemySchema = mongoose.Schema({
 });
 
 const adventureSchema = mongoose.Schema({
-  chapter1: Object
+  scene: {type: String, required: true},
+  text: {type: String, required: true},
+  next: {type: Array, required: true}
 });
 
 const Character = mongoose.model('Character', characterSchema);

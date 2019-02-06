@@ -136,7 +136,7 @@ router.put('/', jwtAuth, (req, res) => {
   const toUpdate = {characterId: req.body.characterId};
   User
     .findOneAndUpdate({username: req.user.username}, {$set: toUpdate}, {new: true})
-    .then(response => res.status(200).json(response))
+    .then(() => res.status(204).end())
     .catch(err => {
       console.error(err);
       res.status(500).json({message: 'Internal server error'});

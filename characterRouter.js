@@ -6,16 +6,7 @@ const { Character } = require('./models');
 
 router.post('/:new', (req, res) => {
   const newCharacter = {};
-  newCharacter.bookmark = {
-    chapter: 'chapter1',
-    scene: 'scene1',
-    next: [
-      {
-        chapter: 'chapter1',
-        scene: 'scene2'
-      }
-    ]
-  };
+  newCharacter.bookmark = '1-1';
 
   if (req.query.class === 'mage') {
     newCharacter.class = 'Mage';
@@ -152,25 +143,11 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/bookmark', (req, res) => {
-  Character
-    .findById(req.user.characterId)
-    .then(character => {
-      res.status(200).json(character.bookmark);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({message: 'Internal server error'});
-    });
-});
-
 router.put('/bookmark', (req, res) => {
   const toUpdate = {"bookmark": req.body.bookmark};
   Character
     .findOneAndUpdate({_id: req.user.characterId}, {$set: toUpdate}, {new: true})
-    .then(response => {
-      res.status(200).json(response);
-    })
+    .then(() => res.status(204).end())
     .catch(err => {
       console.error(err);
       res.status(500).json({message: 'Internal server error'});

@@ -3,23 +3,29 @@ const express = require('express');
 const router = express.Router();
 router.use(express.json());
 
-const { Adventure, Enemy } = require('./models');
+const { Adventure, Enemy, Character } = require('./models');
 
-router.get('/', (req, res) => {
-  Adventure // Hard-coded for now to find the only adventure in db
-    .findOne() 
-    .then(story => {
-      res.status(200).json(story);
+router.get('/:scene', (req, res) => {
+  Character
+    .findById(req.user.characterId)
+    .then(character => {
+      Adventure
+        .findOne({scene: character.bookmark})
+        .then(scene => res.status(200).json(scene))
+        .catch(err => {
+          console.error(err);
+          res.status(500).json({message: 'Error: scene not found'});
+        })
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({message: 'Internal server error'});
-    });
+      res.status(500).json({message: 'Error: character not found'})
+    })
 });
 
 router.get('/enemy/:enemyName', (req, res) => {
-  Enemy // Hard-coded for now to find only enemy in db
-    .findOne({"name": req.params.enemyName})
+  Enemy 
+    .findOne({name: req.params.enemyName})
     .then(enemy => res.status(200).json(enemy))
     .catch(err => {
       console.error(err);

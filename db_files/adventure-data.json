@@ -1,0 +1,15 @@
+{
+  "scene": "1-1",
+  "text": "<h1>Chapter 1</h1><h2>Scene 1</h2>",
+  "next": [
+    "<button class='btn--next' value='1-2'>Continue</button>"
+  ]
+}
+{
+  "scene": "1-2",
+  "text": "<h1>Chapter 1</h1><h2>Scene 2</h2>",
+  "next": [
+    "<button class='btn--next' value='1-3a'>Continue A</button>",
+    "<button class='btn--next' value='1-3b'>Continue B</button>"
+  ]
+}
