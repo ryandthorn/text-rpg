@@ -10,7 +10,7 @@ body {
 }
 
 main {
-  background-image: url(../images/bg/river.gif);
+  background-image: url(../images/bg/bg1.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover; 
@@ -69,6 +69,7 @@ button, input[type="submit"] {
 }
 
 #img--nav-icon {
+  cursor: pointer;
   height: 50px;
   width: 50px;
 }
@@ -321,6 +322,14 @@ button, input[type="submit"] {
 }
 
 /* Story */
+
+p {
+  font-size: 1.2em;
+}
+
+.text--first-person {
+  font-style: italic;
+}
 
 .button-container {
   display: flex;

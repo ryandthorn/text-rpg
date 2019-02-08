@@ -1,15 +1,189 @@
 {
   "scene": "1-1",
-  "text": "<h1>Chapter 1</h1><h2>Scene 1</h2>",
+  "text": "<p>\"Are we there yet?\"</p><p>When the expedition sent you out into the forest to get firewood, you didn't expect them to stick you with Rocco. If he weren't the General's nephew, you would have told this thirteen-year-old brat off a mile ago. A soldier's life is hard, quick, and brutal... unless you're strong enough to survive.</p><p>\"Just about, Roc. Remember: a good soldier is patient.\"</p><p>\"I'm not going to be some stupid soldier! I'm going to be the greatest knight the Queendom has ever seen! And you... you're going to be shining my boots, BOOT-SHINER!!\" He laughs uproariously.</p>",
   "next": [
-    "<button class='btn--next' value='1-2'>Continue</button>"
+    "<button class='btn--next' value='1-2a' type='button'>Teach him a lesson</button>",
+    "<button class='btn--next' value='1-2b' type='button'>Let it slide</button>"
   ]
 }
 {
-  "scene": "1-2",
-  "text": "<h1>Chapter 1</h1><h2>Scene 2</h2>",
+  "scene": "1-2a",
+  "text": "<p>\"Shiner, huh? You want to know something about shiners?\"</p><p>With a light flick of your wrist, you show Rocco the back of your hand.</p><p>Rocco clutches his left eye in disbelief... and then starts wailing.</p><p>\"MOOOOOOOOOMMYYYYYYY!!\"</p><p class='text--first-person'>This kid wants to be a knight?</p><p>\"Enough of that. You'll be learning a lot more about discipline if you keep acting like a foolish child.\"</p><p>Through tears and sniffles, Rocco slowly gets up, still clutching his left eye.</p><p>\"But it hurrrrrrrrts!\"</p><p>You move his hand away from his eye and see the bruise you left.</p><p class='text--first-person'>Sarge isn't going to like this. Time to get moving.</p><p>You take a knee in front of Rocco and look squarely into his eyes:</p><p>\"Young man, I want you to remember something: you're going to get a lot of special treatment in your life, but if you truly want to become the greatest warrior this Queendom has ever seen, the first step is to learn to take responsibility for your actions. Every choice has consequences, and the further you go, the greater and more impactful your decisions will be. People's lives may well depend on you. Represent yourself well, and you may yet live up to your family name.\"</p><p>\"You're boring.\"</p><p class='text--first-person'>Are we there yet?</p>",
   "next": [
-    "<button class='btn--next' value='1-3a'>Continue A</button>",
-    "<button class='btn--next' value='1-3b'>Continue B</button>"
+    "<button class='btn--next' value='1-a3' type='button'>Continue</button>"
+  ]
+}
+{
+  "scene": "1-2b",
+  "text": "<p>\"That's enough of that. The woods are deep. Who knows who or what could be listening, watching... waiting. We have to stay alert if we want to make it back alive.\"</p><p>Rocco loses his sense of humor and starts looking around nervously.</p><p>\"Once we get to the forest, keep your eyes peeled for any sign of motion, and alert me if you see anything.\"</p><p>\"Whatever.\"</p><p>His nonchalant response doesn't match up with his anxious body language, and he's surprisingly silent.</p><p class='text--first-person'>That should keep him occupied. The Fertile Forest is far from goblin country, and hunters walk those woods clearing predator and prey alike. Not much to worry about there.</p><p>\"Look, there!! What is that?!\"</p><p>You whip your head around to see where Rocco is pointing, and you realize that he's pointing at you.</p><p>\"Looks like a BOOT-SHINER to me!! Ahahaha!!\"</p><p class='text--first-person'>I'm done with this kid. Let's get this wood and go home.</p>",
+  "next": [
+    "<button class='btn--next' value='1-b3' type='button'>Continue</button>"
+  ]
+}
+{
+  "scene": "1-a3",
+  "text": "<p>After ten or so thankfully silent minutes, you come upon the well-worn path into the Fertile Forest.</p><p class='text--first-person'>Finally, time to find a Winda tree and get out of here.</p><p>Walking further down the path, you come to a small clearing and find a young but suitable Winda tree.</p><p>Winda wood is well-known for its combination of durability and light weight. It's a long-burning wood that should be easy to take back to camp and a good choice for small groups having to pack light.</p><p>\"Okay Roc, keep an eye out for anything waiting to ambush us while I chop down this tree.\"</p><p>Rocco sighs and otherwise doesn't respond. He finds a nearby tree to lean against and slides his backside down it in a huff into a seated position.</p><p>With your freshly-sharpened hand axe and years of experience, you make short work of the Winda tree, breaking it down into logs, branches, and kindling, and you're ready to tie some bundles together.</p> <p class='text--first-person'>This is something even that spoiled little brat could do.</p><p>\"Hey Roc, come over here and help me tie up these bundles.\"</p><p>No response. <span class='text--first-person'>Probably fell asleep. Some sentry he is.</span></p><p>You get up and turn around only to realize he's not there.</p><p><span class='text--first-person'>Damn fool got bored and wandered off.</span> \"Rocco! Hey, get back here!\"</p><p>Nothing. \"ROCCO!!\"</p><p class='text--first-person'>Another prank? This kid is really getting on my nerves.</p><p>You quiet yourself, tuning in and listening to the forest around you for any sign of noise. Nothing but deafening silence, not even a bird chirping. It's too quiet. Something's off...</p><p>Something's here. You spin around, draw your weapon and find a sneering goblin, dagger in hand.</p>",
+  "next": [
+    "<button class='btn--combat' value='gobl' type='button'>Start combat</button>"
+  ]
+}
+{
+  "scene": "1-b3",
+  "text": "<p>After ten or so thankfully silent minutes, you come upon the well-worn path into the Fertile Forest.</p><p class='text--first-person'>Finally, time to find a Winda tree and get out of here.</p><p>Walking further down the path, you come to a small clearing and find a young but suitable Winda tree.</p><p>Winda wood is well-known for its combination of durability and light weight. It's a long-burning wood that should be easy to take back to camp and a good choice for small groups having to pack light.</p><p>\"Okay Roc, keep an eye out for anything waiting to ambush us while I chop down this tree.\"</p><p>Rocco sighs and otherwise doesn't respond. He finds a nearby tree to lean against and slides his backside down it in a huff into a seated position.</p><p>With your freshly-sharpened hand axe and years of experience, you make short work of the Winda tree, breaking it down into logs, branches, and kindling, and you're ready to tie some bundles together.</p> <p class='text--first-person'>This is something even that spoiled little brat could do.</p><p>\"Hey Roc, come over here and help me tie up these bundles.\"</p><p>No response. <span class='text--first-person'>Probably fell asleep. Some sentry he is.</span></p><p>You get up and turn around only to realize he's not there.</p><p><span class='text--first-person'>Damn fool got bored and wandered off.</span> \"Rocco! Hey, get back here!\"</p><p>Nothing. \"ROCCO!!\"</p><p class='text--first-person'>Another prank? This kid is really getting on my nerves.</p><p>You quiet yourself, tuning in and listening to the forest around you for any sign of noise. Nothing but deafening silence, not even a bird chirping. It's too quiet. Something's off...</p><p>Something's here. You spin around, draw your weapon and find a sneering goblin, dagger in hand.</p>",
+  "next": [
+    "<button class='btn--combat' value='gobl' type='button'>Start combat</button>"
+  ]
+}
+{
+  "scene": "1-a4",
+  "text": "<p class='text--first-person'>What's a goblin doing here? We're nowhere near goblin country, unless...</p><p class='text--first-person'>I've got to find the boy and warn the expedition.</p>",
+  "next": [
+    "<button class='btn--next' value='1-a5a' type='button'>Call for Rocco</button>",
+    "<button class='btn--next' value='1-a5b' type='button'>Search the area</button>"
+  ]
+}
+{
+  "scene": "1-b4",
+  "text": "<p class='text--first-person'>What's a goblin doing here? We're nowhere near goblin country, unless...</p><p class='text--first-person'>I've got to find the boy and warn the expedition.</p>",
+  "next": [
+    "<button class='btn--next' value='1-b5a' type='button'>Call for Rocco</button>",
+    "<button class='btn--next' value='1-b5b' type='button'>Search the area</button>"
+  ]
+}
+{
+  "scene": "1-a5a",
+  "text": "<p>\"ROCCO!! Where are you, boy?\"</p><p>No response.</p><p class='text--first-person'>Please let this just be a prank. Where's that kid hiding?</p><p>Suddenly you hear a quick rustle coming from a nearby bush...</p><p>\"I've had it up to here with your pranks, Roc! Come out of there!\"</p><p>You go to pull Rocco out of the bushes and find... a rock?</p><p>You turn around just in time to foil the second goblin's ambush.</p>",
+  "next": [
+    "<button class='btn--combat' value='gobl' type='button'>Start combat</button>"
+  ]
+}
+{
+  "scene": "1-b5a",
+  "text": "<p>\"ROCCO!! Where are you, boy?\"</p><p>No response.</p><p class='text--first-person'>Please let this just be a prank. Where's that kid hiding?</p><p>Suddenly you hear a quick rustle coming from a nearby bush...</p><p>\"I've had it up to here with your pranks, Roc! Come out of there!\"</p><p>You go to pull Rocco out of the bushes and find... a rock?</p><p>You turn around just in time to foil the second goblin's ambush.</p>",
+  "next": [
+    "<button class='btn--combat' value='gobl' type='button'>Start combat</button>"
+  ]
+}
+{
+  "scene": "1-a5b",
+  "text": "<p class='text--first-person'>Better stay quiet. Goblins don't hunt alone.</p><p>You walk away from the clearing into the nearby forest and hide behind a tree. Staying low and hidden, you work your way back towards the clearing and hear a rustle in a nearby bush.</p><p>Quietly inching closer, you indeed spot the second goblin working its way towards the tree you hid behind.</p>",
+  "next": [
+    "<button class='btn--next' value='1-ab6a' type='button'>Sneak attack</button>",
+    "<button class='btn--next' value='1-ab6b' type='button'>Interrogate</button>"
+  ]
+}
+{
+  "scene": "1-b5b",
+  "text": "<p class='text--first-person'>Better stay quiet. Goblins don't hunt alone.</p><p>You walk away from the clearing into the nearby forest and hide behind a tree. Staying low and hidden, you work your way back towards the clearing and hear a rustle in a nearby bush.</p><p>Quietly inching closer, you indeed spot the second goblin working its way towards the tree you hid behind.</p>",
+  "next": [
+    "<button class='btn--next' value='1-bb6a' type='button'>Sneak attack</button>",
+    "<button class='btn--next' value='1-bb6b' type='button'>Interrogate</button>"
+  ]
+}
+{
+  "scene": "1-aa6",
+  "text": "<p class='text--first-person'>How many of them are there? Why are they here?</p><p>Your mind races with questions as you search the goblin for any clues or signs of Rocco.</p><p class='text--first-person'>Smells revolting, ugh... wait, what's this?</p><p>You find a key and an illegible note scrawled in the unmistakable scribble of Goblintongue.</p><p class='text--first-person'>Could these be orders? And a key... Maybe he was taken somewhere! I've got to find him.</p>",
+  "next": [
+    "<button class='btn--next' value='1-aa7' type='button'>Continue</button>"
+  ]
+}
+{
+  "scene": "1-ba6",
+  "text": "<p class='text--first-person'>How many of them are there? Why are they here?</p><p>Your mind races with questions as you search the goblin for any clues or signs of Rocco.</p><p class='text--first-person'>Smells revolting, ugh... wait, what's this?</p><p>You find a key and an illegible note scrawled in the unmistakable scribble of Goblintongue.</p><p class='text--first-person'>Could these be orders? And a key... Maybe he was taken somewhere! I've got to find him.</p>",
+  "next": [
+    "<button class='btn--next' value='1-ba7' type='button'>Continue</button>"
+  ]
+}
+{
+  "scene": "1-ab6a",
+  "text": "<p>You lie in wait for the goblin as he inches nearer.</p><p>Just as the goblin sneaks a few feet past you, you swiftly dispatch it from behind.</p><p class='text--first-person'>Two down. Just how many of them are there? Why are they here?</p><p>Your mind races with questions as you search the goblin for any clues or signs of Rocco.</p><p class='text--first-person'>Smells revolting, ugh... wait, what's this?</p><p>You find a key and an illegible note scrawled in the unmistakable scribble of Goblintongue.</p><p class='text--first-person'>Could these be orders? And a key... Maybe he was taken somewhere! I've got to find him.</p>",
+  "next": [
+    "<button class='btn--next' value='1-aba7' type='button'>Continue</button>"
+  ]
+}
+{
+  "scene": "1-ab6b",
+  "text": "<p class='text--first-person'>I may not speak Goblintongue, but I bet it will understand this.</p><p>Just as it sneaks by you, you tackle it from behind, knocking its dagger out of its hand and pinning it to the ground.</p><p>\"Where's the boy? WHERE IS HE??\"</p><p>The goblin squeals a high-pitched shriek.</p><p>\"Calling for help? I've taken care of your friend.\"</p><p>The shrieking stops, and the goblin looks up at you, bewilderment in its eyes.</p><p class='text--first-person>It understands me! Were they actually friends? But it's a goblin, and goblins can't... they don't...</p><p>The goblin inhales sharply, noticing your weapon.</p><p class='text--first-person'>It's afraid...</p><p>\"Where is he? I won't hurt you if you tell me where he is.\"</p><p>The goblin stares into your eyes, and after a few seconds, it squeaks \"H...hut. Take... to hut.\" It hands you a key and a note scrawled in Goblintongue.</p><p class='text--first-person'>Remarkable. Time to find this hut, but what should I do about this goblin...? If I let it go, it may alert more, but to kill it... could I live with myself?</p>",
+  "next": [
+    "<button class='btn--next' value='1-abb7a' type='button'>Leave it</button>",
+    "<button class='btn--next' value='1-abb7b' type='button'>Dispatch it</button>"
+  ]
+}
+{
+  "scene": "1-bb6a",
+  "text": "<p>You lie in wait for the goblin as he inches nearer.</p><p>Just as the goblin sneaks a few feet past you, you swiftly dispatch it from behind.</p><p class='text--first-person'>Two down. Just how many of them are there? Why are they here?</p><p>Your mind races with questions as you search the goblin for any clues or signs of Rocco.</p><p class='text--first-person'>Smells revolting, ugh... wait, what's this?</p><p>You find a key and an illegible note scrawled in the unmistakable scribble of Goblintongue.</p><p class='text--first-person'>Could these be orders? And a key... Maybe he was taken somewhere! I've got to find him.</p>",
+  "next": [
+    "<button class='btn--next' value='1-bba7' type='button'>Continue</button>"
+  ]
+}
+{
+  "scene": "1-bb6b",
+  "text": "<p class='text--first-person'>I may not speak Goblintongue, but I bet it will understand this.</p><p>Just as it sneaks by you, you tackle it from behind, knocking its dagger out of its hand and pinning it to the ground.</p><p>\"Where's the boy? WHERE IS HE??\"</p><p>The goblin squeals a high-pitched shriek.</p><p>\"Calling for help? I've taken care of your friend.\"</p><p>The shrieking stops, and the goblin looks up at you, bewilderment in its eyes.</p><p class='text--first-person>It understands me! Were they actually friends? But it's a goblin, and goblins can't... they don't...</p><p>The goblin inhales sharply, noticing your weapon.</p><p class='text--first-person'>It's afraid...</p><p>\"Where is he? I won't hurt you if you tell me where he is.\"</p><p>The goblin stares into your eyes, and after a few seconds, it squeaks \"H...hut. Take... to hut.\" It hands you a key and a note scrawled in Goblintongue.</p><p class='text--first-person'>Remarkable. Time to find this hut, but what should I do about this goblin...? If I let it go, it may alert more, but to kill it... could I live with myself?</p>",
+  "next": [
+    "<button class='btn--next' value='1-bbb7a' type='button'>Leave it</button>",
+    "<button class='btn--next' value='1-bbb7b' type='button'>Dispatch it</button>"
+  ]
+}
+{
+  "scene": "1-aa7",
+  "text": "<p>You head deeper into the woods to find Rocco.</p>",
+  "next": [
+    "<button class='btn--restart' type='button'>End of demo - new character</button>"
+  ]
+}
+{
+  "scene": "1-ba7",
+  "text": "<p>You head deeper into the woods to find Rocco.</p>",
+  "next": [
+    "<button class='btn--restart' type='button'>End of demo - new character</button>"
+  ]
+}
+{
+  "scene": "1-ab7",
+  "text": "<p>You head deeper into the woods to find Rocco.</p>",
+  "next": [
+    "<button class='btn--restart' type='button'>End of demo - new character</button>"
+  ]
+}
+{
+  "scene": "1-aba7",
+  "text": "<p>You head deeper into the woods to find Rocco.</p>",
+  "next": [
+    "<button class='btn--restart' type='button'>End of demo - new character</button>"
+  ]
+}
+{
+  "scene": "1-bba7",
+  "text": "<p>You head deeper into the woods to find Rocco.</p>",
+  "next": [
+    "<button class='btn--restart' type='button'>End of demo - new character</button>"
+  ]
+}
+{
+  "scene": "1-abb7a",
+  "text": "<p>You stand up, freeing the goblin from your grasp. It squeaks, points east, and runs away.<p class='text--first-person'>I have to find Rocco and this hut quickly before any more of that goblin's \"friends\" pay me a visit.</p><p>You head east.</p>",
+  "next": [
+    "<button class='btn--restart' type='button'>End of demo - new character</button>"
+  ]
+}
+{
+  "scene": "1-abb7b",
+  "text": "<p>You realize what needs to be done for both your safety and Rocco's. As you lift your weapon and dispatch the goblin, you see and hear expressions of its sheer terror.</p><p>It lies lifeless on the ground.</p><p class='text--first-person'>\"A soldier does what must be done, every day 'til war is won.\" The Academy's mantra lays out a hard path.</p><p>Filled equally with remorse and a renewed sense of duty, you head deeper into the forest.</p>",
+  "next": [
+    "<button class='btn--restart' type='button'>End of demo - new character</button>"
+  ]
+}
+{
+  "scene": "1-bbb7a",
+  "text": "<p>You stand up, freeing the goblin from your grasp. It squeaks, points east, and runs away.<p class='text--first-person'>I have to find Rocco and this hut quickly before any more of that goblin's \"friends\" pay me a visit.</p><p>You head east.</p>",
+  "next": [
+    "<button class='btn--restart' type='button'>End of demo - new character</button>"
+  ]
+}
+{
+  "scene": "1-bbb7b",
+  "text": "<p>You realize what needs to be done for both your safety and Rocco's. As you lift your weapon and dispatch the goblin, you see and hear expressions of its sheer terror.</p><p>It lies lifeless on the ground.</p><p class='text--first-person'>\"A soldier does what must be done, every day 'til war is won.\" The Academy's mantra lays out a hard path.</p><p>Filled equally with remorse and a renewed sense of duty, you head deeper into the forest.</p>",
+  "next": [
+    "<button class='btn--restart' type='button'>End of demo - new character</button>"
   ]
 }

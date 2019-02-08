@@ -125,11 +125,27 @@ function updateUserCharacterId(character_id) {
 
 function startGame(character) {
   generateStoryHeader();
+  backgroundCheck(character.bookmark);
   if (!character) {
     setupChooseCharacter();
     return;
   }
   displayStory(character.bookmark);
+}
+
+function backgroundCheck(bookmark) {
+  const bg1 = ['1-1', '1-2a', '1-2b'];
+  const bg2 = ['1-a3', '1-b3', '1-a4', '1-b4', '1-a5a', '1-b5a', '1-a5b', '1-b5b', '1-aa6', '1-ab6a', '1-ab6b', '1-ba6', '1-bb6a', '1-bb6b'];
+  const bg3 = ['1-aa7', '1-aba7', '1-bba7a', '1-bba7b', '1-ba7', '1-bba7', '1-abb7a', '1-abb7b', '1-bbb7a', '1-bbb7b'];
+  if (bg1.some(scene => bookmark === scene)) {
+    $('main').css('background-image', 'url(../images/bg/bg1.jpg');
+  }
+  if (bg2.some(scene => bookmark === scene)) {
+    $('main').css('background-image', 'url(../images/bg/river.gif');
+  }
+  if (bg3.some(scene => bookmark === scene)) {
+    $('main').css('background-image', 'url(../images/bg/river-night.gif');
+  }
 }
 
 function getCharacterObj() {
@@ -148,15 +164,18 @@ function mainListener() {
     const target = $( event.target );
 
     if (target.is( '.btn--next' )) {
+      // Check for background change
+      backgroundCheck(target.val());
+      // Advance story based on button value
       advanceStory(target.val());
     };
 
     if (target.is( '.btn--combat' )) {
       let enemyName;
-      if (target.is( '.trog' )) {
+      if (target.val() === 'trog') {
         enemyName = 'Troglodyte';
       }
-      if (target.is( '.gobl' )) {
+      if (target.val() === 'gobl') {
         enemyName = 'Goblin';
       }
       startCombat(enemyName);
@@ -164,6 +183,7 @@ function mainListener() {
 
     if (target.is( '.btn--restart' )) {
       $('header').html(generateMenuHeader());
+      $('main').css('background-image', 'url(../images/bg/bg1.jpg');
       fetch(`/character`, {
         headers: new Headers({
           'Authorization': 'Bearer ' + localStorage.authToken
@@ -178,19 +198,31 @@ function mainListener() {
       $('#frame').html(newUserForm);
     }
 
-    if (target.is('.btn--action-submit')) {
+    if (target.is( '.btn--end-combat' )) {
+      $('#frame').removeClass('combat--screen');
+      $('#frame').css('background-color', 'rgb(0,0,0,.80)');
+
+      if (target.val() === '1-a3') {
+        advanceStory('1-a4');
+      } else if (target.val() === '1-b3') {
+        advanceStory('1-b4');
+      }
+
+      if (target.val() === '1-a5a') {
+        advanceStory('1-aa6');
+      } else if (target.val() === '1-b5a') {
+        advanceStory('1-ba6');
+      }
+    }
+  });
+
+  $('#frame').on('submit', '#js--action-form', function(event) {
       event.preventDefault();
       const player = JSON.parse(sessionStorage.getItem('player'));
       const enemy = JSON.parse(sessionStorage.getItem('enemy'));
       const enemyAction = sessionStorage.getItem('enemyAction');
       const playerAction = $('select option:selected').val();
       combat(player, enemy, playerAction, enemyAction);
-    }
-
-    if (target.is( '#js--end-combat' )) {
-      $('#frame').removeClass('combat--screen');
-      $('#frame').css('background-color', 'rgb(0,0,0,.80)');
-    }
   });
 
   $('#frame').on('submit', '#form--signup', function(event) {
@@ -272,6 +304,10 @@ function headerListener() {
 
     if (target.is( '#img--menu' )) {
       $( '#nav--mobile-menu' ).toggleClass('hidden');
+    }
+
+    if (target.is( '#img--nav-icon' )) {
+      location.reload();
     }
   });
 
@@ -521,7 +557,7 @@ function displayPlayerInfo(player) {
       <h3>MP: ${player.attributes.mp}</h3>
     </div>
     <div class="actions">
-      <form class="action-form">
+      <form class="action-form" id="js--action-form">
         <fieldset>
           <legend>Choose an action</legend>
           <select name="action-menu" id="action-menu" required>
@@ -719,6 +755,7 @@ function playerTurn(player, enemy, playerAction) {
     case 'dblStrike': {
       const dblStrikeString = generateHTML('li', player.class + ' focuses...')
       appendHTML('.combat--log ul', dblStrikeString);
+      player.attributes.mp -= player.actions.dblStrike.mpCost;
 
       for (let i = 0; i < 2; i++) {
         playerAttack(player, enemy);
@@ -730,6 +767,7 @@ function playerTurn(player, enemy, playerAction) {
       appendHTML('.combat--log ul', smashString);
 
       const damage = calcPlayerDamage(player, enemy, 'smash');
+      player.attributes.mp -= player.actions.smash.mpCost;
       enemy.attributes.hp -= damage;
 
       const damageString = generateHTML('li', player.class + ' HITS ' + enemy.name + ' for ' + damage + ' damage');
@@ -803,20 +841,26 @@ function endTurn(player, enemy, turn) {
 function endCombat(player, enemy, condition) {
   if (condition === 'win') {
     $('.combat--log').append(`<p class="block-centered">You defeated ${enemy.name}!</p>`);
-    $('.btn--action-submit').replaceWith('<input class="btn--next" type="button" id="js--end-combat" value="End Combat" />');
+    $('.btn--action-submit').replaceWith(`<button type="button" class="btn--end-combat" id="${enemy.name}" value="${player.bookmark}">End Combat</button>`);
     setScrollPosition();
 
     // Update character hp and mp in DB
     const updateObj = {
       hp: player.attributes.hp,
       mp: player.attributes.mp
-    }
+    };
     putRequest('/character', updateObj);
 
   } else if (condition === 'loss') {
     $('.combat--log').append(`<p class="block-centered">You have been slain by ${enemy.name}!</p><p>Start a new character and try another path!</p>`);
-    $('.btn--action-submit').replaceWith('<input class="btn--restart" type="button" id="js--end-combat" value="New Character" />');
+    $('.btn--action-submit').replaceWith('<button class="btn--restart" type="button" id="js--end-combat">New Character</button>');
     setScrollPosition();
+
+    const updateObj = {
+      hp: player.attributes.hp,
+      mp: player.attributes.mp
+    }
+    putRequest('/character', updateObj);
   }
 }
 
