@@ -257,7 +257,7 @@ button, input[type="submit"] {
   font-size: 1.25em;
   margin: 0 auto;
   margin-top: 2rem;
-  max-width: 300px;
+  max-width: 500px;
   text-align: center;
 }
 #form--choose-character fieldset {

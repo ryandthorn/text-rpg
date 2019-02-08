@@ -27,7 +27,7 @@ function generateMenuHeader() {
   return `
     <section class="navbar" role="navigation">
       <img src="./images/tree-logo.jpg" alt="Tree logo" id="img--nav-icon" />
-      <h2 id="h2--nav-title">Placeholder</h2>
+      <h2 id="h2--nav-title">Dendrion</h2>
       <button class="btn--signout">Sign Out</button>
     </section>
   `
@@ -35,7 +35,7 @@ function generateMenuHeader() {
 
 function generateNewUserForm() {
   return `
-    <h1 id="h1--signup">Sign up for your free <span class="span--title">Placeholder</span> account!</h1>
+    <h1 id="h1--signup">Sign up for your free <span class="span--title">Dendrion</span> account!</h1>
     <form id="form--signup">
       <fieldset>
         <legend class="hidden">Please enter your information</legend>
@@ -388,11 +388,11 @@ function generateNewCharacterForm() {
 
 function generateNewCharacterInfo(selection) {
   if (selection === 'mage') {
-    return `<p>Mage info</p>`
+    return `<p>Low strength and HP</p><p>High magic and MP.</p><p>Special ability: Missile - launch an unblockable bolt of magic energy</p>`
   } else if (selection === 'thief') {
-    return `<p>Thief info</p>`
+    return `<p>Average strength, HP, and MP</p><p>High evasion and accuracy.</p><p>Special ability: Double Strike - attack twice in one turn</p>`
   } else {
-    return `<p>Warrior info</p>`
+    return `<p>High strength an HP</p><p>Low magic and MP.</p><p>Special ability: Smash - an unblockable rage-filled strike</p>`
   }
 }
 
@@ -402,7 +402,7 @@ function generateStoryHeader() {
   $('header').html(`
     <section class="navbar">
       <img src="./images/tree-logo.jpg" alt="Tree logo" id="img--nav-icon" />
-      <h2 id="h2--nav-title">Placeholder</h2>
+      <h2 id="h2--nav-title">Dendrion</h2>
       <img id="img--menu" src="./images/menu.png" alt="Menu - click for options" />
       <nav class="hidden" id="nav--mobile-menu">
         <ul>
