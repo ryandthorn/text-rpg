@@ -138,7 +138,7 @@ function backgroundCheck(bookmark) {
   const bg2 = ['1-a3', '1-b3', '1-a4', '1-b4', '1-a5a', '1-b5a', '1-a5b', '1-b5b', '1-aa6', '1-ab6a', '1-ab6b', '1-ba6', '1-bb6a', '1-bb6b'];
   const bg3 = ['1-aa7', '1-aba7', '1-bba7a', '1-bba7b', '1-ba7', '1-bba7', '1-abb7a', '1-abb7b', '1-bbb7a', '1-bbb7b'];
   if (bg1.some(scene => bookmark === scene)) {
-    $('main').css('background-image', 'url(../images/bg/bg1.jpg');
+    $('main').css('background-image', 'url(../images/bg/valley.jpg');
   }
   if (bg2.some(scene => bookmark === scene)) {
     $('main').css('background-image', 'url(../images/bg/river.gif');
@@ -550,7 +550,7 @@ function displayPlayerInfo(player) {
   
   $('.combat--character').html(`
     <div class="icon">
-      <img src="./images/${player.class}-icon.gif" alt="${player.class} icon" />
+      <img src="./images/characters/${player.class}-icon.gif" alt="${player.class} icon" />
     </div>
     <div class="vitals">
       <h3>HP: ${player.attributes.hp}</h3>

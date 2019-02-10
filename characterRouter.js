@@ -181,9 +181,7 @@ router.put('/', (req, res) => {
 router.delete('/', (req, res) => {
   Character
     .findByIdAndDelete(req.user.characterId)
-    .then(() => {
-      res.status(204).end();
-    })
+    .then(() => res.status(204).end())
     .catch(err => console.error(err));
 })
 
