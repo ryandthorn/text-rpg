@@ -424,7 +424,7 @@ function displayStory(bookmark) {
       'Authorization': 'Bearer ' + localStorage.authToken
     })
   };
-  fetch(`/story/${bookmark}`, options)
+  fetch('/story', options)
     .then(res => res.json())
     .then(scene => {
       const chooseNextScene = scene.next.reduce((string, button) => string + button, '');
