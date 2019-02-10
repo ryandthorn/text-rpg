@@ -1,11 +1,9 @@
 # Dendrion
 ## A text-based roleplaying game inspired by choose-your-own-adventure books and browser RPGs.
 
------
 ## Live demo
 https://obscure-citadel-64452.herokuapp.com/ 
 
------
 ## Technology used
 App:  
   - NodeJS
