@@ -25,7 +25,7 @@ router.post('/', jsonParser, (req, res) => {
     });
   }
 
-  const stringFields = ['username', 'password', 'email'];
+  const stringFields = ['username', 'password', 'confirmPassword', 'email'];
   const nonStringField = stringFields.find(
     field => field in req.body && typeof req.body[field] !== 'string'
   );
@@ -39,16 +39,16 @@ router.post('/', jsonParser, (req, res) => {
     });
   }
 
-  // const passwordsMatch = req.body.password === req.body.confirmPassword;
-  // if (!passwordsMatch) {
-  //   return res.status(422).json({
-  //     code: 422,
-  //     reason: 'ValidationError',
-  //     message: 'Passwords do not match'
-  //   });
-  // }
+  const passwordsMatch = req.body.password === req.body.confirmPassword;
+  if (!passwordsMatch) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Passwords do not match'
+    });
+  }
 
-  const explicityTrimmedFields = ['username', 'password', 'email'];
+  const explicityTrimmedFields = ['username', 'password', 'confirmPassword', 'email'];
   const nonTrimmedField = explicityTrimmedFields.find(
     field => req.body[field].trim() !== req.body[field]
   );
