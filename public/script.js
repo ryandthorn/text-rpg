@@ -551,7 +551,7 @@ function displayPlayerInfo(player) {
   
   $('.combat--character').html(`
     <div class="icon">
-      <img src="images/characters/${player.class}-icon.gif" alt="${player.class} icon" />
+      <img src="images/characters/Thief-icon.gif" alt="${player.class} icon" />
     </div>
     <div class="vitals">
       <h3>HP: ${player.attributes.hp}</h3>
