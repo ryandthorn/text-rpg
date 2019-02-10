@@ -548,7 +548,7 @@ function displayCombatScreen() {
 function displayPlayerInfo(player) {
   const actionsArray = Object.keys(player.actions);
   const optionString = generateOptionString(actionsArray);
-  const lowercaseClass = player.class.slice(0,1).toLowerCase + player.class.slice(1);
+  const lowercaseClass = player.class.slice(0,1).toLowerCase() + player.class.slice(1);
   
   $('.combat--character').html(`
     <div class="icon">
