@@ -5,7 +5,7 @@ router.use(express.json());
 
 const { Adventure, Enemy, Character } = require('./models');
 
-router.get('/:scene', (req, res) => {
+router.get('/', (req, res) => {
   Character
     .findById(req.user.characterId)
     .then(character => {

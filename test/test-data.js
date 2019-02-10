@@ -67,6 +67,7 @@ const enemyData = {
 
 const characterData = {
   class: 'Mage',
+  bookmark: '1-1',
   attributes: {
     hp: 8,
     mp: 12,

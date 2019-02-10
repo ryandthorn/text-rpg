@@ -27,7 +27,7 @@ function seedCharacterData() {
   return Character.create(characterData);
 }
 
-function seedUserData() {
+function seedUserData(charId) {
   console.info('Seeding user data');
   return User
     .hashPassword(userData.password)
@@ -35,7 +35,8 @@ function seedUserData() {
       return User.create({
         username: userData.username,
         password: hash,
-        email: userData.email
+        email: userData.email,
+        characterId: charId
       })
     })
     .catch(err => console.error(err));
@@ -59,6 +60,17 @@ const loginInfo = {
 };
 
 let storedToken;
+
+function loginAndStoreToken() {
+  return chai.request(app)
+    .post('/auth/login')
+    .send(loginInfo)
+    .then(function(res) {
+      storedToken = res.body.authToken;
+      return;
+    })
+    .catch(function(err) {throw err});
+}
 
 describe('Text RPG', function() {
   before(function() {
@@ -104,7 +116,7 @@ describe('Text RPG', function() {
         .post('/auth/login')
         .send(loginInfo)
         .then(function(res) {
-          // This token is not stored
+          // This token is not stored.
           expect(res).to.have.status(200);
           expect(res.body).to.have.key('authToken');
         })
@@ -301,32 +313,42 @@ describe('Text RPG', function() {
   //   });
   // });
 
-  // describe('/story endpoint', function() {
-  //   beforeEach(function() {
-  //     return seedStoryData();
-  //   });
-  //   afterEach(function() {
-  //     return tearDownDb();
-  //   })
-  //   it('should get the story object on GET /', function() {
-  //     return chai.request(app)
-  //       .get('/story')
-  //       .then(function(res) {
-  //         expect(res).to.have.status(200);
-  //         expect(res.body).to.be.a('object');
-  //         expect(res.body).to.haveOwnProperty('chapter1');
-  //       });
-  //   });
+  describe('/story endpoint', function() {
+    beforeEach(function() {
+      return seedCharacterData()
+        .then(function(character) {
+          return seedUserData(character._id)
+            .then(function() {
+              return seedStoryData();
+            })
+            .then(function() {
+              return seedEnemyData();
+            })
+            .then(function() {
+              return loginAndStoreToken();
+            })
+        })
+    });
 
-  //   it ('should get an enemy object on GET /enemy', function() {
-  //     seedEnemyData();
-  //     return chai.request(app)
-  //       .get('/story/enemy')
-  //       .then(function(res) {
-  //         expect(res).to.have.status(200);
-  //         expect(res.body).to.be.a('object');
-  //         expect(res.body.name).to.equal('Troglodyte');
-  //       });
-  //   });
-  // });
+    it("should get the scene from character's bookmark on GET /", function() {
+      return chai.request(app)
+        .get('/story')
+        .set('Authorization', 'Bearer ' + storedToken)
+        .then(function(res) {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a('object');
+        });
+    });
+
+    it ('should get an enemy object on GET /enemy/:enemyName', function() {
+      return chai.request(app)
+        .get('/story/enemy/Troglodyte')
+        .set('Authorization', 'Bearer ' + storedToken)
+        .then(function(res) {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a('object');
+          expect(res.body.name).to.equal('Troglodyte');
+        });
+    });
+  });
 });
