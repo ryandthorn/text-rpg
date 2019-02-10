@@ -183,7 +183,7 @@ function mainListener() {
 
     if (target.is( '.btn--restart' )) {
       $('header').html(generateMenuHeader());
-      $('main').css('background-image', 'url(../images/bg/bg1.jpg');
+      $('main').css('background-image', 'url(../images/bg/valley.jpg');
       fetch(`/character`, {
         headers: new Headers({
           'Authorization': 'Bearer ' + localStorage.authToken
