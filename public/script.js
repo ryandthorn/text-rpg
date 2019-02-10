@@ -124,12 +124,13 @@ function updateUserCharacterId(character_id) {
 }
 
 function startGame(character) {
-  generateStoryHeader();
-  backgroundCheck(character.bookmark);
   if (!character) {
     setupChooseCharacter();
     return;
   }
+  
+  generateStoryHeader();
+  backgroundCheck(character.bookmark);
   displayStory(character.bookmark);
 }
 
