@@ -151,167 +151,102 @@ describe('Text RPG', function() {
     it("should update user's characterId field on PUT /", function() {
       return seedUserData()
         .then(() => {
+          return loginAndStoreToken();
+        })
+        .then(() => {
           return chai.request(app)
-          .post('/auth/login')
-          .send(loginInfo)
-          .then(function(res) {
-            expect(res).to.have.status(200);
-            return chai.request(app)
-              .put('/users')
-              .set('Authorization', 'Bearer ' + res.body.authToken)
-              .send({characterId: "5c5f04796b2bf800174515c3"})
-              .then(function(res) {
-                expect(res).to.have.status(204);
-              })
-              .catch(function(err) {throw err});
-          });  
+            .put('/users')
+            .set('Authorization', 'Bearer ' + storedToken)
+            .send({characterId: "5c5f04796b2bf800174515c3"})
+            .then(function(res) {
+              expect(res).to.have.status(204);
+            })
+            .catch(function(err) {throw err});
         })
         .catch(err => console.error(err));
     });
   });
 
-  // describe('/character endpoint', function() {
-  //   beforeEach(function() {
-  //     return seedCharacterData();
-  //   });
-  //   afterEach(function() {
-  //     return tearDownDb();
-  //   });
+  describe('/character endpoint', function() {
+    beforeEach(function() {
+      return seedCharacterData()
+        .then(function(character) {
+          return seedUserData(character._id)
+            .then(function() {
+              return seedStoryData();
+            })
+            .then(function() {
+              return loginAndStoreToken();
+            });
+        });
+    });
 
-  //   it('should create a new character on POST /', function() {
-  //     return chai.request(app)
-  //       .post('/character/new?class=mage')
-  //       .then(function(res) {
-  //         expect(res).to.have.status(201);
-  //         expect(res.body).to.be.a('object');
-  //         expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
-  //         expect(res.body.class).to.equal('Mage');
-  //       });
-  //   });
+    it('should create a new character on POST /', function() {
+      return chai.request(app)
+        .post('/character/new?class=mage')
+        .set('Authorization', 'Bearer ' + storedToken)
+        .then(function(res) {
+          expect(res).to.have.status(201);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
+          expect(res.body.class).to.equal('Mage');
+        });
+    });
   
-  //   it('should return the character object on GET ?id=', function() {
-  //     return chai.request(app)
-  //       .post('/character/new?class=mage')
-  //       .then(function(res) {
-  //         expect(res).to.have.status(201);
-  //         expect(res.body).to.be.a('object');
-  //         expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
-  //         expect(res.body.class).to.equal('Mage');
+    it("should return the character object from token's characterId on GET /", function() {
+      return chai.request(app)
+        .get('/character')
+        .set('Authorization', 'Bearer ' + storedToken)
+        .then(function(res) {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
+        });
+    });
 
-  //         const queryID = res.body._id;
-  //         return chai.request(app)
-  //           .get(`/character?id=${queryID}`)
-  //           .then(function(res) {
-  //             expect(res).to.have.status(200);
-  //             expect(res.body).to.be.a('object');
-  //             expect(res.body._id).to.equal(queryID);
-  //             expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
-  //           });
-  //       });
-  //   });
-
-  //   it("should return the character's bookmark object on GET /bookmark?id=", function() {
-  //     return chai.request(app)
-  //       .post('/character/new?class=mage')
-  //       .then(function(res) {
-  //         expect(res).to.have.status(201);
-  //         expect(res.body).to.be.a('object');
-  //         expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
-  //         expect(res.body.class).to.equal('Mage');
-
-  //         const queryID = res.body._id;
-  //         return chai.request(app)
-  //           .get(`/character/bookmark?id=${queryID}`)
-  //           .then(function(res) {
-  //             expect(res).to.have.status(200);
-  //             expect(res.body).to.be.a('object');
-  //             expect(res.body).to.have.keys('chapter', 'scene', 'next');
-  //           });
-  //     });
-  //   });
-
-  //   it("should update the character's bookmark object on PUT /bookmark?id=", function() {
-  //     return chai.request(app)
-  //       .post('/character/new?class=mage')
-  //       .then(function(res) {
-  //         expect(res).to.have.status(201);
-  //         expect(res.body).to.be.a('object');
-  //         expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
-  //         expect(res.body.class).to.equal('Mage');
-  //         return res.body;
-  //       })
-  //       .then(function(character) {
-  //         return chai.request(app)
-  //           .put(`/character/bookmark?id=${character._id}`)
-  //           .set('Content-Type', 'application/json')
-  //           .send(JSON.stringify({
-  //             bookmark: {
-  //               chapter: "chapter1",
-  //               scene: "scene2",
-  //               next: [
-  //                 {
-  //                   chapter: "chapter1",
-  //                   scene: "scene3"
-  //                 }
-  //               ]
-  //             }
-  //           }));
-  //       })
-  //       .then(function(res) {
-  //         expect(res).to.have.status(200);
-  //         const bookmark = res.body.bookmark;
-  //         expect(bookmark).to.be.a('object');
-  //         expect(bookmark.chapter).to.equal('chapter1');
-  //         expect(bookmark.scene).to.equal('scene2');
-  //         expect(bookmark.next).to.be.a('array');
-  //         expect(bookmark.next[0]).to.have.keys('chapter', 'scene');
-  //         expect(bookmark.next[0].chapter).to.equal('chapter1');
-  //         expect(bookmark.next[0].scene).to.equal('scene3');    
-  //       });
-  //   });
+    it("should update the character's bookmark object on PUT /bookmark", function() {
+      return chai.request(app)
+        .put('/character/bookmark')
+        .set('Authorization', 'Bearer ' + storedToken)
+        // .set('Content-Type', 'application/json')
+        .send({"bookmark": "1-2"})
+        .then(function(res) {
+          expect(res).to.have.status(204);
+          return chai.request(app)
+            .get('/character')
+            .set('Authorization', 'Bearer ' + storedToken)
+            .then(function(res) {
+              expect(res).to.have.status(200);
+              expect(res.body.bookmark).to.equal('1-2');
+            })
+            .catch(function(err) {throw err});
+        })
+        .catch(function(err) {throw err});
+    });
   
-  //   it('should update the character object on PUT ?id=', function() {
-  //     return chai.request(app)
-  //       .post('/character/new?class=mage')
-  //       .then(function(res) {
-  //         expect(res).to.have.status(201);
-  //         expect(res.body).to.be.a('object');
-  //         expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
-  //         expect(res.body.class).to.equal('Mage');
-  //         return res.body;
-  //       })
-  //       .then(function(character) {
-  //         return chai.request(app)
-  //           .put(`/character?id=${character._id}`)
-  //           .set('Content-Type', 'application/json')
-  //           .send({"hp": 4, "mp": 5});
-  //       })
-  //       .then(function(res) {
-  //         expect(res).to.have.status(200);
-  //         const character = res.body;
-  //         expect(character.attributes.hp).to.equal(4);
-  //         expect(character.attributes.mp).to.equal(5);
-  //       });
-  //   });
+    it('should update the character object on PUT /', function() {
+      return chai.request(app)
+        .put('/character')
+        .set('Authorization', 'Bearer ' + storedToken)
+        .send({"hp": 4, "mp": 5})
+        .then(function(res) {
+          expect(res).to.have.status(200);
+          const character = res.body;
+          expect(character.attributes.hp).to.equal(4);
+          expect(character.attributes.mp).to.equal(5);
+        })
+        .catch(function(err) {throw err})
+    });
 
-  //   it('should delete the character object on DELETE ?id=', function() {
-  //     return chai.request(app)
-  //       .post('/character/new?class=mage')
-  //       .then(function(res) {
-  //         expect(res).to.have.status(201);
-  //         expect(res.body).to.be.a('object');
-  //         expect(res.body).to.have.keys('_id', '__v', 'bookmark', 'actions', 'class', 'attributes', 'skills');
-  //         expect(res.body.class).to.equal('Mage');
-
-  //         const queryID = res.body._id;
-  //         return chai.request(app)
-  //           .delete(`/character?id=${queryID}`)
-  //           .then(function(res) {
-  //             expect(res).to.have.status(204);
-  //           });
-  //       });
-  //   });
-  // });
+    it('should delete the character object on DELETE /', function() {
+      return chai.request(app)
+        .delete('/character')
+        .set('Authorization', 'Bearer ' + storedToken)
+        .then(function(res) {
+          expect(res).to.have.status(204);
+        });
+    });
+  });
 
   describe('/story endpoint', function() {
     beforeEach(function() {
@@ -326,8 +261,8 @@ describe('Text RPG', function() {
             })
             .then(function() {
               return loginAndStoreToken();
-            })
-        })
+            });
+        });
     });
 
     it("should get the scene from character's bookmark on GET /", function() {

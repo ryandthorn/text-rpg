@@ -169,7 +169,7 @@ router.put('/', (req, res) => {
           console.error(err);
           res.status(500).json({message: 'Internal server error'});
         }
-        res.json(character);
+        res.status(200).json(character);
       })
     })
     .catch(err => {
