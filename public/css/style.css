@@ -368,6 +368,14 @@ p {
   text-transform: uppercase;
 }
 
+/* Character screen */
+
+.char-info--container {
+  align-items: center;
+  display: flex;
+  justify-content: space-evenly;
+}
+
 /* Combat */
 
 .combat--h1 {
