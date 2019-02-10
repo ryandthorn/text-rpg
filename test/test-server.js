@@ -96,7 +96,7 @@ describe('Text RPG', function() {
   describe('/auth endpoint', function() {
     beforeEach(function() {
       return seedUserData();
-    })
+    });
     it("should return a valid JWT on login to POST /login", function() {
       return chai.request(app)
         .post('/auth/login')
@@ -109,30 +109,34 @@ describe('Text RPG', function() {
         .catch(function(err) {throw err});
     });
 
-    it('should wait a second so the next test passes consistently', function() {
-      // This test prevents a race condition between
-      // the previous test and the next.
-      return chai.request(app)
-        .post('/auth/login')
-        .send(loginInfo)
-        .then(function(res) {
-          // This token is not stored.
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.key('authToken');
-        })
-        .catch(function(err) {throw err});
-    });
-
     it("should refresh a valid JWT on POST /refresh", function() {
-      return chai.request(app)
-        .post('/auth/refresh')
-        .set('Authorization', 'Bearer ' + storedToken)
-        .then(function(res) {
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.key('authToken');
-          expect(res.body.authToken).to.not.equal(storedToken);
+      // Because each token is generated using the user's username and characterId,
+      // we have to update the characterId before generating the new token.
+      
+      // This prevents a race condition through which the test sometimes fails
+      // when two identical tokens are produced.
+      
+      return loginAndStoreToken()
+        .then(() => {
+          return chai.request(app)
+            .put('/users')
+            .set('Authorization', 'Bearer ' + storedToken)
+            .send({characterId: "5c5f04796b2bf800174515c3"})
+            .then(function(res) {
+              expect(res).to.have.status(204);
+              return chai.request(app)
+                .post('/auth/refresh')
+                .set('Authorization', 'Bearer ' + storedToken)
+                .then(function(res) {
+                  expect(res).to.have.status(200);
+                  expect(res.body).to.have.key('authToken');
+                  expect(res.body.authToken).to.not.equal(storedToken);
+                })
+                .catch(function(err) {throw err}); 
+            })
+            .catch(function(err) {throw err});
         })
-        .catch(function(err) {throw err});
+        .catch(err => {throw err});
     });
   });
 
@@ -148,11 +152,12 @@ describe('Text RPG', function() {
         .catch(function(err) {throw err});
     });
 
-    it("should update user's characterId field on PUT /", function() {
+    it("should assign a characterId to the user on PUT /", function() {
+      // A characterId is the object ID generated on character creation
+      // and is used for retrieving that character from the DB.
+      
       return seedUserData()
-        .then(() => {
-          return loginAndStoreToken();
-        })
+        .then(() => loginAndStoreToken())
         .then(() => {
           return chai.request(app)
             .put('/users')
@@ -193,7 +198,7 @@ describe('Text RPG', function() {
         });
     });
   
-    it("should return the character object from token's characterId on GET /", function() {
+    it("should get the user's character on GET /", function() {
       return chai.request(app)
         .get('/character')
         .set('Authorization', 'Bearer ' + storedToken)
@@ -204,11 +209,10 @@ describe('Text RPG', function() {
         });
     });
 
-    it("should update the character's bookmark object on PUT /bookmark", function() {
+    it("should update the character's bookmark on PUT /bookmark", function() {
       return chai.request(app)
         .put('/character/bookmark')
         .set('Authorization', 'Bearer ' + storedToken)
-        // .set('Content-Type', 'application/json')
         .send({"bookmark": "1-2"})
         .then(function(res) {
           expect(res).to.have.status(204);
@@ -224,7 +228,7 @@ describe('Text RPG', function() {
         .catch(function(err) {throw err});
     });
   
-    it('should update the character object on PUT /', function() {
+    it("should update the character's stats on PUT /", function() {
       return chai.request(app)
         .put('/character')
         .set('Authorization', 'Bearer ' + storedToken)
@@ -265,7 +269,7 @@ describe('Text RPG', function() {
         });
     });
 
-    it("should get the scene from character's bookmark on GET /", function() {
+    it("should get the current scene using the character's bookmark on GET /", function() {
       return chai.request(app)
         .get('/story')
         .set('Authorization', 'Bearer ' + storedToken)
@@ -275,7 +279,7 @@ describe('Text RPG', function() {
         });
     });
 
-    it ('should get an enemy object on GET /enemy/:enemyName', function() {
+    it ('should get an enemy by name on GET /enemy/:enemyName', function() {
       return chai.request(app)
         .get('/story/enemy/Troglodyte')
         .set('Authorization', 'Bearer ' + storedToken)
