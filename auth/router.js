@@ -24,7 +24,7 @@ router.use(bodyParser.json());
 // The user provides a username and password to login
 router.post('/login', localAuth, (req, res) => {
   const authToken = createAuthToken(req.user.serialize());
-  res.json({authToken});
+  res.status(200).json({authToken});
 });
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
@@ -36,7 +36,7 @@ router.post('/refresh', jwtAuth, (req, res) => {
     .findOne({username: req.user.username})
     .then(user => {
       const authToken = createAuthToken(user.serialize());
-      res.json({authToken});
+      res.status(200).json({authToken});
     })
     .catch(err => {
       console.error(err);
