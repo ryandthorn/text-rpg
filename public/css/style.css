@@ -4,7 +4,7 @@
 
 body {
   background-color: lightyellow;
-  font-family: 'Alegreya Sans', sans-serif;
+  font-family: "Alegreya Sans", sans-serif;
   max-height: 100vh;
   max-width: 100vw;
 }
@@ -13,15 +13,17 @@ main {
   background-image: url(../images/bg/valley.jpg);
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover; 
+  background-size: cover;
   height: 100vh;
   margin: 0 auto;
   max-width: 600px;
   overflow: auto;
 }
 
-h1, h2, h3 {
-  font-family: 'Alegreya', serif;
+h1,
+h2,
+h3 {
+  font-family: "Alegreya", serif;
   text-align: center;
 }
 h1 {
@@ -34,17 +36,18 @@ h3 {
   font-size: 1.5em;
 }
 
-button, input[type="submit"] {  
+button,
+input[type="submit"] {
   border: none;
   border-radius: 25px;
   cursor: pointer;
   font-size: 1.25em;
   font-weight: 800;
-  padding: .75rem 1rem;
+  padding: 0.75rem 1rem;
 }
 
 #frame {
-  background-color: rgb(0,0,0, .80);
+  background-color: rgb(0, 0, 0, 0.8);
   border: 3px groove white;
   color: white;
   margin: 5vh 5vw;
@@ -78,7 +81,7 @@ button, input[type="submit"] {
   flex-grow: 2;
   font-size: 1.5em;
   margin: 0;
-  margin-left: .5rem;
+  margin-left: 0.5rem;
   text-align: left;
 }
 
@@ -87,24 +90,32 @@ button, input[type="submit"] {
   border-radius: 25px;
   font-size: 1.1em;
   font-weight: bold;
-  margin-right: .5rem;
-  padding: .75em 1em;
+  margin-right: 0.5rem;
+  padding: 0.75em 1em;
   text-transform: uppercase;
 }
-#nav--mobile-menu button, .btn--header {
+
+#btn--signup {
+  background-color: lightblue;
+}
+
+#nav--mobile-menu button,
+.btn--header {
   background-color: gold;
   border-radius: 25px;
   font-size: 1.1em;
   font-weight: bold;
-  margin-right: .5rem;
-  padding: .75em 1em;
+  margin-right: 0.5rem;
+  padding: 0.75em 1em;
 }
-.btn--login:hover, #nav--mobile-menu button:hover, .btn--header:hover {
+.btn--login:hover,
+#nav--mobile-menu button:hover,
+.btn--header:hover {
   border: 1px solid #ffa600;
   color: white;
-  transition: all .2s;
-	-webkit-transition: all .2s;
-  -moz-transition: all .2s;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
 }
 
 #img--menu {
@@ -128,7 +139,7 @@ button, input[type="submit"] {
 
 #nav--mobile-menu ul {
   list-style-type: none;
-  margin: .5rem 1rem;
+  margin: 0.5rem 1rem;
   padding: 0;
 }
 
@@ -137,7 +148,8 @@ button, input[type="submit"] {
   text-align: center;
 }
 
-#nav--mobile-menu button, .btn--header {
+#nav--mobile-menu button,
+.btn--header {
   background-color: lightgreen;
 }
 
@@ -154,11 +166,12 @@ button, input[type="submit"] {
 
 .btn--signout {
   font-size: 1em;
-  letter-spacing: .75px;
+  letter-spacing: 0.75px;
   text-transform: uppercase;
 }
 
-.btn--header + .btn--signout, #nav--mobile-menu .btn--signout {
+.btn--header + .btn--signout,
+#nav--mobile-menu .btn--signout {
   background-color: gold;
   width: 110px;
 }
@@ -186,7 +199,7 @@ button, input[type="submit"] {
   display: block;
   margin: 1rem auto;
   position: relative;
-  letter-spacing: .75px;
+  letter-spacing: 0.75px;
   text-transform: uppercase;
   top: 2px;
 }
@@ -194,9 +207,9 @@ button, input[type="submit"] {
   box-shadow: 0 4px #619949;
   color: white;
   top: 0;
-  transition: all .2s;
-	-webkit-transition: all .2s;
-  -moz-transition: all .2s;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
 }
 .btn--push-large:active {
   box-shadow: 0 0 #619949;
@@ -214,12 +227,14 @@ button, input[type="submit"] {
   margin-bottom: 1rem;
 }
 
-#form--signup, #form--login {
+#form--signup,
+#form--login {
   margin: 0 auto;
   width: max-content;
 }
 
-#form--signup fieldset, #form--login fieldset {
+#form--signup fieldset,
+#form--login fieldset {
   border: none;
 }
 
@@ -227,17 +242,17 @@ button, input[type="submit"] {
   text-align: center;
 }
 
-#form--signup input[type="submit"]{
+#form--signup input[type="submit"] {
   display: block;
   margin: 1.5rem auto 0 auto;
 }
 
 .signup-container {
-  margin: .5rem 0;
+  margin: 0.5rem 0;
 }
 
 .signup-container label {
-  padding-left: .2rem;
+  padding-left: 0.2rem;
 }
 
 .signup-container input {
@@ -245,8 +260,8 @@ button, input[type="submit"] {
   border-radius: 5px;
   display: block;
   font-weight: 600;
-  margin-top: .15rem;
-  padding: .25rem;
+  margin-top: 0.15rem;
+  padding: 0.25rem;
   width: 200px;
 }
 
@@ -265,11 +280,11 @@ button, input[type="submit"] {
   padding: 0px;
 }
 #form--choose-character legend {
-  font-family: 'Alegreya', serif;
+  font-family: "Alegreya", serif;
   font-size: 1.25em;
   font-weight: bold;
   margin-bottom: 1rem;
-  padding: 0 .25em;
+  padding: 0 0.25em;
 }
 #form--choose-character label {
   background-color: black;
@@ -282,8 +297,8 @@ button, input[type="submit"] {
   cursor: pointer;
   display: block;
   font-weight: bold;
-  margin: .75rem auto 0 auto;
-  padding: .75rem 0 .75rem 4rem;
+  margin: 0.75rem auto 0 auto;
+  padding: 0.75rem 0 0.75rem 4rem;
   width: 200px;
 }
 #form--choose-character label:hover {
@@ -316,7 +331,7 @@ button, input[type="submit"] {
   cursor: pointer;
   font-weight: bold;
   letter-spacing: 1px;
-  margin: .5rem auto 1rem auto;
+  margin: 0.5rem auto 1rem auto;
   padding: 1rem 2rem;
   text-transform: uppercase;
 }
@@ -337,25 +352,29 @@ p {
   align-items: center;
 }
 
-.btn--next, .btn--combat, .btn--restart {
+.btn--next,
+.btn--combat,
+.btn--restart {
   background: goldenrod;
   border: 1px solid lightslategrey;
   border-radius: 25px;
   color: white;
   cursor: pointer;
-  padding: .5rem .75rem;
+  padding: 0.5rem 0.75rem;
 }
-.btn--next:hover, .btn--combat:hover, .btn--restart:hover {
+.btn--next:hover,
+.btn--combat:hover,
+.btn--restart:hover {
   border: 1px solid orange;
-  transition: all .2s;
-	-webkit-transition: all .2s;
-  -moz-transition: all .2s;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
 }
 
-.btn--combat{
+.btn--combat {
   background: firebrick;
   display: block;
-  letter-spacing: .75px;
+  letter-spacing: 0.75px;
   margin: 0 auto;
   text-transform: uppercase;
 }
@@ -363,7 +382,7 @@ p {
 .btn--restart {
   background: rgb(59, 167, 59);
   display: block;
-  letter-spacing: .75px;
+  letter-spacing: 0.75px;
   margin: 0 auto;
   text-transform: uppercase;
 }
@@ -383,7 +402,7 @@ p {
   margin: 1rem auto;
 }
 
-#frame + .combat--screen  {
+#frame + .combat--screen {
   background-color: black;
 }
 
@@ -402,10 +421,10 @@ p {
   height: 4rem;
 }
 .vitals {
-  grid-area: 2 / 1 / 3 / 2; 
+  grid-area: 2 / 1 / 3 / 2;
 }
 .vitals h3 {
-  margin: .25rem auto;
+  margin: 0.25rem auto;
 }
 .actions {
   grid-area: 1 / 2 / 3 / 3;
@@ -416,8 +435,8 @@ p {
 .combat--character .btn--action-submit {
   background: firebrick;
   color: white;
-  letter-spacing: .75px;
-  padding: .5rem .75rem;
+  letter-spacing: 0.75px;
+  padding: 0.5rem 0.75rem;
   text-transform: uppercase;
 }
 .btn--action-submit:hover {
@@ -426,7 +445,7 @@ p {
 
 .combat--log {
   border: 1px solid white;
-  margin: .5rem 0;
+  margin: 0.5rem 0;
   max-height: 30vh;
   overflow: auto;
 }
@@ -457,7 +476,9 @@ p {
 }
 
 @media (min-width: 600px) {
-  body, main, .navbar {
+  body,
+  main,
+  .navbar {
     margin: 0 auto;
     max-width: 1000px;
   }
@@ -486,7 +507,7 @@ p {
     grid-template-rows: 30vh 30vh;
   }
   .combat--character {
-    grid-area: 2 / 2 / 3 / 4
+    grid-area: 2 / 2 / 3 / 4;
   }
   .combat--log {
     grid-area: 1 / 2 / 2 / 6;

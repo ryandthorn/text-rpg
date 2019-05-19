@@ -1,34 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Dendrion</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Alegreya|Alegreya+Sans"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Dendrion</title>
-  <link href="https://fonts.googleapis.com/css?family=Alegreya|Alegreya+Sans" rel="stylesheet">
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-
-<body>
-  <header>
-    <section class="navbar" role="navigation">
-      <img src="./images/tree-logo.jpg" alt="Tree logo" id="img--nav-icon" />
-      <h2 id="h2--nav-title">Dendrion</h2>
-      <button class="btn--login">Sign in</button>
-    </section>
-  </header>
-  <main>
-    <div id="frame">
-      <h2 id="h2--info">Welcome to <span class="span--title">Dendrion</span>, an interactive adventure where your
-        choices matter!</h2>
-      <button id="btn--enter" class="btn--push-large">Enter</button>
-    </div>
-  </main>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-  <script src="script.js"></script>
-</body>
-
+  <body>
+    <header>
+      <section class="navbar" role="navigation">
+        <img src="./images/tree-logo.jpg" alt="Tree logo" id="img--nav-icon" />
+        <h2 id="h2--nav-title">Dendrion</h2>
+        <button id="btn--signup" class="btn--login">Sign up</button>
+        <button id="btn--login" class="btn--login">Sign in</button>
+      </section>
+    </header>
+    <main>
+      <div id="frame">
+        <h2 id="h2--info">
+          Welcome to <span class="span--title">Dendrion</span>, an interactive
+          adventure where your choices matter!
+        </h2>
+        <button id="btn--demo" class="btn--push-large">Demo</button>
+      </div>
+    </main>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
+    ></script>
+    <script src="script.js"></script>
+  </body>
 </html>

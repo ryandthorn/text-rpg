@@ -1,21 +1,21 @@
-'use strict';
+"use strict";
 
 function putRequest(endpoint, payload) {
   return fetch(endpoint, {
-    method: 'PUT',
+    method: "PUT",
     headers: new Headers({
-      'Authorization': 'Bearer ' + localStorage.authToken,
-      'Content-Type': 'application/json'
+      Authorization: "Bearer " + localStorage.authToken,
+      "Content-Type": "application/json"
     }),
     body: JSON.stringify(payload)
   });
 }
 
 function refreshJWT() {
-  return fetch('/auth/refresh', {
-    method: 'POST',
+  return fetch("/auth/refresh", {
+    method: "POST",
     headers: new Headers({
-      'Authorization': 'Bearer ' + localStorage.authToken,
+      Authorization: "Bearer " + localStorage.authToken
     })
   })
     .then(res => res.json())
@@ -30,7 +30,7 @@ function generateMenuHeader() {
       <h2 id="h2--nav-title">Dendrion</h2>
       <button class="btn--signout">Sign Out</button>
     </section>
-  `
+  `;
 }
 
 function generateNewUserForm() {
@@ -58,7 +58,7 @@ function generateNewUserForm() {
         <input type="submit" class="btn--push-large" value="Submit">
       </fieldset>
     </form>
-  `
+  `;
 }
 
 function generateLoginForm() {
@@ -78,32 +78,32 @@ function generateLoginForm() {
         <input type="submit" class="btn--push-large" value="Enter">
       </fieldset>
     </form>
-  `
+  `;
 }
 
 function createNewUser(userInfo) {
   const options = {
-    method: 'POST',
+    method: "POST",
     headers: new Headers({
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     }),
     body: JSON.stringify(userInfo)
-  }
-  return fetch('/users', options);
+  };
+  return fetch("/users", options);
 }
 
 function userLogin(userInfo) {
   const options = {
-    method: 'POST',
+    method: "POST",
     headers: new Headers({
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     }),
     body: JSON.stringify({
       username: userInfo.username,
       password: userInfo.password
     })
-  }
-  return fetch('/auth/login', options)
+  };
+  return fetch("/auth/login", options)
     .then(res => res.json())
     .then(token => token)
     .catch(err => console.error(err));
@@ -111,16 +111,16 @@ function userLogin(userInfo) {
 
 function updateUserCharacterId(character_id) {
   const options = {
-    method: 'PUT',
+    method: "PUT",
     headers: new Headers({
-      'Authorization': 'Bearer ' + localStorage.authToken,
-      'Content-Type': 'application/json'
+      Authorization: "Bearer " + localStorage.authToken,
+      "Content-Type": "application/json"
     }),
     body: JSON.stringify({
       characterId: character_id
     })
-  }
-  return fetch('/users', options);
+  };
+  return fetch("/users", options);
 }
 
 function startGame(character) {
@@ -128,131 +128,167 @@ function startGame(character) {
     setupChooseCharacter();
     return;
   }
-  
+
   generateStoryHeader();
   backgroundCheck(character.bookmark);
   displayStory(character.bookmark);
 }
 
 function backgroundCheck(bookmark) {
-  const bg1 = ['1-1', '1-2a', '1-2b'];
-  const bg2 = ['1-a3', '1-b3', '1-a4', '1-b4', '1-a5a', '1-b5a', '1-a5b', '1-b5b', '1-aa6', '1-ab6a', '1-ab6b', '1-ba6', '1-bb6a', '1-bb6b'];
-  const bg3 = ['1-aa7', '1-aba7', '1-bba7a', '1-bba7b', '1-ba7', '1-bba7', '1-abb7a', '1-abb7b', '1-bbb7a', '1-bbb7b'];
+  const bg1 = ["1-1", "1-2a", "1-2b"];
+  const bg2 = [
+    "1-a3",
+    "1-b3",
+    "1-a4",
+    "1-b4",
+    "1-a5a",
+    "1-b5a",
+    "1-a5b",
+    "1-b5b",
+    "1-aa6",
+    "1-ab6a",
+    "1-ab6b",
+    "1-ba6",
+    "1-bb6a",
+    "1-bb6b"
+  ];
+  const bg3 = [
+    "1-aa7",
+    "1-aba7",
+    "1-bba7a",
+    "1-bba7b",
+    "1-ba7",
+    "1-bba7",
+    "1-abb7a",
+    "1-abb7b",
+    "1-bbb7a",
+    "1-bbb7b"
+  ];
   if (bg1.some(scene => bookmark === scene)) {
-    $('main').css('background-image', 'url(../images/bg/valley.jpg');
+    $("main").css("background-image", "url(../images/bg/valley.jpg");
   }
   if (bg2.some(scene => bookmark === scene)) {
-    $('main').css('background-image', 'url(../images/bg/river.gif');
+    $("main").css("background-image", "url(../images/bg/river.gif");
   }
   if (bg3.some(scene => bookmark === scene)) {
-    $('main').css('background-image', 'url(../images/bg/river-night.gif');
+    $("main").css("background-image", "url(../images/bg/river-night.gif");
   }
 }
 
 function getCharacterObj() {
   const options = {
     headers: new Headers({
-      'Authorization': 'Bearer ' + localStorage.authToken
+      Authorization: "Bearer " + localStorage.authToken
     })
   };
-  return fetch('/character', options)
+  return fetch("/character", options);
 }
 
 /* Handlers */
 
 function mainListener() {
-  $('#frame').click(event => {
-    const target = $( event.target );
+  $("#frame").click(event => {
+    const target = $(event.target);
 
-    if (target.is( '.btn--next' )) {
+    if (target.is(".btn--next")) {
       // Check for background change
       backgroundCheck(target.val());
       // Advance story based on button value
       advanceStory(target.val());
-    };
+    }
 
-    if (target.is( '.btn--combat' )) {
+    if (target.is(".btn--combat")) {
       let enemyName;
-      if (target.val() === 'trog') {
-        enemyName = 'Troglodyte';
+      if (target.val() === "trog") {
+        enemyName = "Troglodyte";
       }
-      if (target.val() === 'gobl') {
-        enemyName = 'Goblin';
+      if (target.val() === "gobl") {
+        enemyName = "Goblin";
       }
       startCombat(enemyName);
     }
 
-    if (target.is( '.btn--restart' )) {
-      $('header').html(generateMenuHeader());
-      $('main').css('background-image', 'url(../images/bg/valley.jpg');
+    if (target.is(".btn--restart")) {
+      $("header").html(generateMenuHeader());
+      $("main").css("background-image", "url(../images/bg/valley.jpg");
       fetch(`/character`, {
         headers: new Headers({
-          'Authorization': 'Bearer ' + localStorage.authToken
-        }),  
-        method: 'DELETE'
+          Authorization: "Bearer " + localStorage.authToken
+        }),
+        method: "DELETE"
       });
       setupChooseCharacter();
     }
 
-    if (target.is( '#btn--enter' )) {
-      const newUserForm = generateNewUserForm();
-      $('#frame').html(newUserForm);
+    if (target.is("#btn--demo")) {
+      const demoLogin = {
+        username: "demo",
+        password: "dendrion"
+      };
+      userLogin(demoLogin)
+        .then(res => {
+          localStorage.setItem("authToken", res.authToken);
+          console.log({ res });
+          putRequest(`/character/bookmark`, { bookmark: "1-1" });
+        })
+        .catch(err => console.error(err));
+      setupChooseCharacter();
     }
 
-    if (target.is( '.btn--end-combat' )) {
-      $('#frame').removeClass('combat--screen');
-      $('#frame').css('background-color', 'rgb(0,0,0,.80)');
+    if (target.is(".btn--end-combat")) {
+      $("#frame").removeClass("combat--screen");
+      $("#frame").css("background-color", "rgb(0,0,0,.80)");
 
-      if (target.val() === '1-a3') {
-        advanceStory('1-a4');
-      } else if (target.val() === '1-b3') {
-        advanceStory('1-b4');
+      if (target.val() === "1-a3") {
+        advanceStory("1-a4");
+      } else if (target.val() === "1-b3") {
+        advanceStory("1-b4");
       }
 
-      if (target.val() === '1-a5a') {
-        advanceStory('1-aa6');
-      } else if (target.val() === '1-b5a') {
-        advanceStory('1-ba6');
+      if (target.val() === "1-a5a") {
+        advanceStory("1-aa6");
+      } else if (target.val() === "1-b5a") {
+        advanceStory("1-ba6");
       }
     }
   });
 
-  $('#frame').on('submit', '#js--action-form', function(event) {
-      event.preventDefault();
-      const player = JSON.parse(sessionStorage.getItem('player'));
-      const enemy = JSON.parse(sessionStorage.getItem('enemy'));
-      const enemyAction = sessionStorage.getItem('enemyAction');
-      const playerAction = $('select option:selected').val();
-      combat(player, enemy, playerAction, enemyAction);
+  $("#frame").on("submit", "#js--action-form", function(event) {
+    event.preventDefault();
+    const player = JSON.parse(sessionStorage.getItem("player"));
+    const enemy = JSON.parse(sessionStorage.getItem("enemy"));
+    const enemyAction = sessionStorage.getItem("enemyAction");
+    const playerAction = $("select option:selected").val();
+    combat(player, enemy, playerAction, enemyAction);
   });
 
-  $('#frame').on('submit', '#form--signup', function(event) {
+  $("#frame").on("submit", "#form--signup", function(event) {
     event.preventDefault();
     const userInfo = {
-      username: $('#username').val(),
-      password: $('#password').val(),
-      confirmPassword: $('#confirm-password').val(),
-      email: $('#email').val()
+      username: $("#username").val(),
+      password: $("#password").val(),
+      confirmPassword: $("#confirm-password").val(),
+      email: $("#email").val()
     };
     createNewUser(userInfo)
       .then(() => {
         userLogin(userInfo)
-          .then(res => localStorage.setItem('authToken', res.authToken))
+          .then(res => localStorage.setItem("authToken", res.authToken))
           .catch(err => console.error(err));
         setupChooseCharacter();
       })
       .catch(err => console.error(err));
   });
 
-  $('#frame').on('submit', '#form--login', function(event) {
+  $("#frame").on("submit", "#form--login", function(event) {
     event.preventDefault();
     const userInfo = {
-      username: $('#username').val(),
-      password: $('#password').val()
+      username: $("#username").val(),
+      password: $("#password").val()
     };
     userLogin(userInfo)
       .then(res => {
-        localStorage.setItem('authToken', res.authToken);
+        localStorage.setItem("authToken", res.authToken);
         getCharacterObj()
           .then(res => res.json())
           .then(character => startGame(character))
@@ -263,15 +299,15 @@ function mainListener() {
 }
 
 function headerListener() {
-  $('header').click(event => {
+  $("header").click(event => {
     event.preventDefault();
-    const target = $( event.target );
+    const target = $(event.target);
 
-    if (target.is( '.btn--login' )) {
+    if (target.is("#btn--login")) {
       if (localStorage.authToken) {
         refreshJWT()
           .then(res => {
-            localStorage.setItem('authToken', res.authToken);
+            localStorage.setItem("authToken", res.authToken);
             getCharacterObj()
               .then(res => res.json())
               .then(character => startGame(character))
@@ -279,68 +315,75 @@ function headerListener() {
                 console.error(err);
                 setupChooseCharacter();
               });
-            })
+          })
           .catch(err => console.error(err));
       } else {
         const loginForm = generateLoginForm();
-        $('#frame').html(loginForm);
+        $("#frame").html(loginForm);
       }
     }
 
-    if (target.is( '.btn--story' )) {
+    if (target.is("#btn--signup")) {
+      const newUserForm = generateNewUserForm();
+      $("#frame").html(newUserForm);
+    }
+
+    if (target.is(".btn--story")) {
       getCharacterObj()
         .then(res => res.json())
         .then(character => displayStory(character.bookmark))
         .catch(err => console.error(err));
     }
-    
-    if (target.is( '.btn--character' )) {
+
+    if (target.is(".btn--character")) {
       displayCharacterInfo();
     }
 
-    if (target.is( '.btn--signout' )) {
+    if (target.is(".btn--signout")) {
       localStorage.clear();
       location.reload();
     }
 
-    if (target.is( '#img--menu' )) {
-      $( '#nav--mobile-menu' ).toggleClass('hidden');
+    if (target.is("#img--menu")) {
+      $("#nav--mobile-menu").toggleClass("hidden");
     }
 
-    if (target.is( '#img--nav-icon' )) {
+    if (target.is("#img--nav-icon")) {
       location.reload();
     }
   });
 
   // Hide mobile menu when user clicks outside of it
-  $('body').mouseup(event => {
-    const menu = $('#nav--mobile-menu');
-    if (!menu.is(event.target) // if the target of the click is neither the container...
-    && menu.has(event.target).length === 0) // nor a descendant of the container
-    {
-      menu.addClass('hidden');
+  $("body").mouseup(event => {
+    const menu = $("#nav--mobile-menu");
+    if (
+      !menu.is(event.target) && // if the target of the click is neither the container...
+      menu.has(event.target).length === 0
+    ) {
+      // nor a descendant of the container
+      menu.addClass("hidden");
     }
   });
 }
 
 function chooseCharacterHandler() {
-  $('#form--choose-character').change(event => {
-    $('form label').removeClass('radio-selected');
+  $("#form--choose-character").change(event => {
+    $("form label").removeClass("radio-selected");
     const target = $(event.target);
-    target.next('label').addClass('radio-selected');
+    target.next("label").addClass("radio-selected");
 
-    const selection = $('input[type=radio]:checked').val();
+    const selection = $("input[type=radio]:checked").val();
     const newCharacterInfo = generateNewCharacterInfo(selection);
-    $('#new-character-info').html(newCharacterInfo);
+    $("#new-character-info").html(newCharacterInfo);
   });
-  $('#form--choose-character').submit(event => {
+  $("#form--choose-character").submit(event => {
     event.preventDefault();
-    const selection = $('input[type=radio]:checked').val();
-    fetch('/character/new?class=' + selection, {
+    const selection = $("input[type=radio]:checked").val();
+    fetch("/character/new?class=" + selection, {
       headers: new Headers({
-        'Authorization': 'Bearer ' + localStorage.authToken,
+        Authorization: "Bearer " + localStorage.authToken
       }),
-      method: 'POST'
+      method: "POST"
     })
       .then(res => res.json())
       .then(character => {
@@ -348,7 +391,7 @@ function chooseCharacterHandler() {
           .then(() => {
             refreshJWT()
               .then(res => {
-                localStorage.setItem('authToken', res.authToken)
+                localStorage.setItem("authToken", res.authToken);
                 startGame(character);
               })
               .catch(err => console.error(err));
@@ -363,7 +406,7 @@ function chooseCharacterHandler() {
 
 function setupChooseCharacter() {
   const chooseCharacter = generateNewCharacterForm();
-  $('#frame').html(chooseCharacter);
+  $("#frame").html(chooseCharacter);
   chooseCharacterHandler();
 }
 
@@ -384,23 +427,23 @@ function generateNewCharacterForm() {
         <input id="btn--start" class="btn--push-large" type="submit" value="Start"/>
       </fieldset>
     </form>
-  `
+  `;
 }
 
 function generateNewCharacterInfo(selection) {
-  if (selection === 'mage') {
-    return `<p>Low strength and HP</p><p>High magic and MP.</p><p>Special ability: Missile - launch an unblockable bolt of magic energy</p>`
-  } else if (selection === 'thief') {
-    return `<p>Average strength, HP, and MP</p><p>High evasion and accuracy.</p><p>Special ability: Double Strike - attack twice in one turn</p>`
+  if (selection === "mage") {
+    return `<p>Low strength and HP</p><p>High magic and MP.</p><p>Special ability: Missile - launch an unblockable bolt of magic energy</p>`;
+  } else if (selection === "thief") {
+    return `<p>Average strength, HP, and MP</p><p>High evasion and accuracy.</p><p>Special ability: Double Strike - attack twice in one turn</p>`;
   } else {
-    return `<p>High strength an HP</p><p>Low magic and MP.</p><p>Special ability: Smash - an unblockable rage-filled strike</p>`
+    return `<p>High strength an HP</p><p>Low magic and MP.</p><p>Special ability: Smash - an unblockable rage-filled strike</p>`;
   }
 }
 
 /* Story */
 
 function generateStoryHeader() {
-  $('header').html(`
+  $("header").html(`
     <section class="navbar">
       <img src="./images/tree-logo.jpg" alt="Tree logo" id="img--nav-icon" />
       <h2 id="h2--nav-title">Dendrion</h2>
@@ -422,15 +465,18 @@ function generateStoryHeader() {
 function displayStory(bookmark) {
   const options = {
     headers: new Headers({
-      'Authorization': 'Bearer ' + localStorage.authToken
+      Authorization: "Bearer " + localStorage.authToken
     })
   };
-  fetch('/story', options)
+  fetch("/story", options)
     .then(res => res.json())
     .then(scene => {
-      const chooseNextScene = scene.next.reduce((string, button) => string + button, '');
-      $('#frame').html(scene.text);
-      $('#frame').append(`
+      const chooseNextScene = scene.next.reduce(
+        (string, button) => string + button,
+        ""
+      );
+      $("#frame").html(scene.text);
+      $("#frame").append(`
         <div class="button-container">
           ${chooseNextScene}
         </div>
@@ -443,7 +489,7 @@ function displayCharacterInfo() {
   getCharacterObj()
     .then(res => res.json())
     .then(char => {
-      $('#frame').html( `
+      $("#frame").html(`
         <div class="char-info--container">
           <section class="char-info--vitals">
             <h2>${char.class}</h2>
@@ -472,12 +518,12 @@ function displayCharacterInfo() {
         </div>
       `);
     })
-    .catch(err => console.error(err))
+    .catch(err => console.error(err));
 }
 
 function advanceStory(nextScene) {
   // Update bookmark and display next scene
-  putRequest(`/character/bookmark`, {bookmark: nextScene})
+  putRequest(`/character/bookmark`, { bookmark: nextScene })
     .then(() => {
       generateStoryHeader();
       displayStory(nextScene);
@@ -508,7 +554,8 @@ function rollDam(damArray) {
 
 function calcPlayerDamage(player, enemy, action) {
   let damage = rollDam(player.actions[action].damage);
-  damage += player.skills.phyDamage - enemy.skills.phyResist - enemy.skills.damReduce;
+  damage +=
+    player.skills.phyDamage - enemy.skills.phyResist - enemy.skills.damReduce;
   if (damage < 0) {
     damage = 0;
   }
@@ -517,7 +564,8 @@ function calcPlayerDamage(player, enemy, action) {
 
 function calcEnemyDamage(player, enemy, action) {
   let damage = rollDam(enemy.actions[action].damage);
-  damage += enemy.skills.phyDamage - player.skills.phyResist - player.skills.damReduce;
+  damage +=
+    enemy.skills.phyDamage - player.skills.phyResist - player.skills.damReduce;
   if (damage < 0) {
     damage = 0;
   }
@@ -525,16 +573,16 @@ function calcEnemyDamage(player, enemy, action) {
 }
 
 function setScrollPosition() {
-  $('.combat--log').scrollTop(999999999);
+  $(".combat--log").scrollTop(999999999);
 }
 
 function displayCombatScreen() {
-  $('header').html(`
+  $("header").html(`
     <h1 class="combat--h1">Combat</h1>
   `);
-  $('#frame').addClass('combat--screen');
-  $('#frame').css('background-color', 'black');
-  $('#frame').html(`
+  $("#frame").addClass("combat--screen");
+  $("#frame").css("background-color", "black");
+  $("#frame").html(`
     <div class="combat--container">
       <section class="combat--character"></section>
       <section class="combat--log">
@@ -548,11 +596,14 @@ function displayCombatScreen() {
 function displayPlayerInfo(player) {
   const actionsArray = Object.keys(player.actions);
   const optionString = generateOptionString(actionsArray);
-  const lowercaseClass = player.class.slice(0,1).toLowerCase() + player.class.slice(1);
-  
-  $('.combat--character').html(`
+  const lowercaseClass =
+    player.class.slice(0, 1).toLowerCase() + player.class.slice(1);
+
+  $(".combat--character").html(`
     <div class="icon">
-      <img src="images/characters/${lowercaseClass}-icon.gif" alt="${player.class} icon" />
+      <img src="images/characters/${lowercaseClass}-icon.gif" alt="${
+    player.class
+  } icon" />
     </div>
     <div class="vitals">
       <h3>HP: ${player.attributes.hp}</h3>
@@ -577,13 +628,17 @@ function displayPlayerInfo(player) {
 
 function displayEnemyInfo(enemy) {
   const enemyActions = Object.keys(enemy.actions);
-  const enemyActionsList = enemyActions.reduce((actionsList, _action, index) => {
-    const action = _action.slice(0,1).toUpperCase() + _action.slice(1);
-    const result = actionsList + `<p class="enemy-action block-centered">${action}</p>`;
-    return result;
-  }, '<h3>Actions</h3>');
+  const enemyActionsList = enemyActions.reduce(
+    (actionsList, _action, index) => {
+      const action = _action.slice(0, 1).toUpperCase() + _action.slice(1);
+      const result =
+        actionsList + `<p class="enemy-action block-centered">${action}</p>`;
+      return result;
+    },
+    "<h3>Actions</h3>"
+  );
 
-  $('.combat--enemy').html(`
+  $(".combat--enemy").html(`
     <div class="icon">
       <img src="${enemy.imgSrc}" alt="${enemy.alt}">
     </div>
@@ -601,9 +656,9 @@ function displayEnemyInfo(enemy) {
 }
 
 function handleActionInfo(player) {
-  $('select').change(() => {
-    const selection = $('select option:selected').val();
-    $('.action-info').html(`
+  $("select").change(() => {
+    const selection = $("select option:selected").val();
+    $(".action-info").html(`
       <p>${player.actions[selection].info}</p>
     `);
   });
@@ -612,7 +667,10 @@ function handleActionInfo(player) {
 function generateOptionString(actionsArray) {
   return actionsArray.reduce((string, action) => {
     const displayName = action.charAt(0).toUpperCase() + action.slice(1);
-    return string + `<option value="${action}" label=${displayName}>${displayName}</option>`;
+    return (
+      string +
+      `<option value="${action}" label=${displayName}>${displayName}</option>`
+    );
   }, actionsArray[0]);
 }
 
@@ -621,8 +679,8 @@ function determineEnemyAction(enemy) {
   const roll = getRandomIntInclusive(0, actions.length - 1);
   const enemyAction = actions[roll];
   const actionText = rollEnemyActionText(enemy, enemyAction);
-  const actionString = generateHTML('li', actionText);
-  appendHTML('.combat--log ul', actionString);
+  const actionString = generateHTML("li", actionText);
+  appendHTML(".combat--log ul", actionString);
   return enemyAction;
 }
 
@@ -630,14 +688,14 @@ function rollEnemyActionText(enemy, enemyAction) {
   const textOptions = enemy.actions[enemyAction].text;
   const roll = getRandomIntInclusive(0, textOptions.length - 1);
   return textOptions[roll];
-} 
+}
 
 function generateHTML(element, text, attributes) {
   let firstElement = element;
   if (attributes) {
-    firstElement += ' ' + attributes;
+    firstElement += " " + attributes;
   }
-  if (element === 'input') {
+  if (element === "input") {
     return `<${firstElement}/>`;
   }
 
@@ -651,7 +709,7 @@ function appendHTML(selector, entry) {
 function startCombat(enemyName) {
   const options = {
     headers: new Headers({
-      'Authorization': 'Bearer ' + localStorage.authToken
+      Authorization: "Bearer " + localStorage.authToken
     })
   };
   getCharacterObj()
@@ -664,9 +722,9 @@ function startCombat(enemyName) {
           displayPlayerInfo(player);
           displayEnemyInfo(enemy);
           handleActionInfo(player);
-          sessionStorage.setItem('player', JSON.stringify(player));
-          sessionStorage.setItem('enemy', JSON.stringify(enemy));
-          sessionStorage.setItem('enemyAction', determineEnemyAction(enemy));
+          sessionStorage.setItem("player", JSON.stringify(player));
+          sessionStorage.setItem("enemy", JSON.stringify(enemy));
+          sessionStorage.setItem("enemyAction", determineEnemyAction(enemy));
         })
         .catch(err => console.error(err));
     })
@@ -684,79 +742,138 @@ function startCombat(enemyName) {
  * 8) Check for victory/loss conditions
  * 9) Update player and enemy in storage
  * 10) Determine enemy action for next turn
-*/
+ */
 
 function combat(player, enemy, playerAction, enemyAction) {
   playerTurn(player, enemy, playerAction);
-    if (enemy.attributes.hp <= 0) {return}
+  if (enemy.attributes.hp <= 0) {
+    return;
+  }
   enemyTurn(player, enemy, enemyAction);
-    if (player.attributes.hp <= 0) {return}
+  if (player.attributes.hp <= 0) {
+    return;
+  }
   setScrollPosition();
   displayPlayerInfo(player);
   displayEnemyInfo(enemy);
 
-  sessionStorage.setItem('player', JSON.stringify(player));
-  sessionStorage.setItem('enemy', JSON.stringify(enemy));
-  sessionStorage.setItem('enemyAction', determineEnemyAction(enemy));
+  sessionStorage.setItem("player", JSON.stringify(player));
+  sessionStorage.setItem("enemy", JSON.stringify(enemy));
+  sessionStorage.setItem("enemyAction", determineEnemyAction(enemy));
   setScrollPosition();
 }
 
 function playerAttack(player, enemy) {
-  const initialMessage = generateHTML('li', player.class + ' attacks!');
-  appendHTML('.combat--log ul', initialMessage);
+  const initialMessage = generateHTML("li", player.class + " attacks!");
+  appendHTML(".combat--log ul", initialMessage);
 
   const playerHitRoll = rollD20();
-  const playerHitCalc = playerHitRoll + player.attributes.agi + player.skills.accuracy;
+  const playerHitCalc =
+    playerHitRoll + player.attributes.agi + player.skills.accuracy;
   const enemyEvadeRoll = rollD20();
-  const enemyEvadeCalc = enemyEvadeRoll + enemy.attributes.agi + enemy.skills.evasion + (enemy.actions.defend.defendBonus || 0);
+  const enemyEvadeCalc =
+    enemyEvadeRoll +
+    enemy.attributes.agi +
+    enemy.skills.evasion +
+    (enemy.actions.defend.defendBonus || 0);
 
   if (playerHitCalc > enemyEvadeCalc) {
-    const damage = calcPlayerDamage(player, enemy, 'attack');
+    const damage = calcPlayerDamage(player, enemy, "attack");
     enemy.attributes.hp -= damage;
-  
-    const hitString = generateHTML('li', player.class + ' HITS for ' + damage + ' damage [roll' + playerHitRoll + ' + agi' + player.attributes.agi + ' + acc' + player.skills.accuracy + 
-      ' (' + playerHitCalc + ') vs (' + enemyEvadeCalc + ') roll' + enemyEvadeRoll + ' + agi' + enemy.attributes.agi + ' + eva' + enemy.skills.evasion + ' + defBonus' + enemy.actions.defend.defendBonus + ']'
-    );
-    appendHTML('.combat--log ul', hitString);
-    displayEnemyInfo(enemy);
 
-  } else {
-    const missString = generateHTML('li', player.class + ' MISSES [roll' + playerHitRoll + ' + agi' + player.attributes.agi + ' + acc' + player.skills.accuracy + 
-      ' (' + playerHitCalc + ') vs (' + enemyEvadeCalc + ') roll' + enemyEvadeRoll + ' + agi' + enemy.attributes.agi + ' + eva' + enemy.skills.evasion + ' + defBonus' + enemy.actions.defend.defendBonus + ']'
+    const hitString = generateHTML(
+      "li",
+      player.class +
+        " HITS for " +
+        damage +
+        " damage [roll" +
+        playerHitRoll +
+        " + agi" +
+        player.attributes.agi +
+        " + acc" +
+        player.skills.accuracy +
+        " (" +
+        playerHitCalc +
+        ") vs (" +
+        enemyEvadeCalc +
+        ") roll" +
+        enemyEvadeRoll +
+        " + agi" +
+        enemy.attributes.agi +
+        " + eva" +
+        enemy.skills.evasion +
+        " + defBonus" +
+        enemy.actions.defend.defendBonus +
+        "]"
     );
-    appendHTML('.combat--log ul', missString);
+    appendHTML(".combat--log ul", hitString);
+    displayEnemyInfo(enemy);
+  } else {
+    const missString = generateHTML(
+      "li",
+      player.class +
+        " MISSES [roll" +
+        playerHitRoll +
+        " + agi" +
+        player.attributes.agi +
+        " + acc" +
+        player.skills.accuracy +
+        " (" +
+        playerHitCalc +
+        ") vs (" +
+        enemyEvadeCalc +
+        ") roll" +
+        enemyEvadeRoll +
+        " + agi" +
+        enemy.attributes.agi +
+        " + eva" +
+        enemy.skills.evasion +
+        " + defBonus" +
+        enemy.actions.defend.defendBonus +
+        "]"
+    );
+    appendHTML(".combat--log ul", missString);
   }
 }
 
 function playerTurn(player, enemy, playerAction) {
-  switch(playerAction) {
-    case 'attack': {
+  switch (playerAction) {
+    case "attack": {
       playerAttack(player, enemy);
       break;
     }
-    case 'defend': {
+    case "defend": {
       player.actions.defend.defendBonus = 5;
-      const defendString = generateHTML('li', player.class + ' defends (+5 defBonus for 1 turn)');
-      appendHTML('.combat--log ul', defendString);
+      const defendString = generateHTML(
+        "li",
+        player.class + " defends (+5 defBonus for 1 turn)"
+      );
+      appendHTML(".combat--log ul", defendString);
       break;
     }
-    case 'missile': {
-      const missileString = generateHTML('li', player.class + ' casts missile!');
-      appendHTML('.combat--log ul', missileString);
+    case "missile": {
+      const missileString = generateHTML(
+        "li",
+        player.class + " casts missile!"
+      );
+      appendHTML(".combat--log ul", missileString);
 
-      const damage = calcPlayerDamage(player, enemy, 'missile');
+      const damage = calcPlayerDamage(player, enemy, "missile");
       player.attributes.mp -= player.actions.missile.mpCost;
       enemy.attributes.hp -= damage;
-      
-      const damageString = generateHTML('li', 'Missile does ' + damage + ' damage to ' + enemy.name);
-      appendHTML('.combat--log ul', damageString);
+
+      const damageString = generateHTML(
+        "li",
+        "Missile does " + damage + " damage to " + enemy.name
+      );
+      appendHTML(".combat--log ul", damageString);
       displayPlayerInfo(player);
       displayEnemyInfo(enemy);
       break;
     }
-    case 'dblStrike': {
-      const dblStrikeString = generateHTML('li', player.class + ' focuses...')
-      appendHTML('.combat--log ul', dblStrikeString);
+    case "dblStrike": {
+      const dblStrikeString = generateHTML("li", player.class + " focuses...");
+      appendHTML(".combat--log ul", dblStrikeString);
       player.attributes.mp -= player.actions.dblStrike.mpCost;
 
       for (let i = 0; i < 2; i++) {
@@ -764,74 +881,131 @@ function playerTurn(player, enemy, playerAction) {
       }
       break;
     }
-    case 'smash': {
-      const smashString = generateHTML('li', player.class + ' becomes enraged!');
-      appendHTML('.combat--log ul', smashString);
+    case "smash": {
+      const smashString = generateHTML(
+        "li",
+        player.class + " becomes enraged!"
+      );
+      appendHTML(".combat--log ul", smashString);
 
-      const damage = calcPlayerDamage(player, enemy, 'smash');
+      const damage = calcPlayerDamage(player, enemy, "smash");
       player.attributes.mp -= player.actions.smash.mpCost;
       enemy.attributes.hp -= damage;
 
-      const damageString = generateHTML('li', player.class + ' HITS ' + enemy.name + ' for ' + damage + ' damage');
-      appendHTML('.combat--log ul', damageString);
+      const damageString = generateHTML(
+        "li",
+        player.class + " HITS " + enemy.name + " for " + damage + " damage"
+      );
+      appendHTML(".combat--log ul", damageString);
       displayEnemyInfo(enemy);
       break;
     }
   }
-  endTurn(player, enemy, 'player');
+  endTurn(player, enemy, "player");
 }
 
 function enemyTurn(player, enemy, enemyAction) {
   if (enemy.attributes.hp <= 0) {
     return;
   }
-  switch(enemyAction) {
-    case 'attack': {
-      const attackString = generateHTML('li', enemy.name + ' attacks!');
-      appendHTML('.combat--log ul', attackString);
+  switch (enemyAction) {
+    case "attack": {
+      const attackString = generateHTML("li", enemy.name + " attacks!");
+      appendHTML(".combat--log ul", attackString);
 
-      const enemyHitRoll = rollD20()
-      const enemyHitCalc = enemyHitRoll + enemy.attributes.agi + enemy.skills.accuracy;
+      const enemyHitRoll = rollD20();
+      const enemyHitCalc =
+        enemyHitRoll + enemy.attributes.agi + enemy.skills.accuracy;
       const playerEvadeRoll = rollD20();
-      const playerEvadeCalc = playerEvadeRoll + player.attributes.agi + player.skills.evasion + (player.actions.defend.defendBonus || 0);
+      const playerEvadeCalc =
+        playerEvadeRoll +
+        player.attributes.agi +
+        player.skills.evasion +
+        (player.actions.defend.defendBonus || 0);
 
       if (enemyHitCalc > playerEvadeCalc) {
-        const damage = calcEnemyDamage(player, enemy, 'attack');
+        const damage = calcEnemyDamage(player, enemy, "attack");
         player.attributes.hp -= damage;
 
-        const hitString = generateHTML('li', enemy.name + ' HITS for ' + damage + ' damage [roll' + enemyHitRoll + ' + agi' + enemy.attributes.agi + ' + acc' + enemy.skills.accuracy + 
-          ' (' + enemyHitCalc + ') vs (' + playerEvadeCalc + ') roll' + playerEvadeRoll + ' + agi' + player.attributes.agi + ' + eva' + player.skills.evasion + ' + defBonus' + player.actions.defend.defendBonus + ']');
-        appendHTML('.combat--log ul', hitString);
-
+        const hitString = generateHTML(
+          "li",
+          enemy.name +
+            " HITS for " +
+            damage +
+            " damage [roll" +
+            enemyHitRoll +
+            " + agi" +
+            enemy.attributes.agi +
+            " + acc" +
+            enemy.skills.accuracy +
+            " (" +
+            enemyHitCalc +
+            ") vs (" +
+            playerEvadeCalc +
+            ") roll" +
+            playerEvadeRoll +
+            " + agi" +
+            player.attributes.agi +
+            " + eva" +
+            player.skills.evasion +
+            " + defBonus" +
+            player.actions.defend.defendBonus +
+            "]"
+        );
+        appendHTML(".combat--log ul", hitString);
       } else {
-        const missString = generateHTML('li', enemy.name + ' MISSES [roll' + enemyHitRoll + ' + agi' + enemy.attributes.agi + ' + acc' + enemy.skills.accuracy + 
-          ' (' + enemyHitCalc + ') vs (' + playerEvadeCalc + ') roll' + playerEvadeRoll + ' + agi' + player.attributes.agi + ' + eva' + player.skills.evasion + ' + defBonus' + player.actions.defend.defendBonus + ']');
-        appendHTML('.combat--log ul', missString);
+        const missString = generateHTML(
+          "li",
+          enemy.name +
+            " MISSES [roll" +
+            enemyHitRoll +
+            " + agi" +
+            enemy.attributes.agi +
+            " + acc" +
+            enemy.skills.accuracy +
+            " (" +
+            enemyHitCalc +
+            ") vs (" +
+            playerEvadeCalc +
+            ") roll" +
+            playerEvadeRoll +
+            " + agi" +
+            player.attributes.agi +
+            " + eva" +
+            player.skills.evasion +
+            " + defBonus" +
+            player.actions.defend.defendBonus +
+            "]"
+        );
+        appendHTML(".combat--log ul", missString);
       }
       break;
     }
-    case 'defend': {
+    case "defend": {
       enemy.actions.defend.defendBonus = 5;
-      const defendString = generateHTML('li', enemy.name + ' defends (+5 defBonus for 1 turn)');
-      appendHTML('.combat--log ul', defendString);
+      const defendString = generateHTML(
+        "li",
+        enemy.name + " defends (+5 defBonus for 1 turn)"
+      );
+      appendHTML(".combat--log ul", defendString);
       break;
     }
   }
-  endTurn(player, enemy, 'enemy');
+  endTurn(player, enemy, "enemy");
 }
 
 function endTurn(player, enemy, turn) {
-  if (turn === 'player') {
+  if (turn === "player") {
     if (enemy.attributes.hp <= 0) {
-      const condition = 'win';
+      const condition = "win";
       return endCombat(player, enemy, condition);
     }
     if (enemy.actions.defend.defendBonus > 0) {
       enemy.actions.defend.defendBonus = 0;
     }
-  } else if (turn === 'enemy') {
+  } else if (turn === "enemy") {
     if (player.attributes.hp <= 0) {
-      const condition = 'loss';
+      const condition = "loss";
       return endCombat(player, enemy, condition);
     }
     if (player.actions.defend.defendBonus > 0) {
@@ -841,9 +1015,15 @@ function endTurn(player, enemy, turn) {
 }
 
 function endCombat(player, enemy, condition) {
-  if (condition === 'win') {
-    $('.combat--log').append(`<p class="block-centered">You defeated ${enemy.name}!</p>`);
-    $('.btn--action-submit').replaceWith(`<button type="button" class="btn--end-combat" id="${enemy.name}" value="${player.bookmark}">End Combat</button>`);
+  if (condition === "win") {
+    $(".combat--log").append(
+      `<p class="block-centered">You defeated ${enemy.name}!</p>`
+    );
+    $(".btn--action-submit").replaceWith(
+      `<button type="button" class="btn--end-combat" id="${
+        enemy.name
+      }" value="${player.bookmark}">End Combat</button>`
+    );
     setScrollPosition();
 
     // Update character hp and mp in DB
@@ -851,22 +1031,27 @@ function endCombat(player, enemy, condition) {
       hp: player.attributes.hp,
       mp: player.attributes.mp
     };
-    putRequest('/character', updateObj);
-
-  } else if (condition === 'loss') {
-    $('.combat--log').append(`<p class="block-centered">You have been slain by ${enemy.name}!</p><p>Start a new character and try another path!</p>`);
-    $('.btn--action-submit').replaceWith('<button class="btn--restart" type="button" id="js--end-combat">New Character</button>');
+    putRequest("/character", updateObj);
+  } else if (condition === "loss") {
+    $(".combat--log").append(
+      `<p class="block-centered">You have been slain by ${
+        enemy.name
+      }!</p><p>Start a new character and try another path!</p>`
+    );
+    $(".btn--action-submit").replaceWith(
+      '<button class="btn--restart" type="button" id="js--end-combat">New Character</button>'
+    );
     setScrollPosition();
 
     const updateObj = {
       hp: player.attributes.hp,
       mp: player.attributes.mp
-    }
-    putRequest('/character', updateObj);
+    };
+    putRequest("/character", updateObj);
   }
 }
 
 $(function() {
   mainListener();
   headerListener();
-})
+});
